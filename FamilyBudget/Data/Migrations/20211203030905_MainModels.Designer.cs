@@ -4,14 +4,16 @@ using FamilyBudget.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FamilyBudget.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211203030905_MainModels")]
+    partial class MainModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,9 +62,6 @@ namespace FamilyBudget.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("ProjectMemberId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Value")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

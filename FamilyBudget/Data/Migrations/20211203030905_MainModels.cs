@@ -93,7 +93,7 @@ namespace FamilyBudget.Data.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FinOperations_ProjectMembers_ProjectMemberId",
                         column: x => x.ProjectMemberId,

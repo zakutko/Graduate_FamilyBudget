@@ -61,7 +61,7 @@ namespace FamilyBudget.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FinType,ForAll,Value,CategoryId,ProjectMemberId,ProjectId")] FinOperation finOperation)
+        public async Task<IActionResult> Create([Bind("Id,FinType,ForAll,Value,CategoryId,ProjectMemberId,ProjectId,CreateTime,UpdateTime")] FinOperation finOperation)
         {
             if (ModelState.IsValid)
             {

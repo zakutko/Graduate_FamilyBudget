@@ -61,6 +61,8 @@ namespace FamilyBudget.Controllers
         {
             if (ModelState.IsValid)
             {
+                category.CreateTime = DateTime.Now;
+                category.UpdateTime = DateTime.Now;
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -91,7 +93,7 @@ namespace FamilyBudget.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ProjectId")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ProjectId,UpdateTime")] Category category)
         {
             if (id != category.Id)
             {
@@ -102,6 +104,7 @@ namespace FamilyBudget.Controllers
             {
                 try
                 {
+                    category.UpdateTime = DateTime.Now;
                     _context.Update(category);
                     await _context.SaveChangesAsync();
                 }

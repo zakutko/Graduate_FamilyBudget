@@ -7,13 +7,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FamilyBudget.Data;
 using FamilyBudget.Models;
+using FamilyBudget.Extensions;
+using Microsoft.AspNetCore.Identity;
 
 namespace FamilyBudget.Controllers
 {
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
-
+        private  IdentityUser user { get { return CurrentUser(); } }
         public CategoriesController(ApplicationDbContext context)
         {
             _context = context;
@@ -22,8 +24,24 @@ namespace FamilyBudget.Controllers
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Categories.Include(c => c.Project);
-            return View(await applicationDbContext.ToListAsync());
+            if (user == null)
+            {
+                return Redirect("/Identity/Account/Login");
+            }
+
+            // temporary solution
+            var categories = new List<Category>();
+            foreach (var category in _context.Categories)
+            {
+                if (CategoryExtensions.CanView(user, category, _context))
+                {
+                    categories.Add(category);
+                }
+            }
+            return View(categories);
+
+            /*var applicationDbContext = _context.Categories.Include(c => c.Project);
+            return View(await applicationDbContext.ToListAsync());*/
         }
 
         // GET: Categories/Details/5
@@ -37,9 +55,16 @@ namespace FamilyBudget.Controllers
             var category = await _context.Categories
                 .Include(c => c.Project)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+
             if (category == null)
             {
                 return NotFound();
+            }
+
+            if (!CategoryExtensions.CanView(user, category, _context))
+            {
+                return Forbid();
             }
 
             return View(category);
@@ -59,6 +84,11 @@ namespace FamilyBudget.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,ProjectId")] Category category)
         {
+            if (!CategoryExtensions.CanEdit(user, category, _context))
+            {
+                return Forbid();
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(category);
@@ -66,6 +96,7 @@ namespace FamilyBudget.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", category.ProjectId);
+
             return View(category);
         }
 
@@ -78,10 +109,18 @@ namespace FamilyBudget.Controllers
             }
 
             var category = await _context.Categories.FindAsync(id);
+
             if (category == null)
             {
                 return NotFound();
             }
+
+            if (!CategoryExtensions.CanEdit(user, category, _context))
+            {
+                return Forbid();
+            }
+
+
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", category.ProjectId);
             return View(category);
         }
@@ -93,6 +132,11 @@ namespace FamilyBudget.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ProjectId")] Category category)
         {
+            if (!CategoryExtensions.CanEdit(user, category, _context))
+            {
+                return Forbid();
+            }
+
             if (id != category.Id)
             {
                 return NotFound();
@@ -133,9 +177,15 @@ namespace FamilyBudget.Controllers
             var category = await _context.Categories
                 .Include(c => c.Project)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (category == null)
             {
                 return NotFound();
+            }
+
+            if (!CategoryExtensions.CanDelete(user, category, _context))
+            {
+                return Forbid();
             }
 
             return View(category);
@@ -155,6 +205,13 @@ namespace FamilyBudget.Controllers
         private bool CategoryExists(int id)
         {
             return _context.Categories.Any(e => e.Id == id);
+        }
+
+        private IdentityUser CurrentUser()
+        {
+            var username = HttpContext.User.Identity.Name;
+            return _context.Users
+                .FirstOrDefault(m => m.UserName == username);
         }
     }
 }

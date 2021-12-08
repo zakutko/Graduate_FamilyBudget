@@ -30,7 +30,7 @@ namespace FamilyBudget.Controllers
             }
 
             // temporary solution
-            var categories = new List<Category>();
+            /*var categories = new List<Category>();
             foreach (var category in _context.Categories)
             {
                 if (CategoryExtensions.CanView(user, category, _context))
@@ -38,10 +38,10 @@ namespace FamilyBudget.Controllers
                     categories.Add(category);
                 }
             }
-            return View(categories);
+            return View(categories);*/
 
-            /*var applicationDbContext = _context.Categories.Include(c => c.Project);
-            return View(await applicationDbContext.ToListAsync());*/
+            var applicationDbContext = _context.Categories.Include(c => c.Project);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Categories/Details/5

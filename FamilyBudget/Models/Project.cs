@@ -17,6 +17,9 @@ namespace FamilyBudget.Models
         public string OwnerId { get; set; }
         public IdentityUser Owner { get; set; }
 
+        public DateTime CreateTime { get; set; }
+        public DateTime UpdateTime { get; set; }
+
         public List<ProjectMember> ProjectMembers { get; set; } = new List<ProjectMember>();
         public List<FinOperation> FinOperations { get; set; } = new List<FinOperation>();
         public List<Category> Categories { get; set; } = new List<Category>();

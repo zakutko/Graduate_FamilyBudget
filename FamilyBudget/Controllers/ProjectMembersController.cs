@@ -59,10 +59,12 @@ namespace FamilyBudget.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NameInProject,UserId,ProjectId")] ProjectMember projectMember)
+        public async Task<IActionResult> Create([Bind("Id,NameInProject,UserId,ProjectId,CreateTime,UpdateTime")] ProjectMember projectMember)
         {
             if (ModelState.IsValid)
             {
+                projectMember.CreateTime = DateTime.Now;
+                projectMember.UpdateTime = DateTime.Now;
                 _context.Add(projectMember);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -95,7 +97,7 @@ namespace FamilyBudget.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NameInProject,UserId,ProjectId")] ProjectMember projectMember)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NameInProject,UserId,ProjectId,UpdateTime")] ProjectMember projectMember)
         {
             if (id != projectMember.Id)
             {
@@ -106,6 +108,7 @@ namespace FamilyBudget.Controllers
             {
                 try
                 {
+                    projectMember.UpdateTime = DateTime.Now;
                     _context.Update(projectMember);
                     await _context.SaveChangesAsync();
                 }

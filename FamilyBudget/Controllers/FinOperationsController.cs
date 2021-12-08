@@ -61,10 +61,12 @@ namespace FamilyBudget.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FinType,ForAll,Value,CategoryId,ProjectMemberId,ProjectId")] FinOperation finOperation)
+        public async Task<IActionResult> Create([Bind("Id,FinType,ForAll,Value,CategoryId,ProjectMemberId,ProjectId,CreateTime,UpdateTime")] FinOperation finOperation)
         {
             if (ModelState.IsValid)
             {
+                finOperation.CreateTime = DateTime.Now;
+                finOperation.UpdateTime = DateTime.Now;
                 _context.Add(finOperation);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -99,7 +101,7 @@ namespace FamilyBudget.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FinType,ForAll,Value,CategoryId,ProjectMemberId,ProjectId")] FinOperation finOperation)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FinType,ForAll,Value,CategoryId,ProjectMemberId,ProjectId,UpdateTime")] FinOperation finOperation)
         {
             if (id != finOperation.Id)
             {
@@ -110,6 +112,7 @@ namespace FamilyBudget.Controllers
             {
                 try
                 {
+                    finOperation.UpdateTime = DateTime.Now;
                     _context.Update(finOperation);
                     await _context.SaveChangesAsync();
                 }

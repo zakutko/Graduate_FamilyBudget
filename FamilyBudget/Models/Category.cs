@@ -15,5 +15,7 @@ namespace FamilyBudget.Models
 
         public int ProjectId { get; set; }
         public Project Project { get; set; }
+        public DateTime CreateTime { get; set; }
+        public DateTime UpdateTime { get; set; }
     }
 }

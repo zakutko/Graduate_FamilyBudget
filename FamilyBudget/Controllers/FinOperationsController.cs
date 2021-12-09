@@ -98,6 +98,7 @@ namespace FamilyBudget.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", finOperation.CategoryId);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", finOperation.ProjectId);
             ViewData["ProjectMemberId"] = new SelectList(_context.ProjectMembers, "Id", "NameInProject", finOperation.ProjectMemberId);

@@ -17,11 +17,11 @@ namespace FamilyBudget.Controllers
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IdentityUser user;
+        private IdentityUser user { get { return CurrentUser(); } }
+
         public CategoriesController(ApplicationDbContext context)
         {
             _context = context;
-            user = CurrentUser();
         }
 
         // GET: Categories

@@ -29,17 +29,17 @@ namespace FamilyBudget.Controllers
                 return Redirect("/Identity/Account/Login");
             }
 
-            var member = (from pm in _context.ProjectMembers
+            var members = (from pm in _context.ProjectMembers
                               where pm.User == user
                               join c in _context.Categories
                               on pm.Project equals c.Project
                               select c);
-            var owner = (from p in _context.Projects
+            var owners = (from p in _context.Projects
                               where p.Owner == user
                               join c in _context.Categories
                               on p equals c.Project
                               select c);
-            var categories = member.Union(owner);
+            var categories = members.Union(owners);
 
             return View(await categories.Include(c => c.Project).ToListAsync());
 
@@ -73,15 +73,19 @@ namespace FamilyBudget.Controllers
         // GET: Categories/Create
         public IActionResult Create()
         {
-            var member = (from pm in _context.ProjectMembers
+            var members = (from pm in _context.ProjectMembers
                                where pm.User == user
                                join p in _context.Projects
                                on pm.Project equals p
                                select p);
-            var owner =  (from p in _context.Projects
-                               where p.Owner == user
-                               select p);
-            var projects = member.Union(owner);
+
+            var owners =  _context.Projects.Where(p => p.Owner == user);
+            var projects = members.Union(owners);
+
+            if (!projects.Any())
+            {
+                return Forbid();
+            }
 
             ViewData["ProjectId"] = new SelectList(projects, "Id", "Name");
             return View();

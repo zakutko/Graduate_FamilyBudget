@@ -7,12 +7,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FamilyBudget.Data;
 using FamilyBudget.Models;
+using FamilyBudget.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace FamilyBudget.Controllers
 {
+    [Authorize]
     public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
+
+        private IdentityUser user { get { return CurrentUser(); } }
 
         public ProjectsController(ApplicationDbContext context)
         {
@@ -22,8 +28,10 @@ namespace FamilyBudget.Controllers
         // GET: Projects
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Projects.Include(p => p.Owner);
-            return View(await applicationDbContext.ToListAsync());
+            var all_projects = await _context.Projects.Include(p => p.Owner).ToListAsync();
+            var viewable_projects = all_projects.Where(x => user.CanView(x, _context)).ToList();
+
+            return View(viewable_projects);
         }
 
         // GET: Projects/Details/5
@@ -42,13 +50,18 @@ namespace FamilyBudget.Controllers
                 return NotFound();
             }
 
+            if (!user.CanView(project, _context))
+            {
+                return Forbid();
+            }
+
             return View(project);
         }
 
         // GET: Projects/Create
         public IActionResult Create()
         {
-            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["OwnerId"] = new SelectList(_context.Users.Where(c => c.Id == user.Id), "Id", "Id");
             return View();
         }
 
@@ -59,13 +72,19 @@ namespace FamilyBudget.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,OwnerId")] Project project)
         {
+            if (!user.CanEdit(project, _context))
+            {
+                return Forbid();
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(project);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", project.OwnerId);
+
+            ViewData["OwnerId"] = new SelectList(_context.Users.Where(c => c.Id == user.Id), "Id", "Id", project.OwnerId);
             return View(project);
         }
 
@@ -82,7 +101,13 @@ namespace FamilyBudget.Controllers
             {
                 return NotFound();
             }
-            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", project.OwnerId);
+
+            if (!user.CanEdit(project, _context))
+            {
+                return Forbid();
+            }
+
+            ViewData["OwnerId"] = new SelectList(_context.Users.Where(c => c.Id == user.Id), "Id", "Id", project.OwnerId);
             return View(project);
         }
 
@@ -138,6 +163,11 @@ namespace FamilyBudget.Controllers
                 return NotFound();
             }
 
+            if (!user.CanDelete(project, _context))
+            {
+                return Forbid();
+            }
+
             return View(project);
         }
 
@@ -155,6 +185,12 @@ namespace FamilyBudget.Controllers
         private bool ProjectExists(int id)
         {
             return _context.Projects.Any(e => e.Id == id);
+        }
+        private IdentityUser CurrentUser()
+        {
+            var username = HttpContext.User.Identity.Name;
+            return _context.Users
+                .FirstOrDefault(m => m.UserName == username);
         }
     }
 }

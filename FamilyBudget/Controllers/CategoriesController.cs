@@ -28,7 +28,7 @@ namespace FamilyBudget.Controllers
         public async Task<IActionResult> Index()
         {
             var all_categories = await _context.Categories.Include(c => c.Project).ToListAsync();
-            var viewable_categories = all_categories.Where(x => CategoryExtensions.CanView(user, x, _context)).ToList();
+            var viewable_categories = all_categories.Where(x => user.CanView(x, _context)).ToList();
 
             return View(viewable_categories);
         }
@@ -50,7 +50,7 @@ namespace FamilyBudget.Controllers
                 return NotFound();
             }
 
-            if (!CategoryExtensions.CanView(user, category, _context))
+            if (!user.CanView(category, _context))
             {
                 return Forbid();
             }
@@ -61,21 +61,15 @@ namespace FamilyBudget.Controllers
         // GET: Categories/Create
         public IActionResult Create()
         {
-            var members = (from pm in _context.ProjectMembers
-                               where pm.User == user
-                               join p in _context.Projects
-                               on pm.Project equals p
-                               select p);
+            var all_projects = _context.Projects.Include(c => c.Owner).ToList();
+            var available_projects = all_projects.Where(c => user.CanEdit(c,_context)).ToList();
 
-            var owners =  _context.Projects.Where(p => p.Owner == user);
-            var projects = members.Union(owners);
-
-            if (!projects.Any())
+            if (!available_projects.Any())
             {
                 return Forbid();
             }
 
-            ViewData["ProjectId"] = new SelectList(projects, "Id", "Name");
+            ViewData["ProjectId"] = new SelectList(available_projects, "Id", "Name");
             return View();
         }
 
@@ -86,7 +80,7 @@ namespace FamilyBudget.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,ProjectId")] Category category)
         {
-            if (!CategoryExtensions.CanEdit(user, category, _context))
+            if (!user.CanEdit(category, _context))
             {
                 return Forbid();
             }
@@ -117,11 +111,10 @@ namespace FamilyBudget.Controllers
                 return NotFound();
             }
 
-            if (!CategoryExtensions.CanEdit(user, category, _context))
+            if (!user.CanEdit(category, _context))
             {
                 return Forbid();
             }
-
 
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", category.ProjectId);
             return View(category);
@@ -134,7 +127,7 @@ namespace FamilyBudget.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ProjectId")] Category category)
         {
-            if (!CategoryExtensions.CanEdit(user, category, _context))
+            if (!user.CanEdit(category, _context))
             {
                 return Forbid();
             }
@@ -164,6 +157,7 @@ namespace FamilyBudget.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", category.ProjectId);
             return View(category);
         }
@@ -185,7 +179,7 @@ namespace FamilyBudget.Controllers
                 return NotFound();
             }
 
-            if (!CategoryExtensions.CanDelete(user, category, _context))
+            if (!user.CanEdit(category, _context))
             {
                 return Forbid();
             }

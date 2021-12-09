@@ -29,19 +29,20 @@ namespace FamilyBudget.Controllers
                 return Redirect("/Identity/Account/Login");
             }
 
-            // temporary solution
-            /*var categories = new List<Category>();
-            foreach (var category in _context.Categories)
-            {
-                if (CategoryExtensions.CanView(user, category, _context))
-                {
-                    categories.Add(category);
-                }
-            }
-            return View(categories);*/
+            var member = (from pm in _context.ProjectMembers
+                              where pm.User == user
+                              join c in _context.Categories
+                              on pm.Project equals c.Project
+                              select c);
+            var owner = (from p in _context.Projects
+                              where p.Owner == user
+                              join c in _context.Categories
+                              on p equals c.Project
+                              select c);
+            var categories = member.Union(owner);
 
-            var applicationDbContext = _context.Categories.Include(c => c.Project);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await categories.Include(c => c.Project).ToListAsync());
+
         }
 
         // GET: Categories/Details/5
@@ -55,7 +56,6 @@ namespace FamilyBudget.Controllers
             var category = await _context.Categories
                 .Include(c => c.Project)
                 .FirstOrDefaultAsync(m => m.Id == id);
-
 
             if (category == null)
             {
@@ -73,7 +73,17 @@ namespace FamilyBudget.Controllers
         // GET: Categories/Create
         public IActionResult Create()
         {
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
+            var member = (from pm in _context.ProjectMembers
+                               where pm.User == user
+                               join p in _context.Projects
+                               on pm.Project equals p
+                               select p).ToList();
+            var owner =  (from p in _context.Projects
+                               where p.Owner == user
+                               select p).ToList();
+            var projects = member.Union(owner);
+
+            ViewData["ProjectId"] = new SelectList(projects, "Id", "Name");
             return View();
         }
 

@@ -77,10 +77,10 @@ namespace FamilyBudget.Controllers
                                where pm.User == user
                                join p in _context.Projects
                                on pm.Project equals p
-                               select p).ToList();
+                               select p);
             var owner =  (from p in _context.Projects
                                where p.Owner == user
-                               select p).ToList();
+                               select p);
             var projects = member.Union(owner);
 
             ViewData["ProjectId"] = new SelectList(projects, "Id", "Name");

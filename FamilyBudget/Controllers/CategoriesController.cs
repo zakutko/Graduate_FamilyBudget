@@ -9,40 +9,28 @@ using FamilyBudget.Data;
 using FamilyBudget.Models;
 using FamilyBudget.Extensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FamilyBudget.Controllers
 {
+    [Authorize]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private IdentityUser user { get { return CurrentUser(); } }
+        private readonly IdentityUser user;
         public CategoriesController(ApplicationDbContext context)
         {
             _context = context;
+            user = CurrentUser();
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            if (user == null)
-            {
-                return Redirect("/Identity/Account/Login");
-            }
+            var all_categories = await _context.Categories.Include(c => c.Project).ToListAsync();
+            var viewable_categories = all_categories.Where(x => CategoryExtensions.CanView(user, x, _context)).ToList();
 
-            var members = (from pm in _context.ProjectMembers
-                              where pm.User == user
-                              join c in _context.Categories
-                              on pm.Project equals c.Project
-                              select c);
-            var owners = (from p in _context.Projects
-                              where p.Owner == user
-                              join c in _context.Categories
-                              on p equals c.Project
-                              select c);
-            var categories = members.Union(owners);
-
-            return View(await categories.Include(c => c.Project).ToListAsync());
-
+            return View(viewable_categories);
         }
 
         // GET: Categories/Details/5

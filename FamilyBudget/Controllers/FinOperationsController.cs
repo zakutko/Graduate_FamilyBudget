@@ -65,23 +65,9 @@ namespace FamilyBudget.Controllers
         // GET: FinOperations/Create
         public IActionResult Create()
         {
-            var categories = _context.Categories.ToList()
-                .Where(c => user.CanEdit(c, _context)).ToList();
-
-            var projects = _context.Projects.ToList()
-                .Where(p => user.CanEdit(p,_context)).ToList();
-
-            var project_members = _context.ProjectMembers.ToList()
-                .Where(pm => user.CanEdit(pm, _context)).ToList();
-
-            if (!(categories.Any() && projects.Any() && project_members.Any()))
-            {
-                return Forbid();
-            }
-
-            ViewData["CategoryId"] = new SelectList(categories, "Id", "Name");
-            ViewData["ProjectId"] = new SelectList(projects, "Id", "Name");
-            ViewData["ProjectMemberId"] = new SelectList(project_members, "Id", "NameInProject");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
+            ViewData["ProjectMemberId"] = new SelectList(_context.ProjectMembers, "Id", "NameInProject");
             return View();
         }
 
@@ -92,6 +78,11 @@ namespace FamilyBudget.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FinType,ForAll,Value,CategoryId,ProjectMemberId,ProjectId")] FinOperation finOperation)
         {
+            if (!user.CanEdit(finOperation, _context))
+            {
+                return Forbid();
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(finOperation);
@@ -137,6 +128,11 @@ namespace FamilyBudget.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FinType,ForAll,Value,CategoryId,ProjectMemberId,ProjectId")] FinOperation finOperation)
         {
+            if (!user.CanEdit(finOperation, _context))
+            {
+                return Forbid();
+            }
+
             if (id != finOperation.Id)
             {
                 return NotFound();

@@ -61,15 +61,7 @@ namespace FamilyBudget.Controllers
         // GET: Categories/Create
         public IActionResult Create()
         {
-            var all_projects = _context.Projects.Include(c => c.Owner).ToList();
-            var available_projects = all_projects.Where(c => user.CanEdit(c,_context)).ToList();
-
-            if (!available_projects.Any())
-            {
-                return Forbid();
-            }
-
-            ViewData["ProjectId"] = new SelectList(available_projects, "Id", "Name");
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
             return View();
         }
 
@@ -179,7 +171,7 @@ namespace FamilyBudget.Controllers
                 return NotFound();
             }
 
-            if (!user.CanEdit(category, _context))
+            if (!user.CanDelete(category, _context))
             {
                 return Forbid();
             }

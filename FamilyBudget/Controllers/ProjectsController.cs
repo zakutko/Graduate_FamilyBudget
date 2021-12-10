@@ -61,7 +61,7 @@ namespace FamilyBudget.Controllers
         // GET: Projects/Create
         public IActionResult Create()
         {
-            ViewData["OwnerId"] = new SelectList(_context.Users.Where(c => c.Id == user.Id), "Id", "Id");
+            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -84,7 +84,7 @@ namespace FamilyBudget.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["OwnerId"] = new SelectList(_context.Users.Where(c => c.Id == user.Id), "Id", "Id", project.OwnerId);
+            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", project.OwnerId);
             return View(project);
         }
 
@@ -107,7 +107,7 @@ namespace FamilyBudget.Controllers
                 return Forbid();
             }
 
-            ViewData["OwnerId"] = new SelectList(_context.Users.Where(c => c.Id == user.Id), "Id", "Id", project.OwnerId);
+            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", project.OwnerId);
             return View(project);
         }
 
@@ -118,6 +118,11 @@ namespace FamilyBudget.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,OwnerId")] Project project)
         {
+            if (!user.CanEdit(project, _context))
+            {
+                return Forbid();
+            }
+
             if (id != project.Id)
             {
                 return NotFound();

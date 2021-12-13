@@ -1,5 +1,10 @@
-﻿using FamilyBudget.Models;
+﻿using FamilyBudget.Data;
+using FamilyBudget.Extensions;
+using FamilyBudget.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,18 +14,26 @@ using System.Threading.Tasks;
 
 namespace FamilyBudget.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ApplicationDbContext _context;
+
+        private IdentityUser user { get { return CurrentUser(); } }
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var all_projects = await _context.Projects.Include(p => p.Owner).ToListAsync();
+            var viewable_projects = all_projects.Where(x => user.CanView(x, _context)).ToList();
+
+            return View(viewable_projects);
         }
 
         public IActionResult Privacy()
@@ -32,6 +45,13 @@ namespace FamilyBudget.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private IdentityUser CurrentUser()
+        {
+            var username = HttpContext.User.Identity.Name;
+            return _context.Users
+                .FirstOrDefault(m => m.UserName == username);
         }
     }
 }

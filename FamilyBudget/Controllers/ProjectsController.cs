@@ -82,7 +82,7 @@ namespace FamilyBudget.Controllers
             {
                 project.CreateTime = DateTime.Now;
                 project.UpdateTime = DateTime.Now;
-                CRUD_project.Create(project, user, _context);
+                CRUD_project.Create(project, user);
                 _context.Add(project);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

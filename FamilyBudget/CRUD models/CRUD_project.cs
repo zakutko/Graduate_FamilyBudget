@@ -10,7 +10,7 @@ namespace FamilyBudget.CRUD_models
 {
     public class CRUD_project
     {
-        public static void Create(Project project, IdentityUser user, ApplicationDbContext context)
+        public static void Create(Project project, IdentityUser user)
         {
             var timeNow = DateTime.Now;
             project.ProjectMembers.Add(new ProjectMember

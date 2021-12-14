@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FamilyBudget.Data;
 using FamilyBudget.Models;
 using FamilyBudget.Extensions;
+using FamilyBudget.CRUD_models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -81,6 +82,7 @@ namespace FamilyBudget.Controllers
             {
                 project.CreateTime = DateTime.Now;
                 project.UpdateTime = DateTime.Now;
+                CRUD_project.Create(project, user);
                 _context.Add(project);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

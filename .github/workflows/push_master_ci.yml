@@ -27,11 +27,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: echo ${{ secret.YANDEX_CLOUD_OAUTH_TOKEN }} | docker login --username oauth --password-stdin cr.yandex
       - name: Build the Docker image
-        run: docker build . --file FamilyBudget/Dockerfile --tag yudakov1814/family_budget:${GITHUB_REF:11}
+        run: docker build . --file FamilyBudget/Dockerfile --tag ${{ secret.REGISTRY_ID }}/family_budget:master
       - name: Push the Docker image
-        run: docker push yudakov1814/family_budget:${GITHUB_REF:11}
+        run: docker push ${{ secret.REGISTRY_ID }}/family_budget:master

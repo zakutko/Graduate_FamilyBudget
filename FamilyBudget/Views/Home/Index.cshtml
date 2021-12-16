@@ -6,8 +6,8 @@
 
 <h1>Index</h1>
 
-<div id="modDialog" class="modal fade">
-    <div id="dialogContent" class="modal-dialog"></div>
+<div id="projectDeleteModal" class="modal fade">
+    <div id="projectDeleteDialogContent" class="modal-dialog"></div>
 </div>
 
 <div class="list-group">
@@ -19,7 +19,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </a>
 
-            <a asp-action="Modal" asp-route-id="@item.Id" class="p-2 ml-3 projectItem">
+            <a asp-area="" asp-controller="Modal" asp-action="ProjectDelete" asp-route-id="@item.Id" class="p-2 ml-3 projectDelete">
                 <span class="badge">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" class="bi bi-x-lg" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"></path>
@@ -37,12 +37,12 @@
 
         $(function () {
             $.ajaxSetup({ cache: false });
-            $(".projectItem").click(function (e) {
+            $(".projectDelete").click(function (e) {
 
                 e.preventDefault();
                 $.get(this.href, function (data) {
-                    $('#dialogContent').html(data);
-                    $('#modDialog').modal('show');
+                    $('#projectDeleteDialogContent').html(data);
+                    $('#projectDeleteModal').modal('show');
                 });
             });
         })

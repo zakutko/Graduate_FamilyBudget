@@ -47,6 +47,23 @@ namespace FamilyBudget.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        public IActionResult Modal(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var project = _context.Projects.FirstOrDefault(p => p.Id == id);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            return PartialView(project);
+        }
+
         private IdentityUser CurrentUser()
         {
             var username = HttpContext.User.Identity.Name;

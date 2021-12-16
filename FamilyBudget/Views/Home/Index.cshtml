@@ -6,12 +6,45 @@
 
 <h1>Index</h1>
 
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
+
 <div class="list-group">
     @foreach (var item in Model)
     {
-    <a asp-area="" asp-controller="Projects"  asp-action="Details" asp-route-id="@item.Id" 
-       class="list-group-item list-group-item-action">
-        @Html.DisplayFor(modelItem => item.Name)
-    </a>
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            <a asp-area="" asp-controller="Projects" asp-action="Details" asp-route-id="@item.Id"
+               class="p-2 flex-grow list-group-item-action">
+                @Html.DisplayFor(modelItem => item.Name)
+            </a>
+
+            <a asp-action="Modal" asp-route-id="@item.Id" class="p-2 ml-3 projectItem">
+                <span class="badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"></path>
+                        <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"></path>
+                    </svg>
+                </span>
+            </a>
+        </div>
     }
 </div>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".projectItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })
+    </script>
+}

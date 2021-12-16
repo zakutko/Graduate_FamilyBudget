@@ -1,0 +1,27 @@
+﻿@model FamilyBudget.Models.Project
+
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">Delete</h5>
+        <button class="btn btn-close" data-dismiss="modal" aria-label="Close">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"></path>
+                    <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"></path>
+                </svg>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <p class="modal-title" id="deleteModalLabel">Are you sure you want to delete @Html.DisplayFor(model => model.Name)?</p>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+        <form asp-area="" asp-controller="Projects" asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="Delete" class="btn btn-danger btn-ok" />
+        </form>
+    </div>
+</div>
+

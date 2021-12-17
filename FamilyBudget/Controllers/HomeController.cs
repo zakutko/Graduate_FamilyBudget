@@ -1,6 +1,7 @@
 ﻿using FamilyBudget.Data;
 using FamilyBudget.Extensions;
 using FamilyBudget.Models;
+using FamilyBudget.CRUD_models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +46,234 @@ namespace FamilyBudget.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+
+        public void OverwriteDB()
+        {
+            var user = CreateIdentityUser();
+            _context.Add(user);
+
+            var project = CreateProject(user);
+            _context.Add(project);
+
+            _context.SaveChanges();
+        }
+
+        private Project CreateProject(IdentityUser user)
+        {
+            var nowTime = DateTime.Now;
+            var project = new Project
+            {
+                Name = "Семейный бюджет",
+                OwnerId = user.Id,
+                Owner = user,
+                CreateTime = nowTime,
+                UpdateTime = nowTime,
+            };
+
+            CRUD_models.CRUD_project.Create(project, user);
+            #region добавление членов проекта и финансовых операций
+            project.ProjectMembers.Add(
+                new ProjectMember
+                {
+                    NameInProject = "Лидия Иванова",
+                    UserId = user.Id,
+                    User = user,
+                    ProjectId = project.Id,
+                    Project = project,
+                    CreateTime = nowTime,
+                    UpdateTime = nowTime
+                });
+
+
+            project.ProjectMembers.Add(
+                new ProjectMember
+                {
+                    NameInProject = "Сергей Петров",
+                    UserId = user.Id,
+                    User = user,
+                    ProjectId = project.Id,
+                    Project = project,
+                    CreateTime = nowTime,
+                    UpdateTime = nowTime
+                });
+
+            project.FinOperations.Add(
+                new FinOperation
+                {
+                    FinType = FinType.Charge,
+                    ForAll = true,
+                    Value = 1200,
+                    CategoryId = project.Categories.Find(c => c.Name == "Продукты").Id,
+                    Category = project.Categories.Find(c => c.Name == "Продукты"),
+                    ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Владелец").Id,
+                    ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Владелец"),
+                    ProjectId = project.Id,
+                    Project = project,
+                    CreateTime = new DateTime(2021,1,12,22,11,11),
+                    UpdateTime = new DateTime(2021,1,12,22,11,11),
+                });
+            project.FinOperations.Add(
+                new FinOperation
+                {
+                    FinType = FinType.Charge,
+                    ForAll = true,
+                    Value = 110,
+                    CategoryId = project.Categories.Find(c => c.Name == "Продукты").Id,
+                    Category = project.Categories.Find(c => c.Name == "Продукты"),
+                    ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Владелец").Id,
+                    ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Владелец"),
+                    ProjectId = project.Id,
+                    Project = project,
+                    CreateTime = new DateTime(2021, 1, 12, 20, 11, 11),
+                    UpdateTime = new DateTime(2021, 1, 12, 20, 11, 11),
+                });
+            project.FinOperations.Add(
+                new FinOperation
+                {
+                    FinType = FinType.Charge,
+                    ForAll = true,
+                    Value = 11000,
+                    CategoryId = project.Categories.Find(c => c.Name == "Подарки").Id,
+                    Category = project.Categories.Find(c => c.Name == "Подарки"),
+                    ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Владелец").Id,
+                    ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Владелец"),
+                    ProjectId = project.Id,
+                    Project = project,
+                    CreateTime = new DateTime(2021, 12, 12, 21, 11, 11),
+                    UpdateTime = new DateTime(2021, 12, 12, 21, 11, 11),
+                });
+                
+            project.FinOperations.Add(
+                new FinOperation
+                {
+                    FinType = FinType.Charge,
+                    ForAll = true,
+                    Value = 11000,
+                    CategoryId = project.Categories.Find(c => c.Name == "Бытовая техника").Id,
+                    Category = project.Categories.Find(c => c.Name == "Бытовая техника"),
+                    ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Лидия Иванова").Id,
+                    ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Лидия Иванова"),
+                    ProjectId = project.Id,
+                    Project = project,
+                    CreateTime = new DateTime(2021, 6, 17, 14, 11, 11),
+                    UpdateTime = new DateTime(2021, 6, 17, 14, 11, 11),
+                });
+            project.FinOperations.Add(
+                new FinOperation
+                {
+                    FinType = FinType.Charge,
+                    ForAll = true,
+                    Value = 2500,
+                    CategoryId = project.Categories.Find(c => c.Name == "Развлечения").Id,
+                    Category = project.Categories.Find(c => c.Name == "Развлечения"),
+                    ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Лидия Иванова").Id,
+                    ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Лидия Иванова"),
+                    ProjectId = project.Id,
+                    Project = project,
+                    CreateTime = new DateTime(2021, 10, 20, 10, 11, 11),
+                    UpdateTime = new DateTime(2021, 10, 20, 10, 11, 11),
+                });
+
+            project.FinOperations.Add(
+                new FinOperation
+                {
+                    FinType = FinType.Charge,
+                    ForAll = true,
+                    Value = 1100,
+                    CategoryId = project.Categories.Find(c => c.Name == "Развлечения").Id,
+                    Category = project.Categories.Find(c => c.Name == "Развлечения"),
+                    ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Сергей Петров").Id,
+                    ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Сергей Петров"),
+                    ProjectId = project.Id,
+                    Project = project,
+                    CreateTime = new DateTime(2021, 4, 12, 20, 0, 0),
+                    UpdateTime = new DateTime(2021, 4, 12, 20, 0, 0),
+                });
+            project.FinOperations.Add(
+                new FinOperation
+                {
+                    FinType = FinType.Charge,
+                    ForAll = true,
+                    Value = 10000,
+                    CategoryId = project.Categories.Find(c => c.Name == "Развлечения").Id,
+                    Category = project.Categories.Find(c => c.Name == "Развлечения"),
+                    ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Сергей Петров").Id,
+                    ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Сергей Петров"),
+                    ProjectId = project.Id,
+                    Project = project,
+                    CreateTime = new DateTime(2021, 5, 12, 20, 0, 0),
+                    UpdateTime = new DateTime(2021, 5, 12, 20, 0, 0),
+                });
+
+            project.FinOperations.Add(
+                new FinOperation
+                {
+                    FinType = FinType.Charge,
+                    ForAll = true,
+                    Value = 10000,
+                    CategoryId = project.Categories.Find(c => c.Name == "Развлечения").Id,
+                    Category = project.Categories.Find(c => c.Name == "Развлечения"),
+                    ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Лидия Иванова").Id,
+                    ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Лидия Иванова"),
+                    ProjectId = project.Id,
+                    Project = project,
+                    CreateTime = new DateTime(2021, 5, 10, 21, 0, 0),
+                    UpdateTime = new DateTime(2021, 5, 10, 21, 0, 0),
+                });
+            project.FinOperations.Add(
+                new FinOperation
+                {
+                    FinType = FinType.Charge,
+                    ForAll = true,
+                    Value = 4000,
+                    CategoryId = project.Categories.Find(c => c.Name == "Кафе").Id,
+                    Category = project.Categories.Find(c => c.Name == "Кафе"),
+                    ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Сергей Петров").Id,
+                    ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Сергей Петров"),
+                    ProjectId = project.Id,
+                    Project = project,
+                    CreateTime = new DateTime(2021, 5, 10, 21, 0, 0),
+                    UpdateTime = new DateTime(2021, 5, 10, 21, 0, 0),
+                });
+
+            project.FinOperations.Add(
+                new FinOperation
+                {
+                    FinType = FinType.Charge,
+                    ForAll = true,
+                    Value = 4000,
+                    CategoryId = project.Categories.Find(c => c.Name == "Кафе").Id,
+                    Category = project.Categories.Find(c => c.Name == "Кафе"),
+                    ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Владелец").Id,
+                    ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Владелец"),
+                    ProjectId = project.Id,
+                    Project = project,
+                    CreateTime = new DateTime(2021, 5, 7, 19, 0, 0),
+                    UpdateTime = new DateTime(2021, 5, 7, 19, 0, 0),
+                });
+#endregion
+            return project;
+
+        }
+        private IdentityUser CreateIdentityUser()
+        {
+            const string EMAIL = "demo@mail.ru";
+            var user = new IdentityUser
+            {
+                UserName = EMAIL,
+                NormalizedUserName = EMAIL.ToUpper(),
+                Email = EMAIL,
+                NormalizedEmail = EMAIL.ToUpper(),
+                EmailConfirmed = true,
+                SecurityStamp = new Guid().ToString(),
+            };
+            var hasher = new PasswordHasher<IdentityUser>();
+            var hashedPass = hasher.HashPassword(user, "123456");
+            user.PasswordHash = hashedPass;
+
+            return user;
         }
 
         private IdentityUser CurrentUser()

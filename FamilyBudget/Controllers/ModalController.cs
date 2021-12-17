@@ -3,6 +3,7 @@ using FamilyBudget.Extensions;
 using FamilyBudget.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,8 @@ namespace FamilyBudget.Controllers
             }
 
             var project = _context.Projects
+                .Include(c => c.ProjectMembers)
+                .Include(c => c.FinOperations)
                 .FirstOrDefault(p => p.Id == id);
 
             if (project == null)

@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <div id="projectDeleteModal" class="modal fade">
-    <div id="projectDeleteDialogContent" class="modal-dialog"></div>
+    <div id="projectDeleteDialogContent" class="modal-dialog modal-dialog-centered modal-lg"></div>
 </div>
 
 <div class="list-group">
@@ -21,8 +21,7 @@
 
             <a asp-area="" asp-controller="Modal" asp-action="ProjectDelete" asp-route-id="@item.Id" class="projectDelete p-2 ml-3 badge">
                 <img src="~/lib/bootstrap/dist/icons/x-lg.svg">
-            </a>
-        
+            </a>       
         </div>
     }
 </div>

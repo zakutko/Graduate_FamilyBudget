@@ -1,5 +1,6 @@
 ﻿using FamilyBudget.Data;
 using FamilyBudget.Extensions;
+using FamilyBudget.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -27,12 +28,22 @@ namespace FamilyBudget.Controllers
                 return NotFound();
             }
 
-            var project = _context.Projects.FirstOrDefault(p => p.Id == id);
+            var project = _context.Projects
+                .FirstOrDefault(p => p.Id == id);
 
             if (project == null)
             {
                 return NotFound();
             }
+
+            if (!user.CanDelete(project,_context))
+            {
+                return Forbid();
+            }
+
+            ViewBag.membersCount = project.ProjectMembers.Count();
+            ViewBag.incomesCount = project.FinOperations.Where(fo => fo.FinType == FinType.Income).Count();
+            ViewBag.chargesCount = project.FinOperations.Where(fo => fo.FinType == FinType.Charge).Count();
 
             return PartialView(project);
         }

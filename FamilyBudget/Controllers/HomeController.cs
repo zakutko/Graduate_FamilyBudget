@@ -19,14 +19,17 @@ namespace FamilyBudget.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
         private readonly ApplicationDbContext _context;
 
         private IdentityUser user { get { return CurrentUser(); } }
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context,
+            SignInManager<IdentityUser> signInManager)
         {
             _logger = logger;
             _context = context;
+            _signInManager = signInManager;
         }
 
         public async Task<IActionResult> Index()
@@ -51,13 +54,19 @@ namespace FamilyBudget.Controllers
 
         public void OverwriteDB()
         {
+            _context.RemoveRange(_context.Projects);
+            _context.RemoveRange(_context.ProjectMembers);
+            _context.RemoveRange(_context.Categories);
+            _context.RemoveRange(_context.FinOperations);
+            _context.RemoveRange(_context.Users);
+
             var user = CreateIdentityUser();
             _context.Add(user);
-
             var project = CreateProject(user);
             _context.Add(project);
 
             _context.SaveChanges();
+            _signInManager.SignOutAsync();
         }
 
         private Project CreateProject(IdentityUser user)

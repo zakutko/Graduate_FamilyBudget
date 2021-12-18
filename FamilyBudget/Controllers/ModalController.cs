@@ -1,5 +1,6 @@
 ﻿using FamilyBudget.Data;
 using FamilyBudget.Extensions;
+using FamilyBudget.ModalViewModels;
 using FamilyBudget.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,10 +25,7 @@ namespace FamilyBudget.Controllers
 
         public IActionResult ProjectDelete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var projectDelete = new ProjectDeleteModel();
 
             var project = _context.Projects
                 .Include(c => c.ProjectMembers)
@@ -36,19 +34,24 @@ namespace FamilyBudget.Controllers
 
             if (project == null)
             {
-                return NotFound();
+                projectDelete.IsNotFound = true;
             }
 
             if (!user.CanDelete(project,_context))
             {
-                return Forbid();
+                projectDelete.IsForbid = true;
             }
 
-            ViewBag.membersCount = project.ProjectMembers.Count();
-            ViewBag.incomesCount = project.FinOperations.Where(fo => fo.FinType == FinType.Income).Count();
-            ViewBag.chargesCount = project.FinOperations.Where(fo => fo.FinType == FinType.Charge).Count();
+            projectDelete.Id                = project.Id;
+            projectDelete.Name              = project.Name;
+            projectDelete.Owner             = project.Owner;
+            projectDelete.CreateTime        = project.CreateTime;
+            projectDelete.UpdateTime        = project.UpdateTime;
+            projectDelete.membersCount      = project.ProjectMembers.Count();
+            projectDelete.incomesCount      = project.FinOperations.Where(fo => fo.FinType == FinType.Income).Count();
+            projectDelete.chargesCount      = project.FinOperations.Where(fo => fo.FinType == FinType.Charge).Count();
 
-            return PartialView(project);
+            return PartialView(projectDelete);
         }
 
         private IdentityUser CurrentUser()

@@ -1,71 +1,83 @@
-﻿@model FamilyBudget.Models.Project
+﻿@model FamilyBudget.ModalViewModels.ProjectDeleteModel
 
 @{
     ViewData["Title"] = "ProjectDelete";
-    
 }
 
 <div class="modal-content">
-    <div class="modal-header ">
-        <h3 class="modal-title ">Are you sure you want to delete this project?</h3>
-        <button class="btn btn-close" data-dismiss="modal" aria-label="Close">
-            <img src="~/lib/bootstrap/dist/icons/x-lg.svg">
-        </button>
-    </div>
+    <div class="modal-header">
+        @if (@Model.IsNotFound)
+        {
+            <h3 class="modal-title text-danger">This project is not found.</h3>
+        }
+        else if (@Model.IsForbid)
+        {
+            <h3 class="modal-title text-danger">This project is forbidden.</h3>
+        }
+        else
+        {
+            <h3 class="modal-title">Are you sure you want to delete this project?</h3>
+        }
 
-    <div class="modal-body container-fluid">
-        <dl class="row">
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Name):
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Owner.UserName):
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Owner.UserName)
-            </dd>
-            <dt class="col-sm-4">
-                Family members count:
-            </dt>
-            <dd class="col-sm-8">
-                @ViewBag.membersCount
-            </dd>
-            <dt class="col-sm-4">
-                Incomes count:
-            </dt>
-            <dd class="col-sm-8">
-                @ViewBag.incomesCount
-            </dd>
-            <dt class="col-sm-4">
-                Charges count:
-            </dt>
-            <dd class="col-sm-8">
-                @ViewBag.chargesCount
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.CreateTime)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.CreateTime)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.UpdateTime)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.UpdateTime)
-            </dd>
-        </dl>
+        <button class="bi bi-x-lg btn" data-dismiss="modal" aria-label="Close"></button>
     </div>
-
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-        <form asp-area="" asp-controller="Projects" asp-action="Delete">
-            <input type="hidden" asp-for="Id" />
-            <input type="submit" value="Delete" class="btn btn-danger btn-ok" />
-        </form>
-    </div>
+    @if (Model.IsValid)
+    {
+        <div class="modal-body container-fluid">
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Name):
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Owner.UserName):
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Owner.UserName)
+                </dd>
+                <dt class="col-sm-4">
+                    Family members count:
+                </dt>
+                <dd class="col-sm-8">
+                    @Model.membersCount
+                </dd>
+                <dt class="col-sm-4">
+                    Incomes count:
+                </dt>
+                <dd class="col-sm-8">
+                    @Model.incomesCount
+                </dd>
+                <dt class="col-sm-4">
+                    Charges count:
+                </dt>
+                <dd class="col-sm-8">
+                    @Model.chargesCount
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.CreateTime)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.CreateTime)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.UpdateTime)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.UpdateTime)
+                </dd>
+            </dl>
+        </div>
+     }
+     <div class="modal-footer">
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         @if (Model.IsValid)
+         {
+             <form asp-area="" asp-controller="Projects" asp-action="Delete">
+                 <input type="hidden" asp-for="Id" />
+                 <input type="submit" value="Delete" class="btn btn-danger btn-ok" />
+             </form>
+         }
+     </div>
 </div>

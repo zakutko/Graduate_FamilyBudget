@@ -35,11 +35,13 @@ namespace FamilyBudget.Controllers
             if (project == null)
             {
                 projectDelete.IsNotFound = true;
+                return PartialView(projectDelete);
             }
 
             if (!user.CanDelete(project,_context))
             {
                 projectDelete.IsForbid = true;
+                return PartialView(projectDelete);
             }
 
             projectDelete.Id                = project.Id;

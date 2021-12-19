@@ -6,12 +6,36 @@
 
 <h1>Index</h1>
 
+<div id="projectDeleteModal" class="modal fade">
+    <div id="projectDeleteDialogContent" class="modal-dialog modal-dialog-centered modal-lg"></div>
+</div>
+
 <div class="list-group">
     @foreach (var item in Model)
     {
-    <a asp-area="" asp-controller="Projects"  asp-action="Details" asp-route-id="@item.Id" 
-       class="list-group-item list-group-item-action">
-        @Html.DisplayFor(modelItem => item.Name)
-    </a>
+        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+           asp-controller="Projects" asp-action="Details" asp-route-id="@item.Id">
+            <span class="p-2 projectListItem list-group-item-action flex-grow-1">
+                @Html.DisplayFor(modelItem => item.Name)
+            </span>
+
+            <i id="@item.Id" class="bi bi-x-lg projectDelete"></i>
+        </a>
     }
 </div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".projectDelete").click(function (e) {
+                e.preventDefault();
+                $.get("Modal/ProjectDelete/" + this.id, function (data) {
+                    $('#projectDeleteDialogContent').html(data);
+                    $('#projectDeleteModal').modal('show');
+                });
+            });
+        })
+    </script>
+}

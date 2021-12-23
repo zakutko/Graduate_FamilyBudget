@@ -12,6 +12,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using FamilyBudget.Models.View.Enums;
+using FamilyBudget.Models.View.Details;
+using FamilyBudget.Models.View.Sort;
+using FamilyBudget.Models.View.Page;
+using FamilyBudget.Models.View.Filter;
 
 namespace FamilyBudget.Controllers
 {
@@ -38,6 +43,82 @@ namespace FamilyBudget.Controllers
             var viewable_projects = all_projects.Where(x => user.CanView(x, _context)).ToList();
 
             return View(viewable_projects);
+        }
+
+        public async Task<IActionResult> Details(int? id, string category, FinType? finType, int page = 1,
+            FinOperationSortEnum sortOrder = FinOperationSortEnum.CreateTimeDesc)
+        {
+            var project = _context.Projects
+                .FirstOrDefault(p => p.Id == id);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            if (!user.CanView(project,_context))
+            {
+                return Forbid();
+            }
+
+            IQueryable<FinOperation> finOperations = _context.FinOperations
+                .Include(x => x.Project)
+                .Include(x => x.Category);
+
+            finOperations = finOperations.Where(p => p.ProjectId == id);
+
+            if (finType!= null)
+            {
+                finOperations = finOperations.Where(p => p.FinType == finType);
+            }
+
+            if (!String.IsNullOrEmpty(category))
+            {
+                finOperations = finOperations.Where(p => p.Category.Name.Contains(category));
+            }
+
+            switch (sortOrder)
+            {
+                case FinOperationSortEnum.FinTypeDesc:
+                    finOperations = finOperations.OrderByDescending(s => s.FinType);
+                    break;
+                case FinOperationSortEnum.FinTypeAsc:
+                    finOperations = finOperations.OrderBy(s => s.FinType);
+                    break;
+                case FinOperationSortEnum.CategoryDesc:
+                    finOperations = finOperations.OrderByDescending(s => s.Category);
+                    break;
+                case FinOperationSortEnum.CategoryAsc:
+                    finOperations = finOperations.OrderBy(s => s.Category);
+                    break;
+                default:
+                case FinOperationSortEnum.CreateTimeDesc:
+                    finOperations = finOperations.OrderByDescending(s => s.CreateTime);
+                    break;
+                case FinOperationSortEnum.CreateTimeAsc:
+                    finOperations = finOperations.OrderBy(s => s.CreateTime);
+                    break;
+                case FinOperationSortEnum.ValueDesc:
+                    finOperations = finOperations.OrderByDescending(s => s.Value);
+                    break;
+                case FinOperationSortEnum.ValueAsc:
+                    finOperations = finOperations.OrderBy(s => s.Value);
+                    break;
+            }
+
+            int pageSize = 10;
+
+            var count = await finOperations.CountAsync();
+            var items = await finOperations.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            HomeProjectDetailsModel detailsModel = new HomeProjectDetailsModel
+            {
+                PageViewModel = new FinOperationPageModel(count, page, pageSize),
+                SortViewModel = new FinOperationSortModel(sortOrder),
+                FilterViewModel = new FinOperationFilterModel(id, category, finType),
+                finOperations = items
+            };
+            return View(detailsModel);
         }
 
         public IActionResult Privacy()

@@ -111,7 +111,7 @@ namespace FamilyBudget.Controllers
             var count = await finOperations.CountAsync();
             var items = await finOperations.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 
-            HomeProjectDetailsModel detailsModel = new HomeProjectDetailsModel
+            var detailsModel = new HomeProjectDetailsModel
             {
                 PageViewModel = new FinOperationPageModel(count, page, pageSize),
                 SortViewModel = new FinOperationSortModel(sortOrder),

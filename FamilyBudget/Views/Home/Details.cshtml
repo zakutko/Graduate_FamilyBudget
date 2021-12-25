@@ -6,13 +6,11 @@
 
 <h1>Details</h1>
 
-<form method="get">
+<form method="get" class="pt-1 pb-3">
     <div class="form-inline">
-        <label class="font-weight-bolder mr-3">Category name:</label>
-        <input name="category" value="@Model.FilterViewModel.SelectedCategory" class="form-control col-sm-4 mr-auto" />
+        <input name="category" placeholder="Category"/>
 
-        <label class="font-weight-bolder mr-3">FinType:</label>
-        <select type="submit" class="form-control col-sm-1 mr-auto" name="finType"
+        <select type="submit" class="form-control col-sm-1 ml-2 mr-auto" name="finType"
                 asp-for="@Model.FilterViewModel.SelectedFinType"
                 asp-items="@Model.FilterViewModel.FinTypes"
                 onchange="this.form.submit()"></select>
@@ -20,56 +18,104 @@
 </form>
 @if (!Model.isEmpty)
 {
-<table class="table">
-    <tr>
-        <th>
-            <a asp-action="Details"
-               asp-route-sortorder="@(Model.SortViewModel.CategorySort)"
-               asp-route-category="@(Model.FilterViewModel.SelectedCategory)">Category </a>
-        </th>
-        <th>
-            <a asp-action="Details"
-               asp-route-sortorder="@(Model.SortViewModel.ValueSort)">Value </a>
-        </th>
-        <th>
-            <a asp-action="Details"
-               asp-route-sortorder="@(Model.SortViewModel.CreateTimeSort)">CreateTime </a>
-        </th>
-        <th>
-            <a asp-action="Details"
-               asp-route-sortorder="@(Model.SortViewModel.FinTypeSort)"
-               asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)">FinType </a>
-        </th>
-    </tr>
-    @foreach (FinOperation u in Model.finOperations)
-    {
-        <tr><td>@u.Category.Name<td>@u.Value</td><td>@u.CreateTime</td><td>@u.FinType</td></tr>
-    }
-</table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <a class="btn btn-sm btn-light"
+                       asp-action="Details"
+                       asp-route-sortorder="@(Model.SortViewModel.CategorySort)"
+                       asp-route-category="@(Model.FilterViewModel.SelectedCategory)">
+                        Category
+                        <i class="fa fa-fw fa-sort"></i>
+                    </a>
+                </th>
+                <th>
+                    <a class="btn btn-sm btn-light"
+                       asp-action="Details"
+                       asp-route-sortorder="@(Model.SortViewModel.ValueSort)">
+                        Value
+                        <i class="fa fa-fw fa-sort"></i>
+                    </a>
+                </th>
+                <th>
+                    <a class="btn btn-sm btn-light"
+                       asp-action="Details"
+                       asp-route-sortorder="@(Model.SortViewModel.CreateTimeSort)">
+                        CreateTime
+                        <i class="fa fa-fw fa-sort"></i>
+                    </a>
+                </th>
+                <th>
+                    <a class="btn btn-sm btn-light"
+                       asp-action="Details"
+                       asp-route-sortorder="@(Model.SortViewModel.FinTypeSort)"
+                       asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)">
+                        FinType
+                        <i class="fa fa-fw fa-sort"></i>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (FinOperation fo in Model.finOperations)
+            {
+                <tr>
+                    <td class="col-3">@fo.Category.Name</td>
+                    <td class="col-3">@fo.Value</td>
+                    <td class="col-3">
+                        @if (@fo.CreateTime.Date.Day == DateTime.Now.Day)
+                        {
+                            <label>Сегодня</label>
+                        }
+                        else if (@fo.CreateTime.Date.Day == DateTime.Today.AddDays(-1).Day)
+                        {
+                            <label>
+                                Вчера
+                            </label>
+                        }
+                        else if (@fo.CreateTime.Date.Year == DateTime.Now.Year)
+                        {
+                            <label>
+                                @fo.CreateTime.ToString("d MMMM")
+                            </label>
+                        }
+                        else
+                        {
+                            <label>
+                                @fo.CreateTime.ToString("d MMMM yyyy")
+                            </label>
+                        }
+                    </td>
+                    <td class="col-3">@fo.FinType</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
 
-<ul class="pagination justify-content-center d-flex p-2">
-    <li class="page-item @(!Model.PageViewModel.HasPreviousPage ? "disabled" : "")">
-        <a asp-action="Details"
-           asp-route-id="@(Model.FilterViewModel.SelectedProject)"
-           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-           asp-route-sortorder="@(Model.SortViewModel.Current)"
-           class="page-link">
-            Previous
-        </a>
-    </li>
-    <li class="page-item @(!Model.PageViewModel.HasNextPage ? "disabled" : "")">
-        <a asp-action="Details"
-           asp-route-id="@(Model.FilterViewModel.SelectedProject)"
-           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-           asp-route-sortorder="@(Model.SortViewModel.Current)"
-           class="page-link">
-            Next
-        </a>
-    </li>
-</ul>
+    <ul class="pagination justify-content-center">
+        <li class="page-item @(!Model.PageViewModel.HasPreviousPage ? "disabled" : "")">
+            <a asp-action="Details"
+               asp-route-id="@(Model.FilterViewModel.SelectedProject)"
+               asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+               asp-route-sortorder="@(Model.SortViewModel.Current)"
+               class="page-link">
+                Previous
+            </a>
+        </li>
+        <li class="page-item @(!Model.PageViewModel.HasNextPage ? "disabled" : "")">
+            <a asp-action="Details"
+               asp-route-id="@(Model.FilterViewModel.SelectedProject)"
+               asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+               asp-route-sortorder="@(Model.SortViewModel.Current)"
+               class="page-link">
+                Next
+            </a>
+        </li>
+    </ul>
 }
 else
 {
-<h4 class="text-center p-5">No FinOperation found</h4>
+    <h4 class="text-center p-5">No FinOperation found</h4>
 }

@@ -204,5 +204,14 @@ namespace FamilyBudget.Controllers
             return _context.Users
                 .FirstOrDefault(m => m.UserName == username);
         }
+
+        public async Task<IActionResult> GetCategories(string term)
+        {
+            var names = _context.Categories.Where(a => a.Name.Contains(term))
+                .Select(a => new { value = a.Name })
+                .Distinct().ToListAsync();
+
+            return Json(await names);
+        }
     }
 }

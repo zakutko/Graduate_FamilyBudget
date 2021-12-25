@@ -8,8 +8,8 @@
 
 <form class="pt-1 pb-3">
         <div class="form-inline">
-            <input type="text" class="form-control col-6 ml-auto" name="category" placeholder="Category"
-                   autocomplete="off" data-categories='@Url.Action("GetCategories", "Categories")' />
+            <input type="text" class="form-control col-6 ml-auto" name="category" placeholder="Category" value="@Model.FilterViewModel.SelectedCategory"
+                   autocomplete="off" data-categories='@Url.Action("SearchCategories", "Categories")' />
 
             <select type="submit" class="form-control col-sm-1 ml-2 mr-auto" name="finType"
                     asp-for="@Model.FilterViewModel.SelectedFinType"
@@ -29,7 +29,7 @@
                            asp-route-sortorder="@(Model.SortViewModel.CategorySort)"
                            asp-route-category="@(Model.FilterViewModel.SelectedCategory)">
                             Category
-                            <i class="fa fa-fw fa-sort"></i>
+                            <i class="fa fa-fw fa-sort fa-sort"></i>
                         </a>
                     </th>
                     <th>
@@ -128,7 +128,13 @@
     <script type="text/javascript">
             $("[data-categories]").each(function () {
                 var target = $(this);
-                target.autocomplete({ source: target.attr("data-categories") });
+                $(this).autocomplete({
+                    source: target.attr("data-categories"),
+                    select: function (event, ui) {
+                        this.value = ui.item.value;
+                        this.form.submit();
+                    }
+                });                
             });
     </script>
 }

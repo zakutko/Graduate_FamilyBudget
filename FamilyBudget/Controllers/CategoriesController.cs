@@ -205,16 +205,21 @@ namespace FamilyBudget.Controllers
                 .FirstOrDefault(m => m.UserName == username);
         }
 
-        public async Task<IActionResult> SearchCategories(int project, string term)
+        public async Task<IActionResult> SearchCategories(int id, string term)
         {
-            var categories = await _context.Categories.ToListAsync();
-            var names = categories
-                .Where(a => user.CanView(a,_context))
-                .Where(a => a.Name.Contains(term))
-                .Select(a => new { value = a.Name })
-                .Distinct();
-
-            return Json(names);
+            try
+            {
+                var categories = await _context.Categories.ToListAsync();
+                var names = categories
+                    .Where(a => a.ProjectId == id)
+                    .Where(a => a.Name.Contains(term))
+                    .Select(a => new { value = a.Name });
+                return Ok(names);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
         }
     }
 }

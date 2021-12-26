@@ -5,11 +5,10 @@
 }
 
 <h1>Details</h1>
-
 <form class="pt-1 pb-3">
         <div class="form-inline">
-            <input type="text" class="form-control col-6 ml-auto" name="category" placeholder="Category" value="@Model.FilterViewModel.SelectedCategory"
-                   autocomplete="off" data-categories='@Url.Action("SearchCategories", "Categories")' />
+            <input type="text" id="inputCategory" data-projectId="@Model.FilterViewModel.SelectedProject" 
+            class="form-control col-6 ml-auto" name="category" placeholder="Category" value="@Model.FilterViewModel.SelectedCategory"/>
 
             <select type="submit" class="form-control col-sm-1 ml-2 mr-auto" name="finType"
                     asp-for="@Model.FilterViewModel.SelectedFinType"
@@ -25,34 +24,44 @@
                 <tr>
                     <th>
                         <a class="btn btn-sm btn-light"
-                           asp-action="Details"
-                           asp-route-sortorder="@(Model.SortViewModel.CategorySort)"
-                           asp-route-category="@(Model.FilterViewModel.SelectedCategory)">
+                            asp-action="Details"
+                            asp-route-id="@(Model.FilterViewModel.SelectedProject)"
+                            asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
+                            asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
+                            asp-route-sortorder="@(Model.SortViewModel.CategorySort)">
                             Category
                             <i class="fa fa-fw fa-sort"></i>
                         </a>
                     </th>
                     <th>
                         <a class="btn btn-sm btn-light"
-                           asp-action="Details"
-                           asp-route-sortorder="@(Model.SortViewModel.ValueSort)">
+                            asp-action="Details"
+                            asp-route-id="@(Model.FilterViewModel.SelectedProject)"
+                            asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
+                            asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
+                            asp-route-sortorder="@(Model.SortViewModel.ValueSort)">
                             Value
                             <i class="fa fa-fw fa-sort"></i>
                         </a>
                     </th>
                     <th>
                         <a class="btn btn-sm btn-light"
-                           asp-action="Details"
-                           asp-route-sortorder="@(Model.SortViewModel.CreateTimeSort)">
+                            asp-action="Details"
+                            asp-route-id="@(Model.FilterViewModel.SelectedProject)"
+                            asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
+                            asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
+                            asp-route-sortorder="@(Model.SortViewModel.CreateTimeSort)">
                             CreateTime
                             <i class="fa fa-fw fa-sort"></i>
                         </a>
                     </th>
                     <th>
                         <a class="btn btn-sm btn-light"
-                           asp-action="Details"
-                           asp-route-sortorder="@(Model.SortViewModel.FinTypeSort)"
-                           asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)">
+                            asp-action="Details"
+                            asp-route-id="@(Model.FilterViewModel.SelectedProject)"
+                            asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
+                            asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
+                            asp-route-sortorder="@(Model.SortViewModel.FinTypeSort)">
                             FinType
                             <i class="fa fa-fw fa-sort"></i>
                         </a>
@@ -72,21 +81,15 @@
                             }
                             else if (@fo.CreateTime.Date.Day == DateTime.Today.AddDays(-1).Day)
                             {
-                                <label>
-                                    Вчера
-                                </label>
+                                <label>Вчера</label>
                             }
                             else if (@fo.CreateTime.Date.Year == DateTime.Now.Year)
                             {
-                                <label>
-                                    @fo.CreateTime.ToString("d MMMM")
-                                </label>
+                                <label>@fo.CreateTime.ToString("d MMMM")</label>
                             }
                             else
                             {
-                                <label>
-                                    @fo.CreateTime.ToString("d MMMM yyyy")
-                                </label>
+                                <label>@fo.CreateTime.ToString("d MMMM yyyy")</label>
                             }
                         </td>
                         <td class="col-3">@fo.FinType</td>
@@ -100,6 +103,8 @@
             <li class="page-item @(!Model.PageViewModel.HasPreviousPage ? "disabled" : "")">
                 <a asp-action="Details"
                    asp-route-id="@(Model.FilterViewModel.SelectedProject)"
+                   asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
+                   asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
                    asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
                    asp-route-sortorder="@(Model.SortViewModel.Current)"
                    class="page-link">
@@ -109,6 +114,8 @@
             <li class="page-item @(!Model.PageViewModel.HasNextPage ? "disabled" : "")">
                 <a asp-action="Details"
                    asp-route-id="@(Model.FilterViewModel.SelectedProject)"
+                   asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
+                   asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
                    asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
                    asp-route-sortorder="@(Model.SortViewModel.Current)"
                    class="page-link">
@@ -125,18 +132,35 @@
 
 @section scripts
 {
-    <script type="text/javascript">
-            $("[data-categories]").each(function () {
-                var target = $(this);
-                $(this).autocomplete({
-                    source: target.attr("data-categories"),
+        <script type="text/javascript">  
+            $(document).ready(function () {  
+                $("#inputCategory").autocomplete({  
+                    source: function (request, response) {
+                        $.ajax({  
+                            url: "/Categories/SearchCategories/",  
+                            method: 'GET',  
+                            data: { 
+                                "id": $("#inputCategory").attr("data-projectId"),
+                                "term": request.term
+                            },  
+                            dataType: 'json',  
+                            success: function (data) {
+                                response($.map(data, function (item) {
+                                    return item;
+                                }))
+                            },  
+                            error: function (err) {  
+                                alert('Error'); 
+                            }  
+                        });  
+                    },
                     select: function (event, ui) {
                         this.value = ui.item.value;
                         this.form.submit();
                     }
-                });                
-            });
-    </script>
+                });  
+            });  
+        </script>  
 }
 
 

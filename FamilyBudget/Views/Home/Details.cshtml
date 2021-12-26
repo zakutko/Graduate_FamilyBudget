@@ -1,4 +1,5 @@
-﻿@model FamilyBudget.Models.View.Details.HomeProjectDetailsModel
+﻿@using FamilyBudget.Models.View.Enums
+@model FamilyBudget.Models.View.Details.HomeProjectDetailsModel
 
 @{
     ViewData["Title"] = "Details";
@@ -30,7 +31,7 @@
                             asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
                             asp-route-sortorder="@(Model.SortViewModel.CategorySort)">
                             Category
-                            <i class="fa fa-fw fa-sort"></i>
+                            <i class="fa fa-fw @(Model.SortViewModel.CategorySort == FinOperationSortEnum.CategoryAsc ? "fa-sort-asc" : "fa-sort-desc")"></i>
                         </a>
                     </th>
                     <th>
@@ -41,7 +42,7 @@
                             asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
                             asp-route-sortorder="@(Model.SortViewModel.ValueSort)">
                             Value
-                            <i class="fa fa-fw fa-sort"></i>
+                            <i class="fa fa-fw @(Model.SortViewModel.ValueSort == FinOperationSortEnum.ValueAsc ? "fa-sort-asc" : "fa-sort-desc")"></i>
                         </a>
                     </th>
                     <th>
@@ -52,7 +53,7 @@
                             asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
                             asp-route-sortorder="@(Model.SortViewModel.CreateTimeSort)">
                             CreateTime
-                            <i class="fa fa-fw fa-sort"></i>
+                            <i class="fa fa-fw @(Model.SortViewModel.CreateTimeSort == FinOperationSortEnum.CreateTimeAsc ? "fa-sort-asc" : "fa-sort-desc")"></i>
                         </a>
                     </th>
                     <th>
@@ -63,7 +64,7 @@
                             asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
                             asp-route-sortorder="@(Model.SortViewModel.FinTypeSort)">
                             FinType
-                            <i class="fa fa-fw fa-sort"></i>
+                            <i class="fa fa-fw @(Model.SortViewModel.FinTypeSort == FinOperationSortEnum.FinTypeAsc ? "fa-sort-asc" : "fa-sort-desc")"></i>
                         </a>
                     </th>
                 </tr>
@@ -75,22 +76,10 @@
                         <td class="col-3">@fo.Category.Name</td>
                         <td class="col-3">@fo.Value</td>
                         <td class="col-3">
-                            @if (@fo.CreateTime.Date.Day == DateTime.Now.Day)
-                            {
-                                <label>Сегодня</label>
-                            }
-                            else if (@fo.CreateTime.Date.Day == DateTime.Today.AddDays(-1).Day)
-                            {
-                                <label>Вчера</label>
-                            }
-                            else if (@fo.CreateTime.Date.Year == DateTime.Now.Year)
-                            {
-                                <label>@fo.CreateTime.ToString("d MMMM")</label>
-                            }
-                            else
-                            {
-                                <label>@fo.CreateTime.ToString("d MMMM yyyy")</label>
-                            }
+                            @if (@fo.CreateTime.Date.Day == DateTime.Now.Day) {<label>Сегодня</label>}
+                            else if (@fo.CreateTime.Date.Day == DateTime.Today.AddDays(-1).Day) {<label>Вчера</label>}
+                            else if (@fo.CreateTime.Date.Year == DateTime.Now.Year) {<label>@fo.CreateTime.ToString("d MMMM")</label>}
+                            else{<label>@fo.CreateTime.ToString("d MMMM yyyy")</label>}
                         </td>
                         <td class="col-3">@fo.FinType</td>
                     </tr>
@@ -126,7 +115,7 @@
     }
     else
     {
-        <h4 class="text-center p-5">No FinOperation found</h4>
+        <h4 class="text-center p-5">No FinOperation found :(</h4>
     }
 
 

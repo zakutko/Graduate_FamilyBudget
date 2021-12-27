@@ -8,19 +8,23 @@ namespace FamilyBudget.Models.View.Sort
 {
     public class FinOperationSortModel
     {
-        public FinOperationSortEnum FinTypeSort { get; private set; } 
-        public FinOperationSortEnum CreateTimeSort { get; private set; }   
-        public FinOperationSortEnum CategorySort { get; private set; }
-        public FinOperationSortEnum ValueSort { get; private set; }
-        public FinOperationSortEnum Current { get; private set; }     
+        public FinOperationSortDirEnum CurrentSortDir { get; set; }
+        public FinOperationSortModelEnum CurrentSortModel { get; private set; }
+        public bool categorySort { get { return CurrentSortModel == FinOperationSortModelEnum.Category; } } 
+        public bool valueSort { get { return CurrentSortModel == FinOperationSortModelEnum.Value; } }
+        public bool createTimeSort { get { return CurrentSortModel == FinOperationSortModelEnum.CreateTime; } }
+        public bool finTypeSort { get { return CurrentSortModel == FinOperationSortModelEnum.FinType; } }
 
-        public FinOperationSortModel(FinOperationSortEnum sortOrder)
+        public bool isAscending { get { return CurrentSortDir == FinOperationSortDirEnum.Ascending; } }
+
+        public bool sortModelChanged(FinOperationSortModelEnum selectedSortModel)  { return selectedSortModel == CurrentSortModel; }
+
+        public FinOperationSortModel(FinOperationSortModelEnum sortModel, FinOperationSortDirEnum sortType)
         {
-            FinTypeSort = sortOrder == FinOperationSortEnum.FinTypeAsc ? FinOperationSortEnum.FinTypeDesc : FinOperationSortEnum.FinTypeAsc;
-            CreateTimeSort = sortOrder == FinOperationSortEnum.CreateTimeAsc ? FinOperationSortEnum.CreateTimeDesc : FinOperationSortEnum.CreateTimeAsc;
-            CategorySort = sortOrder == FinOperationSortEnum.CategoryAsc ? FinOperationSortEnum.CategoryDesc : FinOperationSortEnum.CategoryAsc;
-            ValueSort = sortOrder == FinOperationSortEnum.ValueAsc ? FinOperationSortEnum.ValueDesc : FinOperationSortEnum.ValueAsc;
-            Current = sortOrder;
+            CurrentSortDir = sortType == FinOperationSortDirEnum.Descending ? 
+                FinOperationSortDirEnum.Ascending : FinOperationSortDirEnum.Descending;
+
+            CurrentSortModel = sortModel;
         }
     }
 

@@ -24,47 +24,83 @@
             <thead>
                 <tr>
                     <th>
-                        <a class="btn btn-sm btn-light"
+                        <a class="btn btn-sm @(Model.SortViewModel.categorySort ? "btn-primary" : "btn-light")"
                             asp-action="Details"
                             asp-route-id="@(Model.FilterViewModel.SelectedProject)"
                             asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
                             asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
-                            asp-route-sortorder="@(Model.SortViewModel.CategorySort)">
+                            asp-route-sortmodel="@(FinOperationSortModelEnum.Category)"
+                            asp-route-sorttype="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.Category) ? 
+                                                FinOperationSortDirEnum.Descending : Model.SortViewModel.CurrentSortDir)">
                             Category
-                            <i class="fa fa-fw @(Model.SortViewModel.CategorySort == FinOperationSortEnum.CategoryAsc ? "fa-sort-asc" : "fa-sort-desc")"></i>
+                            @if (@Model.SortViewModel.categorySort)
+                            {
+                                <i class="fa fa-fw @(Model.SortViewModel.isAscending ? "fa-sort-asc" : "fa-sort-desc")"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-fw fa-sort"></i>
+                            }
                         </a>
                     </th>
                     <th>
-                        <a class="btn btn-sm btn-light"
+                        <a class="btn btn-sm @(Model.SortViewModel.valueSort ? "btn-primary" : "btn-light")"
                             asp-action="Details"
                             asp-route-id="@(Model.FilterViewModel.SelectedProject)"
                             asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
                             asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
-                            asp-route-sortorder="@(Model.SortViewModel.ValueSort)">
+                            asp-route-sortmodel="@(FinOperationSortModelEnum.Value)"
+                            asp-route-sorttype="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.Value) ? 
+                                                FinOperationSortDirEnum.Descending : Model.SortViewModel.CurrentSortDir)">
                             Value
-                            <i class="fa fa-fw @(Model.SortViewModel.ValueSort == FinOperationSortEnum.ValueAsc ? "fa-sort-asc" : "fa-sort-desc")"></i>
+                            @if (@Model.SortViewModel.valueSort)
+                            {
+                                <i class="fa fa-fw @(Model.SortViewModel.isAscending ? "fa-sort-asc" : "fa-sort-desc")"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-fw fa-sort"></i>
+                            }
                         </a>
                     </th>
                     <th>
-                        <a class="btn btn-sm btn-light"
+                        <a class="btn btn-sm @(Model.SortViewModel.createTimeSort ? "btn-primary" : "btn-light")"
                             asp-action="Details"
                             asp-route-id="@(Model.FilterViewModel.SelectedProject)"
                             asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
                             asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
-                            asp-route-sortorder="@(Model.SortViewModel.CreateTimeSort)">
+                            asp-route-sortmodel="@(FinOperationSortModelEnum.CreateTime)"
+                            asp-route-sorttype="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.CreateTime) ? 
+                                                FinOperationSortDirEnum.Descending : Model.SortViewModel.CurrentSortDir)">
                             CreateTime
-                            <i class="fa fa-fw @(Model.SortViewModel.CreateTimeSort == FinOperationSortEnum.CreateTimeAsc ? "fa-sort-asc" : "fa-sort-desc")"></i>
+                            @if (@Model.SortViewModel.createTimeSort)
+                            {
+                                <i class="fa fa-fw @(Model.SortViewModel.isAscending ? "fa-sort-asc" : "fa-sort-desc")"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-fw fa-sort"></i>
+                            }
                         </a>
                     </th>
                     <th>
-                        <a class="btn btn-sm btn-light"
+                        <a class="btn btn-sm @(Model.SortViewModel.finTypeSort ? "btn-primary" : "btn-light")"
                             asp-action="Details"
                             asp-route-id="@(Model.FilterViewModel.SelectedProject)"
                             asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
                             asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
-                            asp-route-sortorder="@(Model.SortViewModel.FinTypeSort)">
+                            asp-route-sortmodel="@(FinOperationSortModelEnum.FinType)"
+                            asp-route-sorttype="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.FinType) ? 
+                                                FinOperationSortDirEnum.Descending : Model.SortViewModel.CurrentSortDir)">
                             FinType
-                            <i class="fa fa-fw @(Model.SortViewModel.FinTypeSort == FinOperationSortEnum.FinTypeAsc ? "fa-sort-asc" : "fa-sort-desc")"></i>
+                            @if (@Model.SortViewModel.finTypeSort)
+                            {
+                                <i class="fa fa-fw @(Model.SortViewModel.isAscending ? "fa-sort-asc" : "fa-sort-desc")"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-fw fa-sort"></i>
+                            }
                         </a>
                     </th>
                 </tr>
@@ -95,7 +131,7 @@
                    asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
                    asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
                    asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-                   asp-route-sortorder="@(Model.SortViewModel.Current)"
+                   asp-route-sortorder="@(Model.SortViewModel.CurrentSortModel)"
                    class="page-link">
                     Previous
                 </a>
@@ -106,7 +142,7 @@
                    asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
                    asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
                    asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-                   asp-route-sortorder="@(Model.SortViewModel.Current)"
+                   asp-route-sortorder="@(Model.SortViewModel.CurrentSortModel)"
                    class="page-link">
                     Next
                 </a>
@@ -115,7 +151,7 @@
     }
     else
     {
-        <h4 class="text-center p-5">No FinOperation found :(</h4>
+        <h4 class="text-center p-5">No FinOperation found.</h4>
     }
 
 
@@ -126,21 +162,16 @@
                 $("#inputCategory").autocomplete({  
                     source: function (request, response) {
                         $.ajax({  
-                            url: "/Categories/SearchCategories/",  
-                            method: 'GET',  
+                            url: "/Categories/SearchCategories/", 
                             data: { 
                                 "id": $("#inputCategory").attr("data-projectId"),
                                 "term": request.term
                             },  
-                            dataType: 'json',  
                             success: function (data) {
                                 response($.map(data, function (item) {
                                     return item;
                                 }))
-                            },  
-                            error: function (err) {  
-                                alert('Error'); 
-                            }  
+                            }
                         });  
                     },
                     select: function (event, ui) {

@@ -46,7 +46,8 @@ namespace FamilyBudget.Controllers
         }
 
         public async Task<IActionResult> Details(int? id, string category, FinType? finType, int page = 1,
-            FinOperationSortEnum sortOrder = FinOperationSortEnum.CreateTimeDesc)
+            FinOperationSortModelEnum sortModel = FinOperationSortModelEnum.Default,
+            FinOperationSortDirEnum sortType = FinOperationSortDirEnum.Ascending)
         {
             var project = _context.Projects
                 .FirstOrDefault(p => p.Id == id);
@@ -77,32 +78,28 @@ namespace FamilyBudget.Controllers
                 finOperations = finOperations.Where(p => p.Category.Name.Contains(category));
             }
 
-            switch (sortOrder)
+            switch (sortModel)
             {
-                case FinOperationSortEnum.FinTypeDesc:
+                case FinOperationSortModelEnum.FinType:
+                    if(sortType == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.FinType); break; }
+
                     finOperations = finOperations.OrderByDescending(s => s.FinType);
                     break;
-                case FinOperationSortEnum.FinTypeAsc:
-                    finOperations = finOperations.OrderBy(s => s.FinType);
-                    break;
-                case FinOperationSortEnum.CategoryDesc:
+                case FinOperationSortModelEnum.Category:
+                    if (sortType == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.Category); break; }
+
                     finOperations = finOperations.OrderByDescending(s => s.Category);
                     break;
-                case FinOperationSortEnum.CategoryAsc:
-                    finOperations = finOperations.OrderBy(s => s.Category);
-                    break;
                 default:
-                case FinOperationSortEnum.CreateTimeDesc:
+                case FinOperationSortModelEnum.CreateTime:
+                    if (sortType == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.CreateTime); break; }
+
                     finOperations = finOperations.OrderByDescending(s => s.CreateTime);
                     break;
-                case FinOperationSortEnum.CreateTimeAsc:
-                    finOperations = finOperations.OrderBy(s => s.CreateTime);
-                    break;
-                case FinOperationSortEnum.ValueDesc:
+                case FinOperationSortModelEnum.Value:
+                    if (sortType == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.Value); break; }
+
                     finOperations = finOperations.OrderByDescending(s => s.Value);
-                    break;
-                case FinOperationSortEnum.ValueAsc:
-                    finOperations = finOperations.OrderBy(s => s.Value);
                     break;
             }
 
@@ -114,7 +111,7 @@ namespace FamilyBudget.Controllers
             var detailsModel = new HomeProjectDetailsModel
             {
                 PageViewModel = new FinOperationPageModel(count, page, pageSize),
-                SortViewModel = new FinOperationSortModel(sortOrder),
+                SortViewModel = new FinOperationSortModel(sortModel, sortType),
                 FilterViewModel = new FinOperationFilterModel(id, category, finType),
                 finOperations = items
             };

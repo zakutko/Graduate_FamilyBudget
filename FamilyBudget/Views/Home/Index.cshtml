@@ -14,7 +14,7 @@
     @foreach (var item in Model)
     {
         <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-           asp-controller="Projects" asp-action="Details" asp-route-id="@item.Id">
+           asp-action="Details" asp-route-id="@item.Id">
             <span class="p-2 projectListItem list-group-item-action flex-grow-1">
                 @Html.DisplayFor(modelItem => item.Name)
             </span>

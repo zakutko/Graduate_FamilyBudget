@@ -57,7 +57,7 @@ namespace FamilyBudget.Controllers
                 return NotFound();
             }
 
-            if (!user.CanView(project,_context))
+            if (!user.CanView(project, _context))
             {
                 return Forbid();
             }
@@ -68,7 +68,7 @@ namespace FamilyBudget.Controllers
 
             finOperations = finOperations.Where(p => p.ProjectId == id);
 
-            if (finType!= null)
+            if (finType != null)
             {
                 finOperations = finOperations.Where(p => p.FinType == finType);
             }
@@ -81,8 +81,8 @@ namespace FamilyBudget.Controllers
             switch (sortModel)
             {
                 case FinOperationSortModelEnum.FinType:
-                    if(sortType == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.FinType); break; }
-
+                    if (sortType == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.FinType); break; }
+                    
                     finOperations = finOperations.OrderByDescending(s => s.FinType);
                     break;
                 case FinOperationSortModelEnum.Category:
@@ -192,14 +192,14 @@ namespace FamilyBudget.Controllers
                     FinType = FinType.Charge,
                     ForAll = true,
                     Value = 1200,
-                    CategoryId = project.Categories.Find(c => c.Name == "Продукты").Id,
-                    Category = project.Categories.Find(c => c.Name == "Продукты"),
+                    CategoryId = project.Categories.Find(c => c.Name == "продукты").Id,
+                    Category = project.Categories.Find(c => c.Name == "продукты"),
                     ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Владелец").Id,
                     ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Владелец"),
                     ProjectId = project.Id,
                     Project = project,
-                    CreateTime = new DateTime(2021,1,12,22,11,11),
-                    UpdateTime = new DateTime(2021,1,12,22,11,11),
+                    CreateTime = new DateTime(2021, 1, 12, 22, 11, 11),
+                    UpdateTime = new DateTime(2021, 1, 12, 22, 11, 11),
                 });
             project.FinOperations.Add(
                 new FinOperation
@@ -207,8 +207,8 @@ namespace FamilyBudget.Controllers
                     FinType = FinType.Charge,
                     ForAll = true,
                     Value = 110,
-                    CategoryId = project.Categories.Find(c => c.Name == "Продукты").Id,
-                    Category = project.Categories.Find(c => c.Name == "Продукты"),
+                    CategoryId = project.Categories.Find(c => c.Name == "продукты").Id,
+                    Category = project.Categories.Find(c => c.Name == "продукты"),
                     ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Владелец").Id,
                     ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Владелец"),
                     ProjectId = project.Id,
@@ -222,8 +222,8 @@ namespace FamilyBudget.Controllers
                     FinType = FinType.Charge,
                     ForAll = true,
                     Value = 11000,
-                    CategoryId = project.Categories.Find(c => c.Name == "Подарки").Id,
-                    Category = project.Categories.Find(c => c.Name == "Подарки"),
+                    CategoryId = project.Categories.Find(c => c.Name == "подарки").Id,
+                    Category = project.Categories.Find(c => c.Name == "подарки"),
                     ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Владелец").Id,
                     ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Владелец"),
                     ProjectId = project.Id,
@@ -231,15 +231,15 @@ namespace FamilyBudget.Controllers
                     CreateTime = new DateTime(2021, 12, 12, 21, 11, 11),
                     UpdateTime = new DateTime(2021, 12, 12, 21, 11, 11),
                 });
-                
+
             project.FinOperations.Add(
                 new FinOperation
                 {
                     FinType = FinType.Charge,
                     ForAll = true,
                     Value = 11000,
-                    CategoryId = project.Categories.Find(c => c.Name == "Бытовая техника").Id,
-                    Category = project.Categories.Find(c => c.Name == "Бытовая техника"),
+                    CategoryId = project.Categories.Find(c => c.Name == "бытовая техника").Id,
+                    Category = project.Categories.Find(c => c.Name == "бытовая техника"),
                     ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Лидия Иванова").Id,
                     ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Лидия Иванова"),
                     ProjectId = project.Id,
@@ -253,8 +253,8 @@ namespace FamilyBudget.Controllers
                     FinType = FinType.Charge,
                     ForAll = true,
                     Value = 2500,
-                    CategoryId = project.Categories.Find(c => c.Name == "Развлечения").Id,
-                    Category = project.Categories.Find(c => c.Name == "Развлечения"),
+                    CategoryId = project.Categories.Find(c => c.Name == "развлечения").Id,
+                    Category = project.Categories.Find(c => c.Name == "развлечения"),
                     ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Лидия Иванова").Id,
                     ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Лидия Иванова"),
                     ProjectId = project.Id,
@@ -269,8 +269,8 @@ namespace FamilyBudget.Controllers
                     FinType = FinType.Charge,
                     ForAll = true,
                     Value = 1100,
-                    CategoryId = project.Categories.Find(c => c.Name == "Развлечения").Id,
-                    Category = project.Categories.Find(c => c.Name == "Развлечения"),
+                    CategoryId = project.Categories.Find(c => c.Name == "развлечения").Id,
+                    Category = project.Categories.Find(c => c.Name == "развлечения"),
                     ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Сергей Петров").Id,
                     ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Сергей Петров"),
                     ProjectId = project.Id,
@@ -284,8 +284,8 @@ namespace FamilyBudget.Controllers
                     FinType = FinType.Charge,
                     ForAll = true,
                     Value = 10000,
-                    CategoryId = project.Categories.Find(c => c.Name == "Развлечения").Id,
-                    Category = project.Categories.Find(c => c.Name == "Развлечения"),
+                    CategoryId = project.Categories.Find(c => c.Name == "развлечения").Id,
+                    Category = project.Categories.Find(c => c.Name == "развлечения"),
                     ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Сергей Петров").Id,
                     ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Сергей Петров"),
                     ProjectId = project.Id,
@@ -300,8 +300,8 @@ namespace FamilyBudget.Controllers
                     FinType = FinType.Charge,
                     ForAll = true,
                     Value = 10000,
-                    CategoryId = project.Categories.Find(c => c.Name == "Развлечения").Id,
-                    Category = project.Categories.Find(c => c.Name == "Развлечения"),
+                    CategoryId = project.Categories.Find(c => c.Name == "развлечения").Id,
+                    Category = project.Categories.Find(c => c.Name == "развлечения"),
                     ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Лидия Иванова").Id,
                     ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Лидия Иванова"),
                     ProjectId = project.Id,
@@ -315,8 +315,8 @@ namespace FamilyBudget.Controllers
                     FinType = FinType.Charge,
                     ForAll = true,
                     Value = 4000,
-                    CategoryId = project.Categories.Find(c => c.Name == "Кафе").Id,
-                    Category = project.Categories.Find(c => c.Name == "Кафе"),
+                    CategoryId = project.Categories.Find(c => c.Name == "кафе").Id,
+                    Category = project.Categories.Find(c => c.Name == "кафе"),
                     ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Сергей Петров").Id,
                     ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Сергей Петров"),
                     ProjectId = project.Id,
@@ -331,8 +331,8 @@ namespace FamilyBudget.Controllers
                     FinType = FinType.Charge,
                     ForAll = true,
                     Value = 4000,
-                    CategoryId = project.Categories.Find(c => c.Name == "Кафе").Id,
-                    Category = project.Categories.Find(c => c.Name == "Кафе"),
+                    CategoryId = project.Categories.Find(c => c.Name == "кафе").Id,
+                    Category = project.Categories.Find(c => c.Name == "кафе"),
                     ProjectMemberId = project.ProjectMembers.Find(p => p.NameInProject == "Владелец").Id,
                     ProjectMember = project.ProjectMembers.Find(p => p.NameInProject == "Владелец"),
                     ProjectId = project.Id,
@@ -340,7 +340,7 @@ namespace FamilyBudget.Controllers
                     CreateTime = new DateTime(2021, 5, 7, 19, 0, 0),
                     UpdateTime = new DateTime(2021, 5, 7, 19, 0, 0),
                 });
-#endregion
+            #endregion
             return project;
 
         }

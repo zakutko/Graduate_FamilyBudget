@@ -81,6 +81,7 @@ namespace FamilyBudget.Controllers
             {
                 category.CreateTime = DateTime.Now;
                 category.UpdateTime = DateTime.Now;
+                category.Name = category.Name.ToLower();
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -136,6 +137,7 @@ namespace FamilyBudget.Controllers
                 try
                 {
                     category.UpdateTime = DateTime.Now;
+                    category.Name = category.Name.ToLower();
                     _context.Update(category);
                     await _context.SaveChangesAsync();
                 }

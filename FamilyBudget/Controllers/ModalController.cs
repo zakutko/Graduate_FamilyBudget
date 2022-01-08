@@ -57,9 +57,9 @@ namespace FamilyBudget.Controllers
             return PartialView(projectDelete);
         }
 
-        public IActionResult AddCategoryCharge(int? id)
+        public IActionResult AddCharge(int? id)
         {
-            var addCategoryCharge = new AddChargeModel();
+            var addCharge = new AddChargeModel();
 
             var project = _context.Projects
                 .Include(c => c.ProjectMembers)
@@ -68,22 +68,22 @@ namespace FamilyBudget.Controllers
 
             if (project == null)
             {
-                addCategoryCharge.IsNotFound = true;
-                return PartialView(addCategoryCharge);
+                addCharge.IsNotFound = true;
+                return PartialView(addCharge);
             }
 
             if (!user.CanEdit(project, _context))
             {
-                addCategoryCharge.IsForbid = true;
-                return PartialView(addCategoryCharge);
+                addCharge.IsForbid = true;
+                return PartialView(addCharge);
             }
 
-            return PartialView(addCategoryCharge);
+            return PartialView(addCharge);
         }
 
-        public IActionResult AddCategoryIncome(int? id)
+        public IActionResult AddIncome(int? id)
         {
-            var addCategoryIncome = new AddIncomeModel();
+            var addIncome = new AddIncomeModel();
 
             var project = _context.Projects
                 .Include(c => c.ProjectMembers)
@@ -92,20 +92,20 @@ namespace FamilyBudget.Controllers
 
             if (project == null)
             {
-                addCategoryIncome.IsNotFound = true;
-                return PartialView(addCategoryIncome);
+                addIncome.IsNotFound = true;
+                return PartialView(addIncome);
             }
 
             if (!user.CanEdit(project, _context))
             {
-                addCategoryIncome.IsForbid = true;
-                return PartialView(addCategoryIncome);
+                addIncome.IsForbid = true;
+                return PartialView(addIncome);
             }
 
-            addCategoryIncome.ForAll = true;
-            addCategoryIncome.FinType = FinType.Income;
+            addIncome.ForAll = true;
+            addIncome.FinType = FinType.Income;
 
-            return PartialView(addCategoryIncome);
+            return PartialView(addIncome);
         }
 
         private IdentityUser CurrentUser()

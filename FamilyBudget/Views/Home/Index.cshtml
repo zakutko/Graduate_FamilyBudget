@@ -19,8 +19,8 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </span>
 
-            <i id="@item.Id" class="bi bi-wallet2  fa-lg addCategoryCharge mr-2"></i>
-            <i id="@item.Id" class="bi bi-bag-plus fa-lg addCategoryIncome mr-2"></i>
+            <i id="@item.Id" class="bi bi-wallet2  fa-lg addCharge mr-2"></i>
+            <i id="@item.Id" class="bi bi-bag-plus fa-lg addIncome mr-2"></i>
             <i id="@item.Id" class="bi bi-x-lg projectDelete"></i>
         </a>
     }
@@ -31,9 +31,9 @@
     <script type="text/javascript">
         $(function () {
             $.ajaxSetup({ cache: false });
-            $(".addCategoryCharge").click(function (e) {
+            $(".addCharge").click(function (e) {
                 e.preventDefault();
-                $.get("Modal/AddCategoryCharge/" + this.id, function (data) {
+                $.get("Modal/AddCharge/" + this.id, function (data) {
                     $('#projectDialogContent').html(data).removeClass('modal-lg');
                     $('#projectModal').modal('show');
                 });
@@ -44,9 +44,9 @@
     <script type="text/javascript">
         $(function () {
             $.ajaxSetup({ cache: false });
-            $(".addCategoryIncome").click(function (e) {
+            $(".addIncome").click(function (e) {
                 e.preventDefault();
-                $.get("Modal/AddCategoryIncome/" + this.id, function (data) {
+                $.get("Modal/AddIncome/" + this.id, function (data) {
                     $('#projectDialogContent').html(data).removeClass('modal-lg');
                     $('#projectModal').modal('show');
                 });

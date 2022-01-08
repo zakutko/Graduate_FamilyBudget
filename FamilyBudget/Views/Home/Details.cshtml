@@ -30,8 +30,8 @@
                             asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
                             asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
                             asp-route-sortmodel="@(FinOperationSortModelEnum.Category)"
-                            asp-route-sorttype="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.Category) ? 
-                                                FinOperationSortDirEnum.Descending : Model.SortViewModel.CurrentSortDir)">
+                            asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.Category) ? 
+                                                null : Model.SortViewModel.changeSortDir(Model.SortViewModel.CurrentSortDir))">
                                 Category
                         @if (@Model.SortViewModel.categorySort)
                         {
@@ -50,8 +50,8 @@
                             asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
                             asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
                             asp-route-sortmodel="@(FinOperationSortModelEnum.Value)"
-                            asp-route-sorttype="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.Value) ? 
-                                                FinOperationSortDirEnum.Descending : Model.SortViewModel.CurrentSortDir)">
+                            asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.Value) ? 
+                                                null : Model.SortViewModel.changeSortDir(Model.SortViewModel.CurrentSortDir))">
                                 Value
                         @if (@Model.SortViewModel.valueSort)
                         {
@@ -70,8 +70,8 @@
                             asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
                             asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
                             asp-route-sortmodel="@(FinOperationSortModelEnum.CreateTime)"
-                            asp-route-sorttype="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.CreateTime) ? 
-                                                FinOperationSortDirEnum.Descending : Model.SortViewModel.CurrentSortDir)">
+                            asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.CreateTime) ? 
+                                                null : Model.SortViewModel.changeSortDir(Model.SortViewModel.CurrentSortDir))">
                                 CreateTime
                         @if (@Model.SortViewModel.createTimeSort)
                         {
@@ -90,8 +90,8 @@
                             asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
                             asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
                             asp-route-sortmodel="@(FinOperationSortModelEnum.FinType)"
-                            asp-route-sorttype="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.FinType) ? 
-                                                FinOperationSortDirEnum.Descending : Model.SortViewModel.CurrentSortDir)">
+                            asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.FinType) ? 
+                                                null : Model.SortViewModel.changeSortDir(Model.SortViewModel.CurrentSortDir))">
                                 FinType
                         @if (@Model.SortViewModel.finTypeSort)
                         {
@@ -116,7 +116,7 @@
                         {
                             <label>Сегодня</label>
                         }
-                        else if (@fo.CreateTime.Date.Day == DateTime.Today.AddDays(-1).Day)
+                        else if (@fo.CreateTime.Date == DateTime.Today.AddDays(-1).Date)
                         {
                             <label>Вчера</label>
                         }
@@ -143,7 +143,8 @@
                    asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
                    asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
                    asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-                   asp-route-sortorder="@(Model.SortViewModel.CurrentSortModel)"
+                   asp-route-sortmodel="@(Model.SortViewModel.CurrentSortModel)"
+                   asp-route-sortdir="@(Model.SortViewModel.CurrentSortDir)"
                    class="page-link">
                         Previous
                     </a>
@@ -154,7 +155,8 @@
                    asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
                    asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
                    asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-                   asp-route-sortorder="@(Model.SortViewModel.CurrentSortModel)"
+                   asp-route-sortmodel="@(Model.SortViewModel.CurrentSortModel)"
+                   asp-route-sortdir="@(Model.SortViewModel.CurrentSortDir)"
                    class="page-link">
                         Next
                     </a>

@@ -1,0 +1,44 @@
+﻿@model FamilyBudget.ModalViewModels.AddChargeModel
+
+@{
+    ViewData["Title"] = "AddCategoryCharge";
+}
+
+<div class="modal-content">
+    <div class="modal-header">
+        @if (@Model.IsNotFound)
+        {
+            <h3 class="modal-title text-danger">This project is not found.</h3>
+        }
+        else if (@Model.IsForbid)
+        {
+            <h3 class="modal-title text-danger">This project is forbidden.</h3>
+        }
+        else
+        {
+            <h3 class="modal-title">Create charge.</h3>
+        }
+
+        <button class="bi bi-x-lg btn" data-dismiss="modal" aria-label="Close"></button>
+    </div>
+    @if (Model.IsValid)
+    {
+        <form asp-controller="FinOperations" asp-action="Create">
+            <div class="modal-body container-fluid">
+                <input type="text" id="inputCategory"
+                   class="form-control" name="category" placeholder="Category" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                <input type="submit" value="Create" class="btn btn-success btn-ok" />
+            </div>
+        </form>
+    }
+    else
+    {
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    }
+</div>

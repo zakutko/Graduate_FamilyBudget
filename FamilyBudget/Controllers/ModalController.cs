@@ -4,6 +4,7 @@ using FamilyBudget.ModalViewModels;
 using FamilyBudget.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,57 @@ namespace FamilyBudget.Controllers
             projectDelete.chargesCount      = project.FinOperations.Where(fo => fo.FinType == FinType.Charge).Count();
 
             return PartialView(projectDelete);
+        }
+
+        public IActionResult AddCategoryCharge(int? id)
+        {
+            var addCategoryCharge = new AddChargeModel();
+
+            var project = _context.Projects
+                .Include(c => c.ProjectMembers)
+                .Include(c => c.FinOperations)
+                .FirstOrDefault(p => p.Id == id);
+
+            if (project == null)
+            {
+                addCategoryCharge.IsNotFound = true;
+                return PartialView(addCategoryCharge);
+            }
+
+            if (!user.CanEdit(project, _context))
+            {
+                addCategoryCharge.IsForbid = true;
+                return PartialView(addCategoryCharge);
+            }
+
+            return PartialView(addCategoryCharge);
+        }
+
+        public IActionResult AddCategoryIncome(int? id)
+        {
+            var addCategoryIncome = new AddIncomeModel();
+
+            var project = _context.Projects
+                .Include(c => c.ProjectMembers)
+                .Include(c => c.FinOperations)
+                .FirstOrDefault(p => p.Id == id);
+
+            if (project == null)
+            {
+                addCategoryIncome.IsNotFound = true;
+                return PartialView(addCategoryIncome);
+            }
+
+            if (!user.CanEdit(project, _context))
+            {
+                addCategoryIncome.IsForbid = true;
+                return PartialView(addCategoryIncome);
+            }
+
+            addCategoryIncome.ForAll = true;
+            addCategoryIncome.FinType = FinType.Income;
+
+            return PartialView(addCategoryIncome);
         }
 
         private IdentityUser CurrentUser()

@@ -47,7 +47,7 @@ namespace FamilyBudget.Controllers
 
         public async Task<IActionResult> Details(int? id, string category, FinType? finType, int page = 1,
             FinOperationSortModelEnum sortModel = FinOperationSortModelEnum.Default,
-            FinOperationSortDirEnum sortType = FinOperationSortDirEnum.Ascending)
+            FinOperationSortDirEnum sortDir = FinOperationSortDirEnum.Ascending)
         {
             var project = _context.Projects
                 .FirstOrDefault(p => p.Id == id);
@@ -81,23 +81,23 @@ namespace FamilyBudget.Controllers
             switch (sortModel)
             {
                 case FinOperationSortModelEnum.FinType:
-                    if (sortType == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.FinType); break; }
+                    if (sortDir == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.FinType); break; }
                     
                     finOperations = finOperations.OrderByDescending(s => s.FinType);
                     break;
                 case FinOperationSortModelEnum.Category:
-                    if (sortType == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.Category); break; }
+                    if (sortDir == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.Category); break; }
 
                     finOperations = finOperations.OrderByDescending(s => s.Category);
                     break;
                 default:
                 case FinOperationSortModelEnum.CreateTime:
-                    if (sortType == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.CreateTime); break; }
+                    if (sortDir == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.CreateTime); break; }
 
                     finOperations = finOperations.OrderByDescending(s => s.CreateTime);
                     break;
                 case FinOperationSortModelEnum.Value:
-                    if (sortType == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.Value); break; }
+                    if (sortDir == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.Value); break; }
 
                     finOperations = finOperations.OrderByDescending(s => s.Value);
                     break;
@@ -111,7 +111,7 @@ namespace FamilyBudget.Controllers
             var detailsModel = new HomeProjectDetailsModel
             {
                 PageViewModel = new FinOperationPageModel(count, page, pageSize),
-                SortViewModel = new FinOperationSortModel(sortModel, sortType),
+                SortViewModel = new FinOperationSortModel(sortModel, sortDir),
                 FilterViewModel = new FinOperationFilterModel(id, category, finType),
                 finOperations = items
             };

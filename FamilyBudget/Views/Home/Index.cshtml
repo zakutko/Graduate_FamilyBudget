@@ -6,8 +6,8 @@
 
 <h1>Index</h1>
 
-<div id="projectDeleteModal" class="modal fade">
-    <div id="projectDeleteDialogContent" class="modal-dialog modal-dialog-centered modal-lg"></div>
+<div id="projectModal" class="modal fade">
+    <div id="projectDialogContent" class="modal-dialog modal-dialog-centered"></div>
 </div>
 
 <div class="list-group">
@@ -19,6 +19,8 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </span>
 
+            <i id="@item.Id" class="bi bi-wallet2  fa-lg addCategoryCharge mr-2"></i>
+            <i id="@item.Id" class="bi bi-bag-plus fa-lg addCategoryIncome mr-2"></i>
             <i id="@item.Id" class="bi bi-x-lg projectDelete"></i>
         </a>
     }
@@ -29,11 +31,37 @@
     <script type="text/javascript">
         $(function () {
             $.ajaxSetup({ cache: false });
+            $(".addCategoryCharge").click(function (e) {
+                e.preventDefault();
+                $.get("Modal/AddCategoryCharge/" + this.id, function (data) {
+                    $('#projectDialogContent').html(data).removeClass('modal-lg');
+                    $('#projectModal').modal('show');
+                });
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".addCategoryIncome").click(function (e) {
+                e.preventDefault();
+                $.get("Modal/AddCategoryIncome/" + this.id, function (data) {
+                    $('#projectDialogContent').html(data).removeClass('modal-lg');
+                    $('#projectModal').modal('show');
+                });
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $.ajaxSetup({ cache: false });
             $(".projectDelete").click(function (e) {
                 e.preventDefault();
                 $.get("Modal/ProjectDelete/" + this.id, function (data) {
-                    $('#projectDeleteDialogContent').html(data);
-                    $('#projectDeleteModal').modal('show');
+                    $('#projectDialogContent').html(data).addClass('modal-lg');
+                    $('#projectModal').modal('show');
                 });
             });
         })

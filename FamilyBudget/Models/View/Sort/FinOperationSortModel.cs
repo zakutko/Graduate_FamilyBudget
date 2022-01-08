@@ -18,12 +18,13 @@ namespace FamilyBudget.Models.View.Sort
         public bool isAscending { get { return CurrentSortDir == FinOperationSortDirEnum.Ascending; } }
 
         public bool sortModelChanged(FinOperationSortModelEnum selectedSortModel)  { return selectedSortModel == CurrentSortModel; }
-
-        public FinOperationSortModel(FinOperationSortModelEnum sortModel, FinOperationSortDirEnum sortType)
-        {
-            CurrentSortDir = sortType == FinOperationSortDirEnum.Descending ? 
+        public FinOperationSortDirEnum changeSortDir(FinOperationSortDirEnum sortDir) { return sortDir == FinOperationSortDirEnum.Descending ?
                 FinOperationSortDirEnum.Ascending : FinOperationSortDirEnum.Descending;
+        }
 
+        public FinOperationSortModel(FinOperationSortModelEnum sortModel, FinOperationSortDirEnum sortDir)
+        {
+            CurrentSortDir = sortDir;
             CurrentSortModel = sortModel;
         }
     }

@@ -85,11 +85,12 @@ namespace FamilyBudget.Controllers
 
             if (ModelState.IsValid)
             {
+                finOperation.CategoryId = CreateUniqueInProject(finOperation.ProjectId,finOperation.Category.Name);
                 finOperation.CreateTime = DateTime.Now;
                 finOperation.UpdateTime = DateTime.Now;
                 _context.Add(finOperation);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Home", new { id = finOperation.ProjectId } );
             }
 
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", finOperation.CategoryId);
@@ -214,6 +215,27 @@ namespace FamilyBudget.Controllers
             var username = HttpContext.User.Identity.Name;
             return _context.Users
                 .FirstOrDefault(m => m.UserName == username);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public int CreateUniqueInProject(int projectId, string term)
+        {
+            var categories = _context.Categories.ToList();
+            var category = categories
+                .Where(a => a.ProjectId == projectId)
+                .FirstOrDefault(a => a.Name.Contains(term));
+
+            if (category != null)
+            {
+                return category.Id;
+            }
+
+            category = new Category();
+            category.Name = term;
+            category.ProjectId = projectId;
+            RedirectToRoute(new { controller = "Categories", action = "Create", category });
+            return category.Id;
         }
     }
 }

@@ -5,114 +5,126 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-<form class="pt-1 pb-3">
-        <div class="form-inline">
-            <input type="text" id="inputCategory" data-projectId="@Model.FilterViewModel.SelectedProject" 
-            class="form-control col-6 ml-auto" name="category" placeholder="Category" value="@Model.FilterViewModel.SelectedCategory"/>
 
-            <select type="submit" class="form-control col-sm-1 ml-2 mr-auto" name="finType"
-                    asp-for="@Model.FilterViewModel.SelectedFinType"
-                    asp-items="@Model.FilterViewModel.FinTypes"
-                    onchange="this.form.submit()"></select>
-        </div>
-    </form>
+<h1>Details</h1>
+
+<div id="addFinOpModal" class="modal fade">
+    <div id="addFinOpDialogContent" class="modal-dialog modal-dialog-centered"></div>
+</div>
+
+<form class="pt-1 pb-3">
+    <div class="form-inline">
+        <input type="text" id="inputCategory" data-projectId="@Model.FilterViewModel.SelectedProject" autocomplete="off"
+               class="form-control col-6 ml-auto" name="category" placeholder="Category" value="@Model.FilterViewModel.SelectedCategory" />
+
+        <select type="submit" class="form-control col-sm-1 ml-2 mr-auto" name="finType"
+                asp-for="@Model.FilterViewModel.SelectedFinType"
+                asp-items="@Model.FilterViewModel.FinTypes"
+                onchange="this.form.submit()"></select>
+
+        <a asp-controller="Modal" asp-action="AddIncome" asp-route-id="@Model.FilterViewModel.SelectedProject" 
+        class="btn btn-secondary btn-lg bi bi-piggy-bank addIncome m-2"></a>
+        <a asp-controller="Modal" asp-action="AddCharge" asp-route-id="@Model.FilterViewModel.SelectedProject"
+        class="btn btn-secondary btn-lg bi bi-bag-plus addCharge m-2"></a>
+    </div>
+
+</form>
 
 @if (!Model.isEmpty)
 {
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            <a class="btn btn-sm @(Model.SortViewModel.categorySort ? "btn-primary" : "btn-light")"
-                            asp-action="Details"
-                            asp-route-id="@(Model.FilterViewModel.SelectedProject)"
-                            asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
-                            asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
-                            asp-route-sortmodel="@(FinOperationSortModelEnum.Category)"
-                            asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.Category) ? 
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <a class="btn btn-sm @(Model.SortViewModel.categorySort ? "btn-primary" : "btn-light")"
+                   asp-action="Details"
+                   asp-route-id="@(Model.FilterViewModel.SelectedProject)"
+                   asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
+                   asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
+                   asp-route-sortmodel="@(FinOperationSortModelEnum.Category)"
+                   asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.Category) ?
                                                 null : Model.SortViewModel.changeSortDir(Model.SortViewModel.CurrentSortDir))">
-                                Category
+                        Category
                         @if (@Model.SortViewModel.categorySort)
                         {
-                                        <i class="fa fa-fw @(Model.SortViewModel.isAscending ? "fa-sort-asc" : "fa-sort-desc")"></i>
+                            <i class="fa fa-fw @(Model.SortViewModel.isAscending ? "fa-sort-asc" : "fa-sort-desc")"></i>
                         }
                         else
                         {
-                                        <i class="fa fa-fw fa-sort"></i>
+                            <i class="fa fa-fw fa-sort"></i>
                         }
-                            </a>
-                        </th>
-                        <th>
-                            <a class="btn btn-sm @(Model.SortViewModel.valueSort ? "btn-primary" : "btn-light")"
-                            asp-action="Details"
-                            asp-route-id="@(Model.FilterViewModel.SelectedProject)"
-                            asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
-                            asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
-                            asp-route-sortmodel="@(FinOperationSortModelEnum.Value)"
-                            asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.Value) ? 
+                    </a>
+                </th>
+                <th>
+                    <a class="btn btn-sm @(Model.SortViewModel.valueSort ? "btn-primary" : "btn-light")"
+                   asp-action="Details"
+                   asp-route-id="@(Model.FilterViewModel.SelectedProject)"
+                   asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
+                   asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
+                   asp-route-sortmodel="@(FinOperationSortModelEnum.Value)"
+                   asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.Value) ?
                                                 null : Model.SortViewModel.changeSortDir(Model.SortViewModel.CurrentSortDir))">
-                                Value
+                        Value
                         @if (@Model.SortViewModel.valueSort)
                         {
-                                        <i class="fa fa-fw @(Model.SortViewModel.isAscending ? "fa-sort-asc" : "fa-sort-desc")"></i>
+                            <i class="fa fa-fw @(Model.SortViewModel.isAscending ? "fa-sort-asc" : "fa-sort-desc")"></i>
                         }
                         else
                         {
-                                        <i class="fa fa-fw fa-sort"></i>
+                            <i class="fa fa-fw fa-sort"></i>
                         }
-                            </a>
-                        </th>
-                        <th>
-                            <a class="btn btn-sm @(Model.SortViewModel.createTimeSort ? "btn-primary" : "btn-light")"
-                            asp-action="Details"
-                            asp-route-id="@(Model.FilterViewModel.SelectedProject)"
-                            asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
-                            asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
-                            asp-route-sortmodel="@(FinOperationSortModelEnum.CreateTime)"
-                            asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.CreateTime) ? 
+                    </a>
+                </th>
+                <th>
+                    <a class="btn btn-sm @(Model.SortViewModel.createTimeSort ? "btn-primary" : "btn-light")"
+                   asp-action="Details"
+                   asp-route-id="@(Model.FilterViewModel.SelectedProject)"
+                   asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
+                   asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
+                   asp-route-sortmodel="@(FinOperationSortModelEnum.CreateTime)"
+                   asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.CreateTime) ?
                                                 null : Model.SortViewModel.changeSortDir(Model.SortViewModel.CurrentSortDir))">
-                                CreateTime
+                        CreateTime
                         @if (@Model.SortViewModel.createTimeSort)
                         {
-                                        <i class="fa fa-fw @(Model.SortViewModel.isAscending ? "fa-sort-asc" : "fa-sort-desc")"></i>
+                            <i class="fa fa-fw @(Model.SortViewModel.isAscending ? "fa-sort-asc" : "fa-sort-desc")"></i>
                         }
                         else
                         {
-                                        <i class="fa fa-fw fa-sort"></i>
+                            <i class="fa fa-fw fa-sort"></i>
                         }
-                            </a>
-                        </th>
-                        <th>
-                            <a class="btn btn-sm @(Model.SortViewModel.finTypeSort ? "btn-primary" : "btn-light")"
-                            asp-action="Details"
-                            asp-route-id="@(Model.FilterViewModel.SelectedProject)"
-                            asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
-                            asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
-                            asp-route-sortmodel="@(FinOperationSortModelEnum.FinType)"
-                            asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.FinType) ? 
+                    </a>
+                </th>
+                <th>
+                    <a class="btn btn-sm @(Model.SortViewModel.finTypeSort ? "btn-primary" : "btn-light")"
+                   asp-action="Details"
+                   asp-route-id="@(Model.FilterViewModel.SelectedProject)"
+                   asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
+                   asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
+                   asp-route-sortmodel="@(FinOperationSortModelEnum.FinType)"
+                   asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.FinType) ?
                                                 null : Model.SortViewModel.changeSortDir(Model.SortViewModel.CurrentSortDir))">
-                                FinType
+                        FinType
                         @if (@Model.SortViewModel.finTypeSort)
                         {
-                                        <i class="fa fa-fw @(Model.SortViewModel.isAscending ? "fa-sort-asc" : "fa-sort-desc")"></i>
+                            <i class="fa fa-fw @(Model.SortViewModel.isAscending ? "fa-sort-asc" : "fa-sort-desc")"></i>
                         }
                         else
                         {
-                                        <i class="fa fa-fw fa-sort"></i>
+                            <i class="fa fa-fw fa-sort"></i>
                         }
-                            </a>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
             @foreach (FinOperation fo in Model.finOperations)
             {
-                            <tr>
-                                <td class="col-3">@fo.Category.Name</td>
-                                <td class="col-3">@fo.Value</td>
-                                <td class="col-3">
-                        @if (@fo.CreateTime.Date.Day == DateTime.Now.Day)
+                <tr>
+                    <td class="col-3">@fo.Category.Name</td>
+                    <td class="col-3">@fo.Value</td>
+                    <td class="col-3">
+                        @if (@fo.CreateTime.Date == DateTime.Today.Date)
                         {
                             <label>Сегодня</label>
                         }
@@ -128,73 +140,99 @@
                         {
                             <label>@fo.CreateTime.ToString("d MMMM yyyy")</label>
                         }
-                                </td>
-                                <td class="col-3">@fo.FinType</td>
-                            </tr>
+                    </td>
+                    <td class="col-3">@fo.FinType</td>
+                </tr>
             }
-                </tbody>
-            </table>
+        </tbody>
+    </table>
 
 
-            <ul class="pagination justify-content-center">
-                <li class="page-item @(!Model.PageViewModel.HasPreviousPage ? "disabled" : "")">
-                    <a asp-action="Details"
-                   asp-route-id="@(Model.FilterViewModel.SelectedProject)"
-                   asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
-                   asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
-                   asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-                   asp-route-sortmodel="@(Model.SortViewModel.CurrentSortModel)"
-                   asp-route-sortdir="@(Model.SortViewModel.CurrentSortDir)"
-                   class="page-link">
-                        Previous
-                    </a>
-                </li>
-                <li class="page-item @(!Model.PageViewModel.HasNextPage ? "disabled" : "")">
-                    <a asp-action="Details"
-                   asp-route-id="@(Model.FilterViewModel.SelectedProject)"
-                   asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
-                   asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
-                   asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-                   asp-route-sortmodel="@(Model.SortViewModel.CurrentSortModel)"
-                   asp-route-sortdir="@(Model.SortViewModel.CurrentSortDir)"
-                   class="page-link">
-                        Next
-                    </a>
-                </li>
-            </ul>
+    <ul class="pagination justify-content-center">
+        <li class="page-item @(!Model.PageViewModel.HasPreviousPage ? "disabled" : "")">
+            <a asp-action="Details"
+           asp-route-id="@(Model.FilterViewModel.SelectedProject)"
+           asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
+           asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
+           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+           asp-route-sortmodel="@(Model.SortViewModel.CurrentSortModel)"
+           asp-route-sortdir="@(Model.SortViewModel.CurrentSortDir)"
+           class="page-link">
+                Previous
+            </a>
+        </li>
+        <li class="page-item @(!Model.PageViewModel.HasNextPage ? "disabled" : "")">
+            <a asp-action="Details"
+           asp-route-id="@(Model.FilterViewModel.SelectedProject)"
+           asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
+           asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
+           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+           asp-route-sortmodel="@(Model.SortViewModel.CurrentSortModel)"
+           asp-route-sortdir="@(Model.SortViewModel.CurrentSortDir)"
+           class="page-link">
+                Next
+            </a>
+        </li>
+    </ul>
 }
 else
 {
-            <h4 class="text-center p-5">No FinOperation found.</h4>
+    <h4 class="text-center p-5">No FinOperation found.</h4>
 }
 
 
 @section scripts
 {
-        <script type="text/javascript">  
-            $(document).ready(function () {  
-                $("#inputCategory").autocomplete({  
-                    source: function (request, response) {
-                        $.ajax({  
-                            url: "/Categories/SearchCategories/", 
-                            data: { 
-                                "id": $("#inputCategory").attr("data-projectId"),
-                                "term": request.term
-                            },  
-                            success: function (data) {
-                                response($.map(data, function (item) {
-                                    return item;
-                                }))
-                            }
-                        });  
+<script type="text/javascript">
+    $(function () {
+        $.ajaxSetup({ cache: false });
+        $(".addCharge").click(function (e) {
+            e.preventDefault();
+            $.get(this.href, function (data) {
+                $('#addFinOpDialogContent').html(data);
+                $('#addFinOpModal').modal('show');
+            });
+        });
+    })
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $.ajaxSetup({ cache: false });
+        $(".addIncome").click(function (e) {
+            e.preventDefault();
+            $.get(this.href, function (data) {
+                $('#addFinOpDialogContent').html(data);
+                $('#addFinOpModal').modal('show');
+            });
+        });
+    })
+</script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#inputCategory").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Categories/SearchCategories/",
+                    data: {
+                        "id": $("#inputCategory").attr("data-projectId"),
+                        "term": request.term
                     },
-                    select: function (event, ui) {
-                        this.value = ui.item.value;
-                        this.form.submit();
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
                     }
-                });  
-            });  
-        </script>  
+                });
+            },
+            select: function (event, ui) {
+                this.value = ui.item.value;
+                this.form.submit();
+            }
+        });
+    });
+</script>
 }
 
 

@@ -215,7 +215,8 @@ namespace FamilyBudget.Controllers
                 var names = categories
                     .Where(a => a.ProjectId == id)
                     .Where(a => a.Name.Contains(term))
-                    .Select(a => new { value = a.Name });
+                    .Select(a => new { value = a.Name, id = a.Id })
+                    .Distinct();
                 return Ok(names);
             }
             catch (Exception ex)
@@ -223,5 +224,7 @@ namespace FamilyBudget.Controllers
                 return BadRequest();
             }
         }
+
+        
     }
 }

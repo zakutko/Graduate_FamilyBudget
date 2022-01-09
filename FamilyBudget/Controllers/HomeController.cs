@@ -90,7 +90,6 @@ namespace FamilyBudget.Controllers
 
                     finOperations = finOperations.OrderByDescending(s => s.Category);
                     break;
-                default:
                 case FinOperationSortModelEnum.CreateTime:
                     if (sortDir == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.CreateTime); break; }
 
@@ -100,6 +99,9 @@ namespace FamilyBudget.Controllers
                     if (sortDir == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.Value); break; }
 
                     finOperations = finOperations.OrderByDescending(s => s.Value);
+                    break;
+                default:
+                    finOperations = finOperations.OrderByDescending(s => s.CreateTime);
                     break;
             }
 

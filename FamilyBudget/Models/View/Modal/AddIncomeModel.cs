@@ -15,6 +15,7 @@ namespace FamilyBudget.ModalViewModels
 
         public int Value { get; set; }
 
+        public int CategoryId { get; set; }
         public int? ProjectMemberId { get; set; }
         public ProjectMember ProjectMember { get; set; }
 

@@ -16,17 +16,36 @@
         }
         else
         {
-            <h3 class="modal-title">Create charge.</h3>
+            <h3 class="modal-title">Add charge.</h3>
         }
 
         <button class="bi bi-x-lg btn" data-dismiss="modal" aria-label="Close"></button>
     </div>
     @if (Model.IsValid)
     {
-        <form asp-controller="FinOperations" asp-action="Create">
+        <form asp-controller="FinOperations" asp-action="Create"
+          asp-route-fintype="@Model.FinType"
+          asp-route-projectid="@Model.ProjectId">
             <div class="modal-body container-fluid">
-                <input type="text" id="inputCategory"
-                   class="form-control" name="category" placeholder="Category" />
+                <div class="form-group">
+                    
+                <input type="text" id="inputCategory" data-projectId="@Model.ProjectId" autocomplete="off"
+               class="form-control" name="category" placeholder="Category" value="" />
+                    <div id="SearchCategory"></div>
+                </div>
+                <div class="form-group">
+                    <select asp-for="ProjectMemberId" class="form-control" asp-items="ViewBag.ProjectMemberId"></select>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="ForAll" /> @Html.DisplayNameFor(model => model.ForAll)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Value" class="control-label"></label>
+                    <input asp-for="Value" class="form-control" />
+                    <span asp-validation-for="Value" class="text-danger"></span>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -42,3 +61,28 @@
         </div>
     }
 </div>
+
+ <script type="text/javascript">
+    $(document).ready(function () {
+        $("#inputCategory").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Categories/SearchCategories/",
+                    data: {
+                        "id": $("#inputCategory").attr("data-projectId"),
+                        "term": request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    }
+                });
+            },
+            select: function (event, ui) {
+                this.value = ui.item.value;
+            }
+        })
+        $("#inputCategory").autocomplete("option", "appendTo", "#SearchCategory");
+    });
+</script>

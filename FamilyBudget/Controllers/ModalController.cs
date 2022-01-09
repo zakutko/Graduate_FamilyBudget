@@ -78,6 +78,11 @@ namespace FamilyBudget.Controllers
                 return PartialView(addCharge);
             }
 
+            addCharge.ForAll = true;
+            addCharge.FinType = FinType.Charge;
+            addCharge.ProjectId = project.Id;
+
+            ViewData["ProjectMemberId"] = new SelectList(_context.ProjectMembers, "Id", "NameInProject");
             return PartialView(addCharge);
         }
 
@@ -104,6 +109,8 @@ namespace FamilyBudget.Controllers
 
             addIncome.ForAll = true;
             addIncome.FinType = FinType.Income;
+            addIncome.ProjectId = project.Id;
+            addIncome.CategoryId = _context.Categories.FirstOrDefault().Id;
 
             return PartialView(addIncome);
         }

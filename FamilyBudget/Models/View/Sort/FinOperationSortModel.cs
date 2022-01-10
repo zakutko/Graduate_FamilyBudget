@@ -10,6 +10,7 @@ namespace FamilyBudget.Models.View.Sort
     {
         public FinOperationSortDirEnum CurrentSortDir { get; set; }
         public FinOperationSortModelEnum CurrentSortModel { get; private set; }
+        public bool projectMemberSort { get { return CurrentSortModel == FinOperationSortModelEnum.ProjectMember; } }
         public bool categorySort { get { return CurrentSortModel == FinOperationSortModelEnum.Category; } } 
         public bool valueSort { get { return CurrentSortModel == FinOperationSortModelEnum.Value; } }
         public bool createTimeSort { get { return CurrentSortModel == FinOperationSortModelEnum.CreateTime; } }

@@ -39,27 +39,27 @@ namespace FamilyBudget.Controllers
                 return PartialView(projectDelete);
             }
 
-            if (!user.CanDelete(project,_context))
+            if (!user.CanDelete(project, _context))
             {
                 projectDelete.IsForbid = true;
                 return PartialView(projectDelete);
             }
 
-            projectDelete.Id                = project.Id;
-            projectDelete.Name              = project.Name;
-            projectDelete.Owner             = project.Owner;
-            projectDelete.CreateTime        = project.CreateTime;
-            projectDelete.UpdateTime        = project.UpdateTime;
-            projectDelete.membersCount      = project.ProjectMembers.Count();
-            projectDelete.incomesCount      = project.FinOperations.Where(fo => fo.FinType == FinType.Income).Count();
-            projectDelete.chargesCount      = project.FinOperations.Where(fo => fo.FinType == FinType.Charge).Count();
+            projectDelete.Id = project.Id;
+            projectDelete.Name = project.Name;
+            projectDelete.Owner = project.Owner;
+            projectDelete.CreateTime = project.CreateTime;
+            projectDelete.UpdateTime = project.UpdateTime;
+            projectDelete.membersCount = project.ProjectMembers.Count();
+            projectDelete.incomesCount = project.FinOperations.Where(fo => fo.FinType == FinType.Income).Count();
+            projectDelete.chargesCount = project.FinOperations.Where(fo => fo.FinType == FinType.Charge).Count();
 
             return PartialView(projectDelete);
         }
 
         public IActionResult AddCharge(int? id)
         {
-            var addCharge = new AddChargeModel();
+            var addCharge = new AddFinOpModel();
 
             var project = _context.Projects
                 .Include(c => c.ProjectMembers)
@@ -81,14 +81,14 @@ namespace FamilyBudget.Controllers
             addCharge.ForAll = true;
             addCharge.FinType = FinType.Charge;
             addCharge.ProjectId = project.Id;
+            addCharge.ProjectMembers = new SelectList(project.ProjectMembers, "Id", "NameInProject");
 
-            ViewData["ProjectMemberId"] = new SelectList(_context.ProjectMembers, "Id", "NameInProject");
             return PartialView(addCharge);
         }
 
         public IActionResult AddIncome(int? id)
         {
-            var addIncome = new AddIncomeModel();
+            var addIncome = new AddFinOpModel();
 
             var project = _context.Projects
                 .Include(c => c.ProjectMembers)
@@ -110,7 +110,8 @@ namespace FamilyBudget.Controllers
             addIncome.ForAll = true;
             addIncome.FinType = FinType.Income;
             addIncome.ProjectId = project.Id;
-            addIncome.CategoryId = _context.Categories.FirstOrDefault().Id;
+            addIncome.CategoryId = _context.Categories.FirstOrDefault().Id; //??
+            addIncome.ProjectMemberId = _context.ProjectMembers.FirstOrDefault().Id; //??
 
             return PartialView(addIncome);
         }

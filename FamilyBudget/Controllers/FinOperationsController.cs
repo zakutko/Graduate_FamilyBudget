@@ -87,6 +87,8 @@ namespace FamilyBudget.Controllers
             {
                 finOperation.CreateTime = DateTime.Now;
                 finOperation.UpdateTime = DateTime.Now;
+                finOperation.Category = _context.Categories
+                    .FirstOrDefault(x => x.Id == finOperation.CategoryId);
                 _context.Add(finOperation);
                 _context.SaveChanges();
                 return RedirectToAction("Details", "Home", new { id = finOperation.ProjectId } );

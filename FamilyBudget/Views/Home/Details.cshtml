@@ -22,10 +22,10 @@
                 asp-items="@Model.FilterViewModel.FinTypes"
                 onchange="this.form.submit()"></select>
 
-        <a asp-controller="Modal" asp-action="AddIncome" asp-route-id="@Model.FilterViewModel.SelectedProject" 
-        class="btn btn-secondary btn-lg bi bi-piggy-bank addIncome m-2"></a>
+        <a asp-controller="Modal" asp-action="AddIncome" asp-route-id="@Model.FilterViewModel.SelectedProject"
+           class="btn btn-secondary btn-lg bi bi-piggy-bank addIncome m-2"></a>
         <a asp-controller="Modal" asp-action="AddCharge" asp-route-id="@Model.FilterViewModel.SelectedProject"
-        class="btn btn-secondary btn-lg bi bi-bag-plus addCharge m-2"></a>
+           class="btn btn-secondary btn-lg bi bi-bag-plus addCharge m-2"></a>
     </div>
 
 </form>
@@ -46,6 +46,27 @@
                                                 null : Model.SortViewModel.changeSortDir(Model.SortViewModel.CurrentSortDir))">
                         Category
                         @if (@Model.SortViewModel.categorySort)
+                        {
+                            <i class="fa fa-fw @(Model.SortViewModel.isAscending ? "fa-sort-asc" : "fa-sort-desc")"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-fw fa-sort"></i>
+                        }
+                    </a>
+                </th>
+
+                <th>
+                    <a class="btn btn-sm @(Model.SortViewModel.projectMemberSort ? "btn-primary" : "btn-light")"
+                   asp-action="Details"
+                   asp-route-id="@(Model.FilterViewModel.SelectedProject)"
+                   asp-route-category="@(Model.FilterViewModel.SelectedCategory)"
+                   asp-route-fintype="@(Model.FilterViewModel.SelectedFinType)"
+                   asp-route-sortmodel="@(FinOperationSortModelEnum.ProjectMember)"
+                   asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.ProjectMember) ?
+                                                null : Model.SortViewModel.changeSortDir(Model.SortViewModel.CurrentSortDir))">
+                        ProjectMember
+                        @if (@Model.SortViewModel.projectMemberSort)
                         {
                             <i class="fa fa-fw @(Model.SortViewModel.isAscending ? "fa-sort-asc" : "fa-sort-desc")"></i>
                         }
@@ -122,8 +143,9 @@
             {
                 <tr>
                     <td class="col-3">@fo.Category.Name</td>
-                    <td class="col-3">@fo.Value</td>
-                    <td class="col-3">
+                    <td class="col-3">@fo.ProjectMember.NameInProject</td>
+                    <td class="col-2">@fo.Value</td>
+                    <td class="col-2">
                         @if (@fo.CreateTime.Date == DateTime.Today.Date)
                         {
                             <label>Сегодня</label>
@@ -194,9 +216,7 @@ else
             });
         });
     })
-</script>
 
-<script type="text/javascript">
     $(function () {
         $.ajaxSetup({ cache: false });
         $(".addIncome").click(function (e) {
@@ -207,8 +227,6 @@ else
             });
         });
     })
-</script>
-<script type="text/javascript">
 
     $(document).ready(function () {
         $("#inputCategory").autocomplete({

@@ -64,7 +64,8 @@ namespace FamilyBudget.Controllers
 
             IQueryable<FinOperation> finOperations = _context.FinOperations
                 .Include(x => x.Project)
-                .Include(x => x.Category);
+                .Include(x => x.Category)
+                .Include(x => x.ProjectMember);
 
             finOperations = finOperations.Where(p => p.ProjectId == id);
 
@@ -80,15 +81,20 @@ namespace FamilyBudget.Controllers
 
             switch (sortModel)
             {
+                case FinOperationSortModelEnum.ProjectMember:
+                    if (sortDir == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.ProjectMember.NameInProject); break; }
+
+                    finOperations = finOperations.OrderByDescending(s => s.ProjectMember.NameInProject);
+                    break;
                 case FinOperationSortModelEnum.FinType:
                     if (sortDir == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.FinType); break; }
                     
                     finOperations = finOperations.OrderByDescending(s => s.FinType);
                     break;
                 case FinOperationSortModelEnum.Category:
-                    if (sortDir == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.Category); break; }
+                    if (sortDir == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.Category.Name); break; }
 
-                    finOperations = finOperations.OrderByDescending(s => s.Category);
+                    finOperations = finOperations.OrderByDescending(s => s.Category.Name);
                     break;
                 case FinOperationSortModelEnum.CreateTime:
                     if (sortDir == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.CreateTime); break; }

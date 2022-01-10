@@ -1,4 +1,4 @@
-﻿@model FamilyBudget.ModalViewModels.AddChargeModel
+﻿@model FamilyBudget.ModalViewModels.AddFinOpModel
 
 @{
     ViewData["Title"] = "AddCharge";
@@ -28,14 +28,14 @@
           asp-route-projectid="@Model.ProjectId">
             <div class="modal-body container-fluid">
                 <div class="form-group">
-                    
-                <input type="text" id="inputCategory" data-projectId="@Model.ProjectId" autocomplete="off"
-               class="form-control" name="category" placeholder="Category" value="" />
-               <input type="hidden" id="categoryId" asp-for="CategoryId">
+
+                    <input type="text" id="inputCategory" data-projectId="@Model.ProjectId" autocomplete="off"
+                       class="form-control" placeholder="Category" />
+                    <input type="hidden" id="categoryId" asp-for="CategoryId">
                     <div id="SearchCategory"></div>
                 </div>
                 <div class="form-group">
-                    <select asp-for="ProjectMemberId" class="form-control" asp-items="ViewBag.ProjectMemberId"></select>
+                    <select asp-for="ProjectMemberId" class="form-control" asp-items="@Model.ProjectMembers"></select>
                 </div>
                 <div class="form-group form-check">
                     <label class="form-check-label">
@@ -73,7 +73,7 @@
                         "term": request.term
                     },
                     success: function (data) {
-                        response($.map(data, function (item) {                          
+                        response($.map(data, function (item) {
                             return item;
                         }))
                     }
@@ -85,18 +85,15 @@
             }
         });
         $("#inputCategory").autocomplete("option", "appendTo", "#SearchCategory");
-    }); 
+    });
 
-</script>
-
-<script type="text/javascript">
     $(function () {
         $.ajaxSetup({ cache: false });
         $("#chargeSubmit").click(function (e) {
             $.ajax({
             async: false,
-            url: '/Categories/categoryUnique/',
-            data: { 
+            url: '/Categories/CategoryUnique/',
+            data: {
             "projectId" : $("#inputCategory").attr("data-projectId"),
             "categoryName" : $("#inputCategory").val()
             },

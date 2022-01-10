@@ -59,13 +59,6 @@ namespace FamilyBudget.Controllers
             return View(project);
         }
 
-        // GET: Projects/Create
-        public IActionResult Create()
-        {
-            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
-        }
-
         // POST: Projects/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -85,7 +78,7 @@ namespace FamilyBudget.Controllers
                 CRUD_project.Create(project, user);
                 _context.Add(project);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Home", new { id = project.Id });
             }
 
             ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", project.OwnerId);

@@ -211,12 +211,12 @@ namespace FamilyBudget.Controllers
         {
             try
             {
-                var categories = await _context.Categories.ToListAsync();
-                var names = categories
+                var categories = await _context.Categories
                     .Where(a => a.ProjectId == id)
                     .Where(a => a.Name.Contains(term))
-                    .Select(a => new { value = a.Name, id = a.Id  });
-                return Ok(names);
+                    .Select(a => new { value = a.Name, id = a.Id })
+                    .ToListAsync();
+                return Ok(categories);
             }
             catch (Exception ex)
             {

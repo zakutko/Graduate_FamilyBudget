@@ -114,7 +114,6 @@ namespace FamilyBudget.Controllers
             addIncome.FinType = FinType.Income;
             addIncome.ProjectId = project.Id;
             addIncome.CategoryId = _context.Categories.FirstOrDefault().Id; //??
-            addIncome.ProjectMemberId = _context.ProjectMembers.FirstOrDefault().Id; //??
 
             return PartialView(addIncome);
         }

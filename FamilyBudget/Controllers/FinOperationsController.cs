@@ -86,7 +86,7 @@ namespace FamilyBudget.Controllers
             if (finOperation.ProjectMemberId == -1)
             {
                 finOperation.ForAll = true;
-                finOperation.ProjectMember = _context.ProjectMembers.FirstOrDefault();
+                finOperation.ProjectMemberId = null;
             }
 
             if (ModelState.IsValid)

@@ -142,8 +142,8 @@
             @foreach (FinOperation fo in Model.finOperations)
             {
                 <tr>
-                    <td class="col-3">@fo.Category.Name</td>
-                    <td class="col-3">@fo.ProjectMember.NameInProject</td>
+                    <td class="col-3">@if (fo.Category != null) { <label>@fo.Category.Name</label>  }</td>
+                    <td class="col-3">@if (fo.ProjectMember != null) { <label>@fo.ProjectMember.NameInProject</label> }</td>
                     <td class="col-2">@fo.Value</td>
                     <td class="col-2">
                         @if (@fo.CreateTime.Date == DateTime.Today.Date)

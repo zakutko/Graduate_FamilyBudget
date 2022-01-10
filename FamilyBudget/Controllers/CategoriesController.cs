@@ -215,7 +215,7 @@ namespace FamilyBudget.Controllers
                 var names = categories
                     .Where(a => a.ProjectId == id)
                     .Where(a => a.Name.Contains(term))
-                    .Select(a => new { value = a.Name, id = a.Id })
+                    .Select(a => new { value = a.Name, id = a.Id  })
                     .Distinct();
                 return Ok(names);
             }
@@ -225,6 +225,27 @@ namespace FamilyBudget.Controllers
             }
         }
 
-        
+        public async Task<IActionResult> categoryUnique(int projectId, string categoryName)
+        {
+            try
+            {
+                var category = _context.Categories.Where(x => x.ProjectId == projectId)
+                .FirstOrDefault(e => e.Name == categoryName);
+                if (category != null)
+                {
+                    return Ok(category.Id);
+                }
+
+                category = new Category();
+                category.Name = categoryName;
+                category.ProjectId = projectId;
+                await Create(category);
+                return Ok(category.Id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

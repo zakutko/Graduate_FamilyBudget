@@ -76,7 +76,7 @@ namespace FamilyBudget.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FinType,ForAll,Value,CategoryId,ProjectMemberId,ProjectId,CreateTime,UpdateTime")] FinOperation finOperation)
+        public IActionResult Create([Bind("Id,FinType,ForAll,Value,CategoryId,ProjectMemberId,ProjectId,CreateTime,UpdateTime")] FinOperation finOperation)
         {
             if (!user.CanEdit(finOperation, _context))
             {
@@ -85,11 +85,10 @@ namespace FamilyBudget.Controllers
 
             if (ModelState.IsValid)
             {
-                finOperation.CategoryId = CreateUniqueInProject(finOperation.ProjectId,finOperation.Category.Name);
                 finOperation.CreateTime = DateTime.Now;
                 finOperation.UpdateTime = DateTime.Now;
                 _context.Add(finOperation);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 return RedirectToAction("Details", "Home", new { id = finOperation.ProjectId } );
             }
 
@@ -215,27 +214,6 @@ namespace FamilyBudget.Controllers
             var username = HttpContext.User.Identity.Name;
             return _context.Users
                 .FirstOrDefault(m => m.UserName == username);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public int CreateUniqueInProject(int projectId, string term)
-        {
-            var categories = _context.Categories.ToList();
-            var category = categories
-                .Where(a => a.ProjectId == projectId)
-                .FirstOrDefault(a => a.Name.Contains(term));
-
-            if (category != null)
-            {
-                return category.Id;
-            }
-
-            category = new Category();
-            category.Name = term;
-            category.ProjectId = projectId;
-            RedirectToRoute(new { controller = "Categories", action = "Create", category });
-            return category.Id;
         }
     }
 }

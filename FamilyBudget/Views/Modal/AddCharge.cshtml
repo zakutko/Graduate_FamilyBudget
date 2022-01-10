@@ -23,7 +23,7 @@
     </div>
     @if (Model.IsValid)
     {
-        <form asp-controller="FinOperations" asp-action="Create"
+        <form id="test" asp-controller="FinOperations" asp-action="Create"
           asp-route-fintype="@Model.FinType"
           asp-route-projectid="@Model.ProjectId">
             <div class="modal-body container-fluid">
@@ -31,6 +31,7 @@
                     
                 <input type="text" id="inputCategory" data-projectId="@Model.ProjectId" autocomplete="off"
                class="form-control" name="category" placeholder="Category" value="" />
+               <input type="hidden" id="categoryId" asp-for="CategoryId">
                     <div id="SearchCategory"></div>
                 </div>
                 <div class="form-group">
@@ -48,9 +49,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
-                <input type="submit" value="Create" class="btn btn-success btn-ok" />
+                <input id="chargeSubmit" type="submit" value="Create" class="btn btn-success btn-ok" />
             </div>
         </form>
     }
@@ -62,7 +62,7 @@
     }
 </div>
 
- <script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function () {
         $("#inputCategory").autocomplete({
             source: function (request, response) {
@@ -73,7 +73,7 @@
                         "term": request.term
                     },
                     success: function (data) {
-                        response($.map(data, function (item) {
+                        response($.map(data, function (item) {                          
                             return item;
                         }))
                     }
@@ -81,8 +81,30 @@
             },
             select: function (event, ui) {
                 this.value = ui.item.value;
+                $("#categoryId").val(ui.item.id)
             }
-        })
+        });
         $("#inputCategory").autocomplete("option", "appendTo", "#SearchCategory");
-    });
+    }); 
+
 </script>
+
+<script type="text/javascript">
+    $(function () {
+        $.ajaxSetup({ cache: false });
+        $("#chargeSubmit").click(function (e) {
+            $.ajax({
+            async: false,
+            url: '/Categories/categoryUnique/',
+            data: { 
+            "projectId" : $("#inputCategory").attr("data-projectId"),
+            "categoryName" : $("#inputCategory").val()
+            },
+            success: function(response){
+                    $("#categoryId").val(response);
+            }
+            })
+        });
+    })
+</script>
+

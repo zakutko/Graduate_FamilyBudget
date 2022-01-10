@@ -83,6 +83,12 @@ namespace FamilyBudget.Controllers
                 return Forbid();
             }
 
+            if (finOperation.ProjectMemberId == -1)
+            {
+                finOperation.ForAll = true;
+                finOperation.ProjectMember = _context.ProjectMembers.FirstOrDefault();
+            }
+
             if (ModelState.IsValid)
             {
                 finOperation.CreateTime = DateTime.Now;

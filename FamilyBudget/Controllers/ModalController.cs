@@ -78,10 +78,13 @@ namespace FamilyBudget.Controllers
                 return PartialView(addCharge);
             }
 
-            addCharge.ForAll = true;
+            addCharge.ForAll = false;
             addCharge.FinType = FinType.Charge;
             addCharge.ProjectId = project.Id;
-            addCharge.ProjectMembers = new SelectList(project.ProjectMembers, "Id", "NameInProject");
+
+            var projectMembers = project.ProjectMembers.ToList();
+            projectMembers.Insert(0, new ProjectMember { NameInProject = "Семья", Id= -1, ProjectId = project.Id });
+            addCharge.ProjectMembers = new SelectList(projectMembers, "Id", "NameInProject");
 
             return PartialView(addCharge);
         }

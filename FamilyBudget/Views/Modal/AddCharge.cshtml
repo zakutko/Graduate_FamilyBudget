@@ -37,11 +37,6 @@
                 <div class="form-group">
                     <select asp-for="ProjectMemberId" class="form-control" asp-items="@Model.ProjectMembers"></select>
                 </div>
-                <div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="ForAll" /> @Html.DisplayNameFor(model => model.ForAll)
-                    </label>
-                </div>
                 <div class="form-group">
                     <label asp-for="Value" class="control-label"></label>
                     <input asp-for="Value" class="form-control" />
@@ -49,6 +44,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
                 <input id="chargeSubmit" type="submit" value="Create" class="btn btn-success btn-ok" />
             </div>

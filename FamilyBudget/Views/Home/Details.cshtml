@@ -23,9 +23,9 @@
                 onchange="this.form.submit()"></select>
 
         <a asp-controller="Modal" asp-action="AddIncome" asp-route-id="@Model.FilterViewModel.SelectedProject"
-           class="btn btn-secondary btn-lg bi bi-piggy-bank addIncome m-2"></a>
+           class="btn btn-sm btn-warning addIncome m-2">Income <i class="bi bi-plus-lg"></i></a>
         <a asp-controller="Modal" asp-action="AddCharge" asp-route-id="@Model.FilterViewModel.SelectedProject"
-           class="btn btn-secondary btn-lg bi bi-bag-plus addCharge m-2"></a>
+           class="btn btn-sm btn-info btn addCharge m-2">Charge <i class="bi bi-plus-lg"></i></a>
     </div>
 
 </form>

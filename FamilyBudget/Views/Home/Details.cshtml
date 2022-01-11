@@ -5,6 +5,10 @@
     ViewData["Title"] = "Details";
 }
 
+<div id="finOperationDeleteModal" class="modal fade">
+    <div id="finOperationDeleteDialogContent" class="modal-dialog modal-dialog-centered modal-lg"></div>
+</div>
+
 <h1>Details</h1>
 <form class="pt-1 pb-3">
         <div class="form-inline">
@@ -118,6 +122,8 @@
                             else{<label>@fo.CreateTime.ToString("d MMMM yyyy")</label>}
                         </td>
                         <td class="col-3">@fo.FinType</td>
+                        <td id="@fo.Id" class="bi bi-pencil finOperationEdit"></td>
+                        <td id="@fo.Id" class="bi bi-x-lg finOperationDelete"></td>
                     </tr>
                 }
             </tbody>
@@ -179,7 +185,24 @@
                         this.form.submit();
                     }
                 });  
-            });  
+
+                $(".finOperationDelete").click(function (e) {
+                    e.preventDefault();
+                    $.get("/Modal/FinOperationDelete/" + this.id, function (data) {
+                        $('#finOperationDeleteDialogContent').html(data);
+                        $('#finOperationDeleteModal').modal('show');
+                    });
+                });
+
+                $(".finOperationEdit").click(function (e) {
+                    e.preventDefault();
+                    $.get("/Modal/FinOperationEdit/" + this.id, function (data) {
+                        $('#finOperationEditDialogContent').html(data);
+                        $('#finOperationEditModal').modal('show');
+                    });
+                });
+            });
+
         </script>  
 }
 

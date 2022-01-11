@@ -64,6 +64,91 @@ namespace FamilyBudget.Controllers
             return PartialView();
         }
 
+        public IActionResult FinOperationDelete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var finOperation = _context.FinOperations
+                .Include(f => f.Category)
+                .Include(f => f.Project)
+                .Include(f => f.ProjectMember)
+                .FirstOrDefault(m => m.Id == id);
+
+
+            if (!user.CanDelete(finOperation, _context))
+            {
+                return PartialView(new FinOperationModal { IsForbid = true });
+            }
+
+            if (finOperation == null)
+            {
+                return PartialView(new FinOperationModal { IsNotFound = true });
+            }
+
+            var finOperationModal = new FinOperationModal
+            {
+                Id = finOperation.Id,
+                FinType = finOperation.FinType,
+                ForAll = finOperation.ForAll,
+                Value = finOperation.Value,
+                CategoryId = finOperation.CategoryId,
+                Category = finOperation.Category,
+                ProjectMemberId = finOperation.ProjectMemberId,
+                ProjectMember = finOperation.ProjectMember,
+                ProjectId = finOperation.ProjectId,
+                Project = finOperation.Project,
+                CreateTime = finOperation.CreateTime,
+                UpdateTime = finOperation.UpdateTime,
+            };
+
+            return PartialView(finOperationModal);
+        }
+        public IActionResult FinOperationEdit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var finOperation = _context.FinOperations
+                .Include(f => f.Category)
+                .Include(f => f.Project)
+                .Include(f => f.ProjectMember)
+                .FirstOrDefault(m => m.Id == id);
+
+
+            if (!user.CanDelete(finOperation, _context))
+            {
+                return PartialView(new FinOperationModal { IsForbid = true });
+            }
+
+            if (finOperation == null)
+            {
+                return PartialView(new FinOperationModal { IsNotFound = true });
+            }
+
+            var finOperationModal = new FinOperationModal
+            {
+                Id = finOperation.Id,
+                FinType = finOperation.FinType,
+                ForAll = finOperation.ForAll,
+                Value = finOperation.Value,
+                CategoryId = finOperation.CategoryId,
+                ProjectMemberId = finOperation.ProjectMemberId,
+                ProjectMember = finOperation.ProjectMember,
+                ProjectId = finOperation.ProjectId,
+                CreateTime = finOperation.CreateTime,
+                UpdateTime = finOperation.UpdateTime,
+            };
+
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", finOperationModal.CategoryId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", finOperationModal.ProjectId);
+            ViewData["ProjectMemberId"] = new SelectList(_context.ProjectMembers, "Id", "NameInProject", finOperationModal.ProjectMemberId);
+            return PartialView(finOperationModal);
+        }
         private IdentityUser CurrentUser()
         {
             var username = HttpContext.User.Identity.Name;

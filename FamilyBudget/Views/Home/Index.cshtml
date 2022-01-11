@@ -55,7 +55,7 @@ else
 
             $(".projectCreate").click(function (e) {
                 e.preventDefault();
-                $.get("Modal/ProjectCreate/" + this.id, function (data) {
+                $.get("/Modal/ProjectCreate/" + this.id, function (data) {
                     $('#projectCreateDialogContent').html(data);
                     $('#projectCreateModal').modal('show');
                 });
@@ -63,7 +63,7 @@ else
 
             $(".projectDelete").click(function (e) {
                 e.preventDefault();
-                $.get("Modal/ProjectDelete/" + this.id, function (data) {
+                $.get("/Modal/ProjectDelete/" + this.id, function (data) {
                     $('#projectDeleteDialogContent').html(data);
                     $('#projectDeleteModal').modal('show');
                 });

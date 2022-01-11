@@ -10,6 +10,7 @@ namespace FamilyBudget.Models.View.Sort
     {
         public FinOperationSortDirEnum CurrentSortDir { get; set; }
         public FinOperationSortModelEnum CurrentSortModel { get; private set; }
+        public bool projectMemberSort { get { return CurrentSortModel == FinOperationSortModelEnum.ProjectMember; } }
         public bool categorySort { get { return CurrentSortModel == FinOperationSortModelEnum.Category; } } 
         public bool valueSort { get { return CurrentSortModel == FinOperationSortModelEnum.Value; } }
         public bool createTimeSort { get { return CurrentSortModel == FinOperationSortModelEnum.CreateTime; } }
@@ -18,12 +19,13 @@ namespace FamilyBudget.Models.View.Sort
         public bool isAscending { get { return CurrentSortDir == FinOperationSortDirEnum.Ascending; } }
 
         public bool sortModelChanged(FinOperationSortModelEnum selectedSortModel)  { return selectedSortModel == CurrentSortModel; }
-
-        public FinOperationSortModel(FinOperationSortModelEnum sortModel, FinOperationSortDirEnum sortType)
-        {
-            CurrentSortDir = sortType == FinOperationSortDirEnum.Descending ? 
+        public FinOperationSortDirEnum changeSortDir(FinOperationSortDirEnum sortDir) { return sortDir == FinOperationSortDirEnum.Descending ?
                 FinOperationSortDirEnum.Ascending : FinOperationSortDirEnum.Descending;
+        }
 
+        public FinOperationSortModel(FinOperationSortModelEnum sortModel, FinOperationSortDirEnum sortDir)
+        {
+            CurrentSortDir = sortDir;
             CurrentSortModel = sortModel;
         }
     }

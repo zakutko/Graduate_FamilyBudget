@@ -1,0 +1,103 @@
+﻿@model FamilyBudget.ModalViewModels.AddFinOpModel
+
+@{
+    ViewData["Title"] = "AddCharge";
+}
+
+<div class="modal-content">
+    <div class="modal-header">
+        @if (@Model.IsNotFound)
+        {
+            <h3 class="modal-title text-danger">This project is not found.</h3>
+        }
+        else if (@Model.IsForbid)
+        {
+            <h3 class="modal-title text-danger">This project is forbidden.</h3>
+        }
+        else
+        {
+            <h3 class="modal-title">Add charge.</h3>
+        }
+
+        <button class="bi bi-x-lg btn" data-dismiss="modal" aria-label="Close"></button>
+    </div>
+    @if (Model.IsValid)
+    {
+        <form id="test" asp-controller="FinOperations" asp-action="Create"
+          asp-route-fintype="@Model.FinType"
+          asp-route-projectid="@Model.ProjectId">
+            <div class="modal-body container-fluid">
+                <div class="form-group">
+
+                    <input type="text" id="inputCategory" data-projectId="@Model.ProjectId" autocomplete="off"
+                       class="form-control" placeholder="Category" />
+                    <input type="hidden" id="categoryId" asp-for="CategoryId">
+                    <div id="SearchCategory"></div>
+                </div>
+                <div class="form-group">
+                    <select asp-for="ProjectMemberId" class="form-control" asp-items="@Model.ProjectMembers"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Value" class="control-label"></label>
+                    <input asp-for="Value" class="form-control" />
+                    <span asp-validation-for="Value" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                <input id="chargeSubmit" type="submit" value="Create" class="btn btn-success btn-ok" />
+            </div>
+        </form>
+    }
+    else
+    {
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#inputCategory").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Categories/SearchCategories/",
+                    data: {
+                        "id": $("#inputCategory").attr("data-projectId"),
+                        "term": request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    }
+                });
+            },
+            select: function (event, ui) {
+                this.value = ui.item.value;
+                $("#categoryId").val(ui.item.id)
+            }
+        });
+        $("#inputCategory").autocomplete("option", "appendTo", "#SearchCategory");
+    });
+
+    $(function () {
+        $.ajaxSetup({ cache: false });
+        $("#chargeSubmit").click(function (e) {
+            $.ajax({
+            async: false,
+            url: '/Categories/CategoryUnique/',
+            data: {
+            "projectId" : $("#inputCategory").attr("data-projectId"),
+            "categoryName" : $("#inputCategory").val()
+            },
+            success: function(response){
+                    $("#categoryId").val(response);
+            }
+            })
+        });
+    })
+</script>
+

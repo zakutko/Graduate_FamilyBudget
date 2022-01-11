@@ -27,7 +27,7 @@ namespace FamilyBudget.CRUD_models
             project.Categories.Add(new Category 
             {  
                 ProjectId = project.Id, 
-                Name = "Продукты", 
+                Name = "продукты", 
                 Project = project, 
                 CreateTime = timeNow, 
                 UpdateTime = timeNow 
@@ -35,7 +35,7 @@ namespace FamilyBudget.CRUD_models
             project.Categories.Add(new Category 
             { 
                 ProjectId = project.Id, 
-                Name = "Транспорт", 
+                Name = "транспорт", 
                 Project = project, 
                 CreateTime = timeNow, 
                 UpdateTime = timeNow 
@@ -43,7 +43,7 @@ namespace FamilyBudget.CRUD_models
             project.Categories.Add(new Category
             {
                 ProjectId = project.Id,
-                Name = "Кафе",
+                Name = "кафе",
                 Project = project,
                 CreateTime = timeNow,
                 UpdateTime = timeNow
@@ -51,7 +51,7 @@ namespace FamilyBudget.CRUD_models
             project.Categories.Add(new Category
             {
                 ProjectId = project.Id,
-                Name = "Развлечения",
+                Name = "развлечения",
                 Project = project,
                 CreateTime = timeNow,
                 UpdateTime = timeNow
@@ -59,7 +59,7 @@ namespace FamilyBudget.CRUD_models
             project.Categories.Add(new Category
             {
                 ProjectId = project.Id,
-                Name = "Подарки",
+                Name = "подарки",
                 Project = project,
                 CreateTime = timeNow,
                 UpdateTime = timeNow
@@ -67,7 +67,7 @@ namespace FamilyBudget.CRUD_models
             project.Categories.Add(new Category
             {
                 ProjectId = project.Id,
-                Name = "Бытовая техника",
+                Name = "бытовая техника",
                 Project = project,
                 CreateTime = timeNow,
                 UpdateTime = timeNow

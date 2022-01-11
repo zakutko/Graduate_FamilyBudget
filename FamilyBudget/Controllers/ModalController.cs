@@ -40,22 +40,87 @@ namespace FamilyBudget.Controllers
                 return PartialView(projectDelete);
             }
 
-            if (!user.CanDelete(project,_context))
+            if (!user.CanDelete(project, _context))
             {
                 projectDelete.IsForbid = true;
                 return PartialView(projectDelete);
             }
 
-            projectDelete.Id                = project.Id;
-            projectDelete.Name              = project.Name;
-            projectDelete.Owner             = project.Owner;
-            projectDelete.CreateTime        = project.CreateTime;
-            projectDelete.UpdateTime        = project.UpdateTime;
-            projectDelete.membersCount      = project.ProjectMembers.Count();
-            projectDelete.incomesCount      = project.FinOperations.Where(fo => fo.FinType == FinType.Income).Count();
-            projectDelete.chargesCount      = project.FinOperations.Where(fo => fo.FinType == FinType.Charge).Count();
+            projectDelete.Id = project.Id;
+            projectDelete.Name = project.Name;
+            projectDelete.Owner = project.Owner;
+            projectDelete.CreateTime = project.CreateTime;
+            projectDelete.UpdateTime = project.UpdateTime;
+            projectDelete.membersCount = project.ProjectMembers.Count();
+            projectDelete.incomesCount = project.FinOperations.Where(fo => fo.FinType == FinType.Income).Count();
+            projectDelete.chargesCount = project.FinOperations.Where(fo => fo.FinType == FinType.Charge).Count();
 
             return PartialView(projectDelete);
+        }
+
+        public IActionResult AddCharge(int? id)
+        {
+            var addCharge = new AddFinOpModel();
+
+            var project = _context.Projects
+                .Include(c => c.ProjectMembers)
+                .Include(c => c.FinOperations)
+                .FirstOrDefault(p => p.Id == id);
+
+            if (project == null)
+            {
+                addCharge.IsNotFound = true;
+                return PartialView(addCharge);
+            }
+
+            if (!user.CanEdit(project, _context))
+            {
+                addCharge.IsForbid = true;
+                return PartialView(addCharge);
+            }
+
+            addCharge.ForAll = false;
+            addCharge.FinType = FinType.Charge;
+            addCharge.ProjectId = project.Id;
+
+            var projectMembers = project.ProjectMembers.ToList();
+            projectMembers.Insert(0, new ProjectMember { NameInProject = "Семья", Id= -1, ProjectId = project.Id });
+            addCharge.ProjectMembers = new SelectList(projectMembers, "Id", "NameInProject");
+
+            return PartialView(addCharge);
+        }
+
+        public IActionResult AddIncome(int? id)
+        {
+            var addIncome = new AddFinOpModel();
+
+            var project = _context.Projects
+                .Include(c => c.ProjectMembers)
+                .Include(c => c.FinOperations)
+                .FirstOrDefault(p => p.Id == id);
+
+            if (project == null)
+            {
+                addIncome.IsNotFound = true;
+                return PartialView(addIncome);
+            }
+
+            if (!user.CanEdit(project, _context))
+            {
+                addIncome.IsForbid = true;
+                return PartialView(addIncome);
+            }
+
+            addIncome.ForAll = false;
+            addIncome.FinType = FinType.Income;
+            addIncome.ProjectId = project.Id;
+            addIncome.CategoryId = _context.Categories.FirstOrDefault().Id; //??
+
+            var projectMembers = project.ProjectMembers.ToList();
+            projectMembers.Insert(0, new ProjectMember { NameInProject = "Семья", Id = -1, ProjectId = project.Id });
+            addIncome.ProjectMembers = new SelectList(projectMembers, "Id", "NameInProject");
+
+            return PartialView(addIncome);
         }
 
         public IActionResult ProjectCreate()

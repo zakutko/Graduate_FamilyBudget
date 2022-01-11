@@ -76,20 +76,28 @@ namespace FamilyBudget.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FinType,ForAll,Value,CategoryId,ProjectMemberId,ProjectId,CreateTime,UpdateTime")] FinOperation finOperation)
+        public IActionResult Create([Bind("Id,FinType,ForAll,Value,CategoryId,ProjectMemberId,ProjectId,CreateTime,UpdateTime")] FinOperation finOperation)
         {
             if (!user.CanEdit(finOperation, _context))
             {
                 return Forbid();
             }
 
+            if (finOperation.ProjectMemberId == -1)
+            {
+                finOperation.ForAll = true;
+                finOperation.ProjectMemberId = null;
+            }
+
             if (ModelState.IsValid)
             {
                 finOperation.CreateTime = DateTime.Now;
                 finOperation.UpdateTime = DateTime.Now;
+                finOperation.Category = _context.Categories
+                    .FirstOrDefault(x => x.Id == finOperation.CategoryId);
                 _context.Add(finOperation);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _context.SaveChanges();
+                return RedirectToAction("Details", "Home", new { id = finOperation.ProjectId } );
             }
 
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", finOperation.CategoryId);

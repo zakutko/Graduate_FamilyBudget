@@ -28,10 +28,15 @@
           asp-route-projectid="@Model.ProjectId"
           asp-route-categoryid="@Model.CategoryId"
           asp-route-projectmemberid="@Model.ProjectMemberId">
-            <div class="modal-body">
-                <label asp-for="Value" class="control-label"></label>
-                <input asp-for="Value" class="form-control" />
-                <span asp-validation-for="Value" class="text-danger"></span>
+            <div class="modal-body container-fluid">
+                <div class="form-group">
+                    <select asp-for="ProjectMemberId" class="form-control" asp-items="@Model.ProjectMembers"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Value" class="control-label"></label>
+                    <input asp-for="Value" class="form-control" />
+                    <span asp-validation-for="Value" class="text-danger"></span>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -1,3 +1,4 @@
+using Eir.Services;
 using FamilyBudget.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -5,9 +6,11 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,19 +20,43 @@ namespace FamilyBudget
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _currentEnvironment = env;
         }
+
+        private readonly IHostEnvironment _currentEnvironment;
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            var connectionString = "";
+            if (_currentEnvironment.IsDevelopment())
+            {
+                connectionString = "Host=localhost;Port=5432;Database=FamilyBudgetDB;Username=postgres;Password=123";
+            } else
+            {
+                connectionString = "Host=rc1b-3m4lexln73k8vtbf.mdb.yandexcloud.net;Port=6432;SSL Mode=Require;Database=FamilyBudgetDB;Username=User_Id;Password=User_Password;Trust Server Certificate=true;";
+                connectionString = connectionString.Replace("User_Id", Configuration["UserId"]);
+                connectionString = connectionString.Replace("User_Password", Configuration["Password"]);
+            }
+
+            services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>((sp, opt) =>
+                {
+                    opt.UseNpgsql(connectionString, b => b.RemoteCertificateValidationCallback(SSL.RemoteCertificateValidation));
+                    if (_currentEnvironment.IsDevelopment())
+                    {
+                        opt.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()));
+                    }
+                    else
+                    {
+                        opt.UseInternalServiceProvider(sp);
+                    }
+                });
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<IdentityUser>(options =>

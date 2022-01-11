@@ -18,6 +18,7 @@ using FamilyBudget.Models.View.Sort;
 using FamilyBudget.Models.View.Page;
 using FamilyBudget.Models.View.Filter;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using FamilyBudget.Models.View.Edit;
 
 namespace FamilyBudget.Controllers
 {
@@ -164,6 +165,13 @@ namespace FamilyBudget.Controllers
                 .Select(x => new HomeProjectDetailsModel.PieItem { Name = x.Key == FinType.Income ? "Доход" : "Расход", Value = x.Sum(y => y.Value) }).ToList()
             };
             return View(detailsModel);
+        }
+
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            var editModel = new HomeProjectEditModel();
+            return View(editModel);
         }
 
         public IActionResult Privacy()

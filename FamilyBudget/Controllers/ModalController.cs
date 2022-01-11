@@ -110,7 +110,7 @@ namespace FamilyBudget.Controllers
                 return PartialView(addIncome);
             }
 
-            addIncome.ForAll = true;
+            addIncome.ForAll = false;
             addIncome.FinType = FinType.Income;
             addIncome.ProjectId = project.Id;
             addIncome.CategoryId = _context.Categories.FirstOrDefault().Id; //??

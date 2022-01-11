@@ -1,9 +1,11 @@
-﻿using FamilyBudget.Data;
+﻿using FamilyBudget.CRUD_models;
+using FamilyBudget.Data;
 using FamilyBudget.Extensions;
 using FamilyBudget.ModalViewModels;
 using FamilyBudget.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -54,6 +56,12 @@ namespace FamilyBudget.Controllers
             projectDelete.chargesCount      = project.FinOperations.Where(fo => fo.FinType == FinType.Charge).Count();
 
             return PartialView(projectDelete);
+        }
+
+        public IActionResult ProjectCreate()
+        {
+            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id");
+            return PartialView();
         }
 
         private IdentityUser CurrentUser()

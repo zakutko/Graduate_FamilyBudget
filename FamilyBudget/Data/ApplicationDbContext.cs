@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using FamilyBudget.ModalViewModels;
 
 namespace FamilyBudget.Data
 {
@@ -19,5 +20,7 @@ namespace FamilyBudget.Data
         {
 
         }
+
+        public DbSet<FamilyBudget.ModalViewModels.ProjectDeleteModel> ProjectDeleteModel { get; set; }
     }
 }

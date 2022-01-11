@@ -140,7 +140,7 @@ namespace FamilyBudget.Controllers
                 .Include(f => f.Category)
                 .Include(f => f.Project)
                 .Include(f => f.ProjectMember)
-                .FirstOrDefault(m => m.Id == id.Value);
+                .FirstOrDefault(m => m.Id == id);
 
             var project = _context.Projects
                 .Include(c => c.ProjectMembers)
@@ -190,7 +190,7 @@ namespace FamilyBudget.Controllers
                 .Include(f => f.Category)
                 .Include(f => f.Project)
                 .Include(f => f.ProjectMember)
-                .FirstOrDefault(m => m.Id == id.Value);
+                .FirstOrDefault(m => m.Id == id);
             var project = _context.Projects
                 .Include(c => c.ProjectMembers)
                 .Include(c => c.FinOperations)

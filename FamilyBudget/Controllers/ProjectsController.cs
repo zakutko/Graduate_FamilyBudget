@@ -78,7 +78,7 @@ namespace FamilyBudget.Controllers
                 CRUD_project.Create(project, user);
                 _context.Add(project);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Home", new { id = project.Id });
+                return RedirectToAction("Index", "Home");
             }
 
             ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", project.OwnerId);

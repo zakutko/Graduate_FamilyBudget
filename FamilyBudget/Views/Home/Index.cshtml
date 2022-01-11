@@ -64,8 +64,8 @@ else
             $(".projectDelete").click(function (e) {
                 e.preventDefault();
                 $.get("Modal/ProjectDelete/" + this.id, function (data) {
-                    $('#projectDeleteDialogContent').html(data);
-                    $('#projectDeleteModal').modal('show');
+                    $('#projectDialogContent').html(data);
+                    $('#projectModal').modal('show');
                 });
             });
         });

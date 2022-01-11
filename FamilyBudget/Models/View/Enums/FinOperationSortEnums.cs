@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace FamilyBudget.Models.View.Enums
 {
     public enum FinOperationSortDirEnum
-    { 
+    {
         Ascending,
         Descending
     }
@@ -14,6 +14,7 @@ namespace FamilyBudget.Models.View.Enums
     public enum FinOperationSortModelEnum
     {
         Default,
+        ProjectMember,
         FinType,
         Category,
         CreateTime,

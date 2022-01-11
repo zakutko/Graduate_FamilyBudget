@@ -81,6 +81,7 @@ namespace FamilyBudget.Controllers
             {
                 category.CreateTime = DateTime.Now;
                 category.UpdateTime = DateTime.Now;
+                category.Name = category.Name.ToLower();
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -136,6 +137,7 @@ namespace FamilyBudget.Controllers
                 try
                 {
                     category.UpdateTime = DateTime.Now;
+                    category.Name = category.Name.ToLower();
                     _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
@@ -209,16 +211,39 @@ namespace FamilyBudget.Controllers
         {
             try
             {
-                var categories = await _context.Categories.ToListAsync();
-                var names = categories
+                var categories = await _context.Categories
                     .Where(a => a.ProjectId == id)
                     .Where(a => a.Name.Contains(term))
-                    .Select(a => new { value = a.Name });
-                return Ok(names);
+                    .Select(a => new { value = a.Name, id = a.Id })
+                    .ToListAsync();
+                return Ok(categories);
             }
             catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
+            }
+        }
+
+        public async Task<IActionResult> CategoryUnique(int projectId, string categoryName)
+        {
+            try
+            {
+                var category = _context.Categories.Where(x => x.ProjectId == projectId)
+                .FirstOrDefault(e => e.Name == categoryName);
+                if (category != null)
+                {
+                    return Ok(category.Id);
+                }
+
+                category = new Category();
+                category.Name = categoryName;
+                category.ProjectId = projectId;
+                await Create(category);
+                return Ok(category.Id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

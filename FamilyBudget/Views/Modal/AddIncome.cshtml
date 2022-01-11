@@ -1,0 +1,55 @@
+﻿@model FamilyBudget.ModalViewModels.AddFinOpModel
+
+@{
+    ViewData["Title"] = "AddIncome";
+}
+
+<div class="modal-content">
+    <div class="modal-header">
+        @if (@Model.IsNotFound)
+        {
+            <h3 class="modal-title text-danger">This project is not found.</h3>
+        }
+        else if (@Model.IsForbid)
+        {
+            <h3 class="modal-title text-danger">This project is forbidden.</h3>
+        }
+        else
+        {
+            <h3 class="modal-title">Add income.</h3>
+        }
+
+        <button class="bi bi-x-lg btn" data-dismiss="modal" aria-label="Close"></button>
+    </div>
+    @if (Model.IsValid)
+    {
+        <form asp-controller="FinOperations" asp-action="Create"
+          asp-route-fintype="@Model.FinType"
+          asp-route-projectid="@Model.ProjectId"
+          asp-route-categoryid="@Model.CategoryId"
+          asp-route-projectmemberid="@Model.ProjectMemberId">
+            <div class="modal-body container-fluid">
+                <div class="form-group">
+                    <select asp-for="ProjectMemberId" class="form-control" asp-items="@Model.ProjectMembers"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Value" class="control-label"></label>
+                    <input asp-for="Value" class="form-control" />
+                    <span asp-validation-for="Value" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                <input type="submit" value="Create" class="btn btn-success btn-ok" />
+            </div>
+        </form>
+    }
+    else
+    {
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    }
+</div>
+

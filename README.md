@@ -8,13 +8,17 @@
 Стараемся обновляться и использовать только последние версии ПО
 
  - [Visual Studio Community 2022](https://visualstudio.microsoft.com/ru/)
- - [pgAdmin 4](https://www.pgadmin.org/download/pgadmin-4-windows/)
+ - [PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads/)
 
 ### Установка Visual Studio Community 2022
 При установке VS необходимо выбрать "ASP.NET и разработка веб-приложений"
 
-### Установка pgAdmin 4
-Обычная установка, без особенностей
+### Установка PostgreSQL
+1. На вкладке **Select Components** убираем галочку со **Stack Builder**.
+2. На вкладке **Password** пишем пароль **123**.
+3. На вкладке **Port** должен стоять порт **5432**.
+4. Остальное по дефолту.
+5. При первом запуске нужно будет тыкнуть на **Apply Migrations** и обновить страницу.
 
 ## Первый запуск
 

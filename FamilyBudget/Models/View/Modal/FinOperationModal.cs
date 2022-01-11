@@ -1,5 +1,7 @@
 ﻿using FamilyBudget.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FamilyBudget.ModalViewModels
 {
@@ -16,9 +18,11 @@ namespace FamilyBudget.ModalViewModels
 
         public int? ProjectMemberId { get; set; }
         public ProjectMember ProjectMember { get; set; }
+        public SelectList ProjectMembers { get; set; }
 
         public int ProjectId { get; set; }
         public Project Project { get; set; }
+
         public DateTime CreateTime { get; set; }
         public DateTime UpdateTime { get; set; }
 

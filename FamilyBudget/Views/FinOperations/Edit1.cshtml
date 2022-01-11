@@ -1,21 +1,15 @@
 ﻿@model FamilyBudget.Models.FinOperation
 
-@{
-    ViewData["Title"] = "Edit";
-}
-
-<h1>Edit</h1>
-
 <h4>FinOperation</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit1">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="FinType" class="control-label"></label>
-                    <select asp-for="FinType" asp-items="@Html.GetEnumSelectList<FinType>()" class="form-control"></select>
+                <select asp-for="FinType" class="form-control"></select>
                 <span asp-validation-for="FinType" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -43,12 +37,15 @@
                 <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
                 <span asp-validation-for="ProjectId" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                <input type="hidden" asp-for="CreateTime" class="form-control" />
+                <label asp-for="CreateTime" class="control-label"></label>
+                <input asp-for="CreateTime" class="form-control" />
+                <span asp-validation-for="CreateTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="hidden" asp-for="UpdateTime" class="form-control" />
+                <label asp-for="UpdateTime" class="control-label"></label>
+                <input asp-for="UpdateTime" class="form-control" />
+                <span asp-validation-for="UpdateTime" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

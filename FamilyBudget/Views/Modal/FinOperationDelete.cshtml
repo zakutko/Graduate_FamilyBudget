@@ -43,12 +43,15 @@
             <dd class = "col-sm-8">
                 @Html.DisplayFor(model => model.Value)
             </dd>
-            <dt class = "col-sm-4">
-                @Html.DisplayNameFor(model => model.Category)
-            </dt>
-            <dd class = "col-sm-8">
-                @Html.DisplayFor(model => model.Category.Name)
-            </dd class>
+            @if (Model.FinType == FinType.Charge)
+            {
+                <dt class = "col-sm-4">
+                    @Html.DisplayNameFor(model => model.Category)
+                </dt>
+                <dd class = "col-sm-8">
+                    @Html.DisplayFor(model => model.Category.Name)
+                </dd class>
+            }
             <dt class = "col-sm-4">
                 @Html.DisplayNameFor(model => model.ProjectMember)
             </dt>

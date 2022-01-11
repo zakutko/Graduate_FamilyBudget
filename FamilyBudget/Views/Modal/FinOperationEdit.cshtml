@@ -19,6 +19,7 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
                 <div class="form-group">
+
                     <label asp-for="FinType" class="control-label"></label>
                     <select asp-for="FinType" asp-items="@Html.GetEnumSelectList<FinType>()" class="form-control"></select>
                     <span asp-validation-for="FinType" class="text-danger"></span>
@@ -33,14 +34,19 @@
                     <input asp-for="Value" class="form-control" />
                     <span asp-validation-for="Value" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="CategoryId" class="control-label"></label>
-                    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                    <span asp-validation-for="CategoryId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
+                    @if (Model.FinType == FinType.Charge)
+                    {
+                        <label asp-for="CategoryId" class="control-label"></label>
+                        <div class="form-group">
+                        <input type="text" id="inputCategory" data-projectId="@Model.ProjectId" autocomplete="off"
+                           class="form-control" placeholder="Category" value="@Model.Category.Name"/>
+                        <input type="hidden" id="categoryId" asp-for="CategoryId">
+                        <div id="SearchCategory"></div>
+                        </div>
+                    }
+                    <div class="form-group">
                     <label asp-for="ProjectMemberId" class="control-label"></label>
-                    <select asp-for="ProjectMemberId" class="form-control" asp-items="ViewBag.ProjectMemberId"></select>
+                    <select asp-for="ProjectMemberId" class="form-control" asp-items="@Model.ProjectMembers"></select>
                     <span asp-validation-for="ProjectMemberId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -48,19 +54,66 @@
                     <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
                     <span asp-validation-for="ProjectId" class="text-danger"></span>
                 </div>
+
+                <div class="form-group">
+                <input type="hidden" asp-for="CreateTime" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="UpdateTime" class="form-control" />
+                </div>
             </div>
         </div>
         </div>
         <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-         @if (Model.IsValid)
-         {
-            <input type="submit" value="Edit" class="btn btn-info btn-ok" />
-         }
+        @if (Model.IsValid)
+        {
+           <input id="chargeSubmit" type="submit" value="Edit" class="btn btn-info btn-ok" />
+        }
         </div>
         </form>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<script type="text/javascript">
+$(document).ready(function () {
+    $("#inputCategory").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Categories/SearchCategories/",
+                data: {
+                    "id": $("#inputCategory").attr("data-projectId"),
+                    "term": request.term
+                },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return item;
+                    }))
+                }
+            });
+        },
+        select: function (event, ui) {
+            this.value = ui.item.value;
+            $("#categoryId").val(ui.item.id)
+        }
+    });
+    $("#inputCategory").autocomplete("option", "appendTo", "#SearchCategory");
+});
+
+$(function () {
+    $.ajaxSetup({ cache: false });
+    $("#chargeSubmit").click(function (e) {
+        $.ajax({
+        async: false,
+        url: '/Categories/CategoryUnique/',
+        data: {
+            "projectId" : $("#inputCategory").attr("data-projectId"),
+            "categoryName" : $("#inputCategory").val()
+        },
+        success: function(response){
+            $("#categoryId").val(response);
+        }
+        })
+    });
+})
+</script>
+

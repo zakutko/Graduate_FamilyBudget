@@ -20,9 +20,5 @@ namespace FamilyBudget.Data
         {
 
         }
-
-        public DbSet<FamilyBudget.ModalViewModels.ProjectDeleteModel> ProjectDeleteModel { get; set; }
-
-        public DbSet<FamilyBudget.ModalViewModels.FinOperationModal> FinOperationModal { get; set; }
     }
 }

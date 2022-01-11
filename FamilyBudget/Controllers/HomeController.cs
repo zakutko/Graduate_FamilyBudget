@@ -18,6 +18,7 @@ using FamilyBudget.Models.View.Sort;
 using FamilyBudget.Models.View.Page;
 using FamilyBudget.Models.View.Filter;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using FamilyBudget.Models.View.Edit;
 
 namespace FamilyBudget.Controllers
 {
@@ -125,6 +126,13 @@ namespace FamilyBudget.Controllers
                 finOperations = items
             };
             return View(detailsModel);
+        }
+
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            var editModel = new HomeProjectEditModel();
+            return View(editModel);
         }
 
         public IActionResult Privacy()

@@ -167,7 +167,7 @@ namespace FamilyBudget.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details","Home", new { id = finOperation.ProjectId });
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", finOperation.CategoryId);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", finOperation.ProjectId);
@@ -210,7 +210,7 @@ namespace FamilyBudget.Controllers
             var finOperation = await _context.FinOperations.FindAsync(id);
             _context.FinOperations.Remove(finOperation);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Home", new {id = finOperation.ProjectId});
         }
 
         private bool FinOperationExists(int id)

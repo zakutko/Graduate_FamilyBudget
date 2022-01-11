@@ -9,6 +9,10 @@
     <div id="finOperationDeleteDialogContent" class="modal-dialog modal-dialog-centered modal-lg"></div>
 </div>
 
+<div id="finOperationEditModal" class="modal fade">
+    <div id="finOperationEditDialogContent" class="modal-dialog modal-dialog-centered"></div>
+</div>
+
 <h1>Details</h1>
 
 <div id="addFinOpModal" class="modal fade">
@@ -181,6 +185,8 @@
                         }
                     </td>
                     <td class="col-3">@fo.FinType</td>
+                    <td id="@fo.Id" class="bi bi-pencil finOperationEdit"></td>
+                    <td id="@fo.Id" class="bi bi-x-lg finOperationDelete"></td>
                 </tr>
             }
         </tbody>
@@ -266,49 +272,25 @@ else
                 this.form.submit();
             }
         });
-    });
-</script>
-        <script type="text/javascript">  
-            $(document).ready(function () {  
-                $("#inputCategory").autocomplete({  
-                    source: function (request, response) {
-                        $.ajax({  
-                            url: "/Categories/SearchCategories/", 
-                            data: { 
-                                "id": $("#inputCategory").attr("data-projectId"),
-                                "term": request.term
-                            },  
-                            success: function (data) {
-                                response($.map(data, function (item) {
-                                    return item;
-                                }))
-                            }
-                        });  
-                    },
-                    select: function (event, ui) {
-                        this.value = ui.item.value;
-                        this.form.submit();
-                    }
-                });  
 
-                $(".finOperationDelete").click(function (e) {
-                    e.preventDefault();
-                    $.get("/Modal/FinOperationDelete/" + this.id, function (data) {
-                        $('#finOperationDeleteDialogContent').html(data);
-                        $('#finOperationDeleteModal').modal('show');
-                    });
-                });
 
-                $(".finOperationEdit").click(function (e) {
-                    e.preventDefault();
-                    $.get("/Modal/FinOperationEdit/" + this.id, function (data) {
-                        $('#finOperationEditDialogContent').html(data);
-                        $('#finOperationEditModal').modal('show');
-                    });
+        $(".finOperationDelete").click(function (e) {
+                e.preventDefault();
+                $.get("/Modal/FinOperationDelete/" + this.id, function (data) {
+                    $('#finOperationDeleteDialogContent').html(data);
+                    $('#finOperationDeleteModal').modal('show');
                 });
             });
 
-        </script>  
+        $(".finOperationEdit").click(function (e) {
+            e.preventDefault();
+            $.get("/Modal/FinOperationEdit/" + this.id, function (data) {
+                $('#finOperationEditDialogContent').html(data);
+                $('#finOperationEditModal').modal('show');
+            });
+        });
+    });
+</script>
 }
 
 

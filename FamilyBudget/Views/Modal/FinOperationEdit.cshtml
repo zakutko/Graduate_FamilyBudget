@@ -6,10 +6,23 @@
 
 <div class="modal-content">
     <div class="modal-header">
-    <h5 class="modal-title">Edit project</h5>
+    @if (@Model.IsNotFound)
+    {
+        <h3 class="modal-title text-danger">This finoperation is not found.</h3>
+    }
+    else if (@Model.IsForbid)
+    {
+        <h3 class="modal-title text-danger">This finoperation is forbidden.</h3>
+    }
+    else
+    {
+        <h3 class="modal-title">Edit finoperation</h3>
+    }
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
+
+
 
     </div>
     <form asp-area="" asp-controller="FinOperations" asp-action="Edit">
@@ -18,17 +31,12 @@
             <div class="col-md">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
-                <div class="form-group">
+                <input type="hidden" asp-for="FinType"/>
+                <input type="hidden" asp-for="ForAll" />
+                <input type="hidden" asp-for="ProjectId" class="form-control"/>
+                <input type="hidden" asp-for="CreateTime" class="form-control" />
+                <input type="hidden" asp-for="UpdateTime" class="form-control" />
 
-                    <label asp-for="FinType" class="control-label"></label>
-                    <select asp-for="FinType" asp-items="@Html.GetEnumSelectList<FinType>()" class="form-control"></select>
-                    <span asp-validation-for="FinType" class="text-danger"></span>
-                </div>
-                <div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="ForAll" /> @Html.DisplayNameFor(model => model.ForAll)
-                    </label>
-                </div>
                 <div class="form-group">
                     <label asp-for="Value" class="control-label"></label>
                     <input asp-for="Value" class="form-control" />
@@ -48,18 +56,6 @@
                     <label asp-for="ProjectMemberId" class="control-label"></label>
                     <select asp-for="ProjectMemberId" class="form-control" asp-items="@Model.ProjectMembers"></select>
                     <span asp-validation-for="ProjectMemberId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ProjectId" class="control-label"></label>
-                    <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
-                    <span asp-validation-for="ProjectId" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                <input type="hidden" asp-for="CreateTime" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <input type="hidden" asp-for="UpdateTime" class="form-control" />
                 </div>
             </div>
         </div>

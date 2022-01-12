@@ -41,7 +41,7 @@ else
                 @Html.DisplayFor(modelItem => item.Name)
             </span>
 
-            <i id="@item.Id" class="bi bi-pencil projectEdit"></i>
+            <i id="@item.Id" class="bi bi-pencil projectEdit mr-2"></i>
             <i id="@item.Id" class="bi bi-x-lg projectDelete"></i>
         </a>
     }
@@ -51,8 +51,13 @@ else
 @section scripts
 {
     <script type="text/javascript">
-        $(function () {
-            $.ajaxSetup({ cache: false });
+        
+        $(".projectEdit").click(function (e) {
+                e.preventDefault();
+                document.location.href = "Home/Edit/" + this.id;               
+            });
+       
+        $.ajaxSetup({ cache: false });
 
             $(".projectCreate").click(function (e) {
                 e.preventDefault();

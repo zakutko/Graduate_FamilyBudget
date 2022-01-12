@@ -170,6 +170,20 @@ namespace FamilyBudget.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
+            var project = _context.Projects
+                .FirstOrDefault(p => p.Id == id);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            if (!user.CanView(project, _context))
+            {
+                return Forbid();
+            }
+
+
             var editModel = new HomeProjectEditModel();
             return View(editModel);
         }

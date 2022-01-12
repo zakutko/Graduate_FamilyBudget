@@ -38,15 +38,30 @@
 
 <div class="container">
     <div class="row">
-        <div class="col">
+        @if (Model.FilterViewModel.SelectedFinType == FinType.Charge) {
+        <div class="col-1"></div>
+        <div class="col-4">
             <canvas id="PieByCategory"></canvas>
         </div>
-        <div class="col">
+        <div class="col-1"></div>
+        <div class="col-1"></div>
+        <div class="col-4">
             <canvas id="PieByProjectMember"></canvas>
         </div>
-        <div class="col">
+        <div class="col-1"></div>
+        } else if (Model.FilterViewModel.SelectedFinType == FinType.Income) {
+        <div class="col-4"></div>
+        <div class="col-4">
+            <canvas id="PieByProjectMember"></canvas>
+        </div>
+        <div class="col-4"></div>
+        } else {
+        <div class="col-4"></div>
+        <div class="col-4">
             <canvas id="PieByFinOp"></canvas>
         </div>
+        <div class="col-4"></div>
+        }
     </div>
 </div>
 
@@ -196,11 +211,11 @@
                         {
                 <label>@fo.CreateTime.ToString("d MMMM yyyy")</label>
                         }
-                    </td>
-                    <td class="col-3">@fo.FinType</td>
-                    <td id="@fo.Id" class="bi bi-pencil finOperationEdit" style="cursor: pointer"></td>
-                    <td id="@fo.Id" class="bi bi-x-lg finOperationDelete" style="cursor: pointer"></td>
-                </tr>
+            </td>
+            <td class="col-3">@fo.FinType</td>
+            <td id="@fo.Id" class="bi bi-pencil finOperationEdit" style="cursor: pointer"></td>
+            <td id="@fo.Id" class="bi bi-x-lg finOperationDelete" style="cursor: pointer"></td>
+        </tr>
             }
     </tbody>
 </table>
@@ -286,10 +301,14 @@ else
             },
         };
 
-        new Chart(
-            document.getElementById('PieByCategory'),
-            config
-        );
+        const PieByCategory = document.getElementById('PieByCategory')
+
+        if (PieByCategory) {
+            new Chart(
+                PieByCategory,
+                config
+            );
+        }
     }
 
     {
@@ -318,10 +337,14 @@ else
             },
         };
 
-        new Chart(
-            document.getElementById('PieByProjectMember'),
-            config
-        );
+        const PieByProjectMember = document.getElementById('PieByProjectMember')
+
+        if (PieByProjectMember) {
+            new Chart(
+                PieByProjectMember,
+                config
+            );
+        }
     }
 
     {
@@ -349,10 +372,14 @@ else
             },
         };
 
-        new Chart(
-            document.getElementById('PieByFinOp'),
-            config
-        );
+        const PieByFinOp = document.getElementById('PieByFinOp')
+
+        if (PieByFinOp) {
+            new Chart(
+                PieByFinOp,
+                config
+            );
+        }
     }
 </script>
 
@@ -383,30 +410,30 @@ else
             });
         })
 
-    $(document).ready(function () {
-        $("#inputCategory").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "/Categories/SearchCategories/",
-                    data: {
-                        "id": $("#inputCategory").attr("data-projectId"),
-                        "term": request.term
-                    },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return item;
-                        }))
-                    }
-                });
-            },
-            select: function (event, ui) {
-                this.value = ui.item.value;
-                this.form.submit();
-            }
-        });
+        $(document).ready(function () {
+            $("#inputCategory").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Categories/SearchCategories/",
+                        data: {
+                            "id": $("#inputCategory").attr("data-projectId"),
+                            "term": request.term
+                        },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return item;
+                            }))
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    this.value = ui.item.value;
+                    this.form.submit();
+                }
+            });
 
 
-        $(".finOperationDelete").click(function (e) {
+            $(".finOperationDelete").click(function (e) {
                 e.preventDefault();
                 $.get("/Modal/FinOperationDelete/" + this.id, function (data) {
                     $('#finOperationDeleteDialogContent').html(data);
@@ -414,15 +441,15 @@ else
                 });
             });
 
-        $(".finOperationEdit").click(function (e) {
-            e.preventDefault();
-            $.get("/Modal/FinOperationEdit/" + this.id, function (data) {
-                $('#finOperationEditDialogContent').html(data);
-                $('#finOperationEditModal').modal('show');
+            $(".finOperationEdit").click(function (e) {
+                e.preventDefault();
+                $.get("/Modal/FinOperationEdit/" + this.id, function (data) {
+                    $('#finOperationEditDialogContent').html(data);
+                    $('#finOperationEditModal').modal('show');
+                });
             });
         });
-    });
-</script>
+    </script>
 }
 
 

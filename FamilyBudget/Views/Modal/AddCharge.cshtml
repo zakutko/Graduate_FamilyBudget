@@ -30,7 +30,7 @@
                 <div class="form-group">
 
                     <input type="text" id="inputCategory" data-projectId="@Model.ProjectId" autocomplete="off"
-                       class="form-control" placeholder="Category" />
+                       class="form-control" placeholder="Category"/>
                     <input type="hidden" id="categoryId" asp-for="CategoryId">
                     <div id="SearchCategory"></div>
                 </div>
@@ -90,11 +90,11 @@
             async: false,
             url: '/Categories/CategoryUnique/',
             data: {
-            "projectId" : $("#inputCategory").attr("data-projectId"),
-            "categoryName" : $("#inputCategory").val()
+                "projectId" : $("#inputCategory").attr("data-projectId"),
+                "categoryName" : $("#inputCategory").val()
             },
             success: function(response){
-                    $("#categoryId").val(response);
+                $("#categoryId").val(response);
             }
             })
         });

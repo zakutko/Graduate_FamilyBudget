@@ -1,0 +1,123 @@
+﻿@model FamilyBudget.ModalViewModels.FinOperationModal
+
+@{
+    ViewData["Title"] = "FinOperationEdit";
+}
+
+<div class="modal-content">
+    <div class="modal-header">
+    @if (@Model.IsNotFound)
+    {
+        <h3 class="modal-title text-danger">This finoperation is not found.</h3>
+    }
+    else if (@Model.IsForbid)
+    {
+        <h3 class="modal-title text-danger">This finoperation is forbidden.</h3>
+    }
+    else
+    {
+        <h3 class="modal-title">Edit finoperation</h3>
+    }
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+
+
+
+    </div>
+    <form asp-area="" asp-controller="FinOperations" asp-action="Edit">
+        <div class="modal-body">
+        <div class="row">
+            <div class="col-md">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="FinType"/>
+                <input type="hidden" asp-for="ForAll" />
+                <input type="hidden" asp-for="ProjectId" class="form-control"/>
+                <input type="hidden" asp-for="CreateTime" class="form-control" />
+                <input type="hidden" asp-for="UpdateTime" class="form-control" />
+
+                <div class="form-group">
+                    <label asp-for="Value" class="control-label"></label>
+                    <input asp-for="Value" class="form-control" />
+                    <span asp-validation-for="Value" class="text-danger"></span>
+                </div>
+                    @if (Model.FinType == FinType.Charge)
+                    {
+                        <label asp-for="CategoryId" class="control-label"></label>
+                        <div class="form-group">
+                        <input type="text" id="inputCategory" data-projectId="@Model.ProjectId" autocomplete="off"
+                           class="form-control" placeholder="Category" value="@Model.Category.Name"/>
+                        <input type="hidden" id="categoryId" asp-for="CategoryId">
+                        <div id="SearchCategory"></div>
+                        </div>
+                    }
+                    <div class="form-group">
+                    <label asp-for="ProjectMemberId" class="control-label"></label>
+                    <select asp-for="ProjectMemberId" class="form-control" asp-items="@Model.ProjectMembers"></select>
+                    <span asp-validation-for="ProjectMemberId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        @if (Model.IsValid)
+        {
+            @if(Model.FinType == FinType.Income)
+            {
+                <input type="submit" value="Edit" class="btn btn-info btn-ok" />
+            }
+            else
+            {
+                <input id="chargeSubmit" type="submit" value="Edit" class="btn btn-info btn-ok" />
+            }
+
+        }
+        </div>
+        </form>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $("#inputCategory").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Categories/SearchCategories/",
+                data: {
+                    "id": $("#inputCategory").attr("data-projectId"),
+                    "term": request.term
+                },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return item;
+                    }))
+                }
+            });
+        },
+        select: function (event, ui) {
+            this.value = ui.item.value;
+            $("#categoryId").val(ui.item.id)
+        }
+    });
+    $("#inputCategory").autocomplete("option", "appendTo", "#SearchCategory");
+});
+
+$(function () {
+    $.ajaxSetup({ cache: false });
+    $("#chargeSubmit").click(function (e) {
+        $.ajax({
+        async: false,
+        url: '/Categories/CategoryUnique/',
+        data: {
+            "projectId" : $("#inputCategory").attr("data-projectId"),
+            "categoryName" : $("#inputCategory").val()
+        },
+        success: function(response){
+            $("#categoryId").val(response);
+        }
+        })
+    });
+})
+</script>
+

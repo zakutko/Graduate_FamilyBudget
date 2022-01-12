@@ -6,22 +6,54 @@
 
 <h1>Edit</h1>
 
-<h4>Project</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-controller="Project" asp-action="Edit">
-            
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+    <div class="container-fluid">
+        <form asp-controller="Projects" asp-action="Edit" asp-route-id="@Model.projectId">
+            <div class="row">
+                <div class="col-sm-6 list-group">
+                    <h4 class="text-center">Categories</h4>
+
+                    <a class="list-group-item-warning list-group-item-action
+                             text-center text-center bi bi-plus-circle">                            
+                    </a>
+
+                    @foreach (var item in Model.categories)
+                    {
+                        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <span class="projectListItem list-group-item-action flex-grow-1">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </span>
+
+                            <i id="@item.Id" class="bi bi-pencil projectEdit mr-2"></i>
+                            <i id="@item.Id" class="bi bi-x-lg projectDelete"></i>
+                        </div>
+                    }
+                </div>
+
+                <div class="col-sm-6 list-group">
+                    <h4 class="text-center">ProjectMembers</h4>
+
+                    <a class="list-group-item-warning list-group-item-action
+                             text-center text-center bi bi-plus-circle">                            
+                    </a>
+
+                    @foreach (var item in Model.projectMembers)
+                    {
+                        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <span class="projectListItem list-group-item-action flex-grow-1">
+                                @Html.DisplayFor(modelItem => item.NameInProject)
+                            </span>
+
+                            <i id="@item.Id" class="bi bi-pencil projectEdit mr-2"></i>
+                            <i id="@item.Id" class="bi bi-x-lg projectDelete"></i>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="pull-right">
+                <input class="btn btn-primary mr-2" type="submit" value="Save"  />
+                <a class="btn btn-secondary" asp-action="Index">Back</a>
             </div>
         </form>
     </div>
-    <a class="btn btn-secondary" asp-action="Index">Back</a>
 </div>
-
-    
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

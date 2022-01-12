@@ -220,29 +220,30 @@ else
 @section scripts
 {
 <script type="text/javascript">
-    $(function () {
-        $.ajaxSetup({ cache: false });
-        $(".addCharge").click(function (e) {
-            e.preventDefault();
-            $.get(this.href, function (data) {
-                $('#addFinOpDialogContent').html(data);
-                $('#addFinOpModal').modal('show');
-            });
-        });
-    })
-
-    $(function () {
-        $.ajaxSetup({ cache: false });
-        $(".addIncome").click(function (e) {
-            e.preventDefault();
-            $.get(this.href, function (data) {
-                $('#addFinOpDialogContent').html(data);
-                $('#addFinOpModal').modal('show');
-            });
-        });
-    })
 
     $(document).ready(function () {
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".addCharge").click(function (e) {
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#addFinOpDialogContent').html(data);
+                    $('#addFinOpModal').modal('show');
+                });
+            });
+        })
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".addIncome").click(function (e) {
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#addFinOpDialogContent').html(data);
+                    $('#addFinOpModal').modal('show');
+                });
+            });
+        })
+
         $("#inputCategory").autocomplete({
             source: function (request, response) {
                 $.ajax({

@@ -136,7 +136,7 @@ namespace FamilyBudget.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FinType,ForAll,Value,CategoryId,ProjectMemberId,ProjectId,UpdateTime")] FinOperation finOperation)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FinType,ForAll,Value,CategoryId,ProjectMemberId,ProjectId,UpdateTime,CreateTime")] FinOperation finOperation)
         {
             if (!user.CanEdit(finOperation, _context))
             {
@@ -146,6 +146,13 @@ namespace FamilyBudget.Controllers
             if (id != finOperation.Id)
             {
                 return NotFound();
+            }
+
+
+            if (finOperation.ProjectMemberId == -1)
+            {
+                finOperation.ForAll = true;
+                finOperation.ProjectMemberId = null;
             }
 
             if (ModelState.IsValid)
@@ -167,7 +174,7 @@ namespace FamilyBudget.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details","Home", new { id = finOperation.ProjectId });
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", finOperation.CategoryId);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", finOperation.ProjectId);
@@ -210,7 +217,7 @@ namespace FamilyBudget.Controllers
             var finOperation = await _context.FinOperations.FindAsync(id);
             _context.FinOperations.Remove(finOperation);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Home", new {id = finOperation.ProjectId});
         }
 
         private bool FinOperationExists(int id)

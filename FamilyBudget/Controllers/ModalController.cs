@@ -114,7 +114,7 @@ namespace FamilyBudget.Controllers
             addIncome.ForAll = false;
             addIncome.FinType = FinType.Income;
             addIncome.ProjectId = project.Id;
-            addIncome.CategoryId = _context.Categories.FirstOrDefault().Id; //??
+            addIncome.CategoryId = null; //??
 
             var projectMembers = project.ProjectMembers.ToList();
             projectMembers.Insert(0, new ProjectMember { NameInProject = "Семья", Id = -1, ProjectId = project.Id });
@@ -129,6 +129,108 @@ namespace FamilyBudget.Controllers
             return PartialView();
         }
 
+        public IActionResult FinOperationDelete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var finOperation = _context.FinOperations
+                .Include(f => f.Category)
+                .Include(f => f.Project)
+                .Include(f => f.ProjectMember)
+                .FirstOrDefault(m => m.Id == id.Value);
+
+            var project = _context.Projects
+                .Include(c => c.ProjectMembers)
+                .Include(c => c.FinOperations)
+                .FirstOrDefault(p => p.FinOperations.Contains(finOperation));
+
+            if (!user.CanDelete(finOperation, _context))
+            {
+                return PartialView(new FinOperationModal { IsForbid = true });
+            }
+
+            if (finOperation == null)
+            {
+                return PartialView(new FinOperationModal { IsNotFound = true });
+            }
+
+            var finOperationModal = new FinOperationModal
+            {
+                Id = finOperation.Id,
+                FinType = finOperation.FinType,
+                ForAll = finOperation.ForAll,
+                Value = finOperation.Value,
+                CategoryId = finOperation.CategoryId,
+                Category = finOperation.Category,
+                ProjectMember = finOperation.ProjectMember,
+                ProjectMemberId = finOperation.ProjectMemberId,
+                ProjectId = finOperation.ProjectId,
+                Project = finOperation.Project,
+                CreateTime = finOperation.CreateTime,
+                UpdateTime = finOperation.UpdateTime,
+            };
+
+            var projectMembers = project.ProjectMembers.ToList();
+            projectMembers.Insert(0, new ProjectMember { NameInProject = "Семья", Id = -1, ProjectId = project.Id });
+            finOperationModal.ProjectMembers = new SelectList(projectMembers, "Id", "NameInProject");
+
+            return PartialView(finOperationModal);
+        }
+        public IActionResult FinOperationEdit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var finOperation = _context.FinOperations
+                .Include(f => f.Category)
+                .Include(f => f.Project)
+                .Include(f => f.ProjectMember)
+                .FirstOrDefault(m => m.Id == id.Value);
+            var project = _context.Projects
+                .Include(c => c.ProjectMembers)
+                .Include(c => c.FinOperations)
+                .FirstOrDefault(p => p.FinOperations.Contains(finOperation));
+
+            if (!user.CanDelete(finOperation, _context))
+            {
+                return PartialView(new FinOperationModal { IsForbid = true });
+            }
+
+            if (finOperation == null)
+            {
+                return PartialView(new FinOperationModal { IsNotFound = true });
+            }
+
+            var finOperationModal = new FinOperationModal
+            {
+                Id = finOperation.Id,
+                FinType = finOperation.FinType,
+                ForAll = finOperation.ForAll,
+                Value = finOperation.Value,
+                CategoryId = finOperation.CategoryId,
+                Category = finOperation.Category,
+                ProjectMember = finOperation.ProjectMember,
+                ProjectMemberId = finOperation.ProjectMemberId,
+                ProjectId = finOperation.ProjectId,
+                Project = finOperation.Project,
+                CreateTime = finOperation.CreateTime,
+                UpdateTime = finOperation.UpdateTime,
+            };
+
+            var projectMembers = project.ProjectMembers.ToList();
+            projectMembers.Insert(0, new ProjectMember { NameInProject = "Семья", Id = -1, ProjectId = project.Id });
+            finOperationModal.ProjectMembers = new SelectList(projectMembers, "Id", "NameInProject");
+
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", finOperationModal.CategoryId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", finOperationModal.ProjectId);
+            ViewData["ProjectMemberId"] = new SelectList(_context.ProjectMembers, "Id", "NameInProject", finOperationModal.ProjectMemberId);
+            return PartialView(finOperationModal);
+        }
         private IdentityUser CurrentUser()
         {
             var username = HttpContext.User.Identity.Name;

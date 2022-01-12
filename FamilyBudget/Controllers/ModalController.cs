@@ -114,7 +114,7 @@ namespace FamilyBudget.Controllers
             addIncome.ForAll = false;
             addIncome.FinType = FinType.Income;
             addIncome.ProjectId = project.Id;
-            addIncome.CategoryId = _context.Categories.FirstOrDefault().Id; //??
+            addIncome.CategoryId = null; //??
 
             var projectMembers = project.ProjectMembers.ToList();
             projectMembers.Insert(0, new ProjectMember { NameInProject = "Семья", Id = -1, ProjectId = project.Id });

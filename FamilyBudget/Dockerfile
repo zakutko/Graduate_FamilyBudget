@@ -5,6 +5,11 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+ARG UserId
+ARG Password
+ENV UserId=$UserId
+ENV Password=$Password
+
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["FamilyBudget/FamilyBudget.csproj", "FamilyBudget/"]

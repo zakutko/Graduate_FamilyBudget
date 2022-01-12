@@ -132,14 +132,15 @@ namespace FamilyBudget.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-
-        public void OverwriteDB()
+        [AllowAnonymous]
+        public IActionResult OverwriteDB()
         {
             _context.RemoveRange(_context.Projects);
             _context.RemoveRange(_context.ProjectMembers);
@@ -154,6 +155,8 @@ namespace FamilyBudget.Controllers
 
             _context.SaveChanges();
             _signInManager.SignOutAsync();
+
+            return Ok("ok");
         }
 
         private Project CreateProject(IdentityUser user)

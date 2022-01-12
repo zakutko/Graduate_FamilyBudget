@@ -29,6 +29,6 @@ jobs:
       - name: Login to DockerHub
         run: echo ${{ secrets.YANDEX_CLOUD_OAUTH_TOKEN }} | docker login --username oauth --password-stdin cr.yandex
       - name: Build the Docker image
-        run: docker build . --file FamilyBudget/Dockerfile --tag ${{ secrets.REGISTRY_ID }}/family_budget:master
+        run: docker build . --file FamilyBudget/Dockerfile --build-arg UserId=${{ secrets.DockerUserId }} --build-arg Password=${{ secrets.DockerPassword }} --tag ${{ secrets.REGISTRY_ID }}/family_budget:master
       - name: Push the Docker image
         run: docker push ${{ secrets.REGISTRY_ID }}/family_budget:master

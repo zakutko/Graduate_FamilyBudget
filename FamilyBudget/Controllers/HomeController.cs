@@ -112,7 +112,7 @@ namespace FamilyBudget.Controllers
                     break;
             }
 
-            int pageSize = 10;
+            int pageSize = 5;
 
             var count = await finOperations.CountAsync();
             var items = await finOperations.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
@@ -122,7 +122,13 @@ namespace FamilyBudget.Controllers
                 PageViewModel = new FinOperationPageModel(count, page, pageSize),
                 SortViewModel = new FinOperationSortModel(sortModel, sortDir),
                 FilterViewModel = new FinOperationFilterModel(id, category, finType),
-                finOperations = items
+                FinOperations = items,
+                PieByCategory = finOperations.GroupBy(x => x.Category.Name)
+                .Select(x => new HomeProjectDetailsModel.PieItem { Name = x.Key, Value = x.Sum(y => y.Value) }).ToList(),
+                PieByProjectMember = finOperations.GroupBy(x => x.ProjectMember.NameInProject)
+                .Select(x => new HomeProjectDetailsModel.PieItem { Name = x.Key, Value = x.Sum(y => y.Value) }).ToList(),
+                PieByFinOp = finOperations.GroupBy(x => x.FinType)
+                .Select(x => new HomeProjectDetailsModel.PieItem { Name = x.Key == FinType.Income ? "Income" : "Charge", Value = x.Sum(y => y.Value) }).ToList()
             };
             return View(detailsModel);
         }

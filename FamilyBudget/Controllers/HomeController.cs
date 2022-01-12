@@ -113,7 +113,7 @@ namespace FamilyBudget.Controllers
                     break;
                 case FinOperationSortModelEnum.FinType:
                     if (sortDir == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.FinType); break; }
-                    
+
                     finOperations = finOperations.OrderByDescending(s => s.FinType);
                     break;
                 case FinOperationSortModelEnum.Category:
@@ -185,6 +185,14 @@ namespace FamilyBudget.Controllers
 
 
             var editModel = new HomeProjectEditModel();
+
+            var projectMembers = _context.ProjectMembers.Where(x => x.ProjectId == project.Id);
+            var categories = _context.Categories.Where(x => x.ProjectId == project.Id);
+
+            editModel.projectId = project.Id;
+            editModel.project = project;
+            editModel.projectMembers = await projectMembers.ToListAsync();
+            editModel.categories = await categories.ToListAsync();
             return View(editModel);
         }
 

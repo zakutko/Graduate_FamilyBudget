@@ -10,10 +10,19 @@ namespace FamilyBudget.Models.View.Details
 {
     public class HomeProjectDetailsModel
     {
-        public IEnumerable<FinOperation> finOperations { get; set; }
+        public class PieItem
+        {
+            public string Name;
+            public int Value;
+        }
+
+        public IEnumerable<PieItem> PieByCategory { get; set; }
+        public IEnumerable<PieItem> PieByProjectMember { get; set; }
+        public IEnumerable<PieItem> PieByFinOp { get; set; }
+        public IEnumerable<FinOperation> FinOperations { get; set; }
         public FinOperationPageModel PageViewModel { get; set; }
         public FinOperationFilterModel FilterViewModel { get; set; }
         public FinOperationSortModel SortViewModel { get; set; }
-        public bool isEmpty { get { return !finOperations.Any(); } }
+        public bool IsEmpty { get { return !FinOperations.Any(); } }
     }
 }

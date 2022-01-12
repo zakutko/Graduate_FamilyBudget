@@ -4,14 +4,9 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div id="projectDeleteModal" class="modal fade">
-    <div id="projectDeleteDialogContent" class="modal-dialog modal-dialog-centered modal-lg"></div>
+<div id="projectModal" class="modal fade">
+    <div id="projectDialogContent" class="modal-dialog modal-dialog-centered modal-lg"></div>
 </div>
-
-<div id="projectCreateModal" class="modal fade">
-    <div id="projectCreateDialogContent" class="modal-dialog modal-dialog-centered modal-lg"></div>
-</div>
-
 
 @if (Model.Count() == 0)
 {
@@ -41,7 +36,7 @@ else
                 @Html.DisplayFor(modelItem => item.Name)
             </span>
 
-            <i id="@item.Id" class="bi bi-pencil projectEdit"></i>
+            <i id="@item.Id" class="bi bi-pencil projectEdit mr-2"></i>
             <i id="@item.Id" class="bi bi-x-lg projectDelete"></i>
         </a>
     }
@@ -51,24 +46,29 @@ else
 @section scripts
 {
     <script type="text/javascript">
-        $(function () {
-            $.ajaxSetup({ cache: false });
-
-            $(".projectCreate").click(function (e) {
+        
+        $(".projectEdit").click(function (e) {
                 e.preventDefault();
-                $.get("Modal/ProjectCreate/" + this.id, function (data) {
-                    $('#projectCreateDialogContent').html(data);
-                    $('#projectCreateModal').modal('show');
-                });
+                document.location.href = "Home/Edit/" + this.id;               
             });
+       
+        $.ajaxSetup({ cache: false });
 
-            $(".projectDelete").click(function (e) {
-                e.preventDefault();
-                $.get("Modal/ProjectDelete/" + this.id, function (data) {
-                    $('#projectDialogContent').html(data);
-                    $('#projectModal').modal('show');
-                });
+        $(".projectCreate").click(function (e) {
+            e.preventDefault();
+            $.get("Modal/ProjectCreate/" + this.id, function (data) {
+                $('#projectDialogContent').html(data);
+                $('#projectModal').modal('show');
             });
         });
+
+        $(".projectDelete").click(function (e) {
+            e.preventDefault();
+            $.get("Modal/ProjectDelete/" + this.id, function (data) {
+                $('#projectDialogContent').html(data);
+                $('#projectModal').modal('show');
+            });
+        });
+        
     </script>
 }

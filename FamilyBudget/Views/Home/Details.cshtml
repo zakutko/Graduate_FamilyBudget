@@ -32,7 +32,7 @@
     </div>
     <div class="card-body">
         <form>
-            <div class="form-inline">
+            <div class="form-inline align-items-center">
                 <span style="display:inline-block" class="col-sm-1 ml-2 mr-auto">
                 <small class="form-text">FinType:</small>
                 <select type="submit" class="form-control" name="finType"
@@ -62,6 +62,7 @@
                 <small class="form-text">to:</small>
                 <input class="form-control" type="date" name="endDate" asp-for="@Model.FilterViewModel.SelectedEndDate">
                 </span>
+                <button type="submit" class="btn btn-success"><i class="bi bi-filter"></i>Filter</button>
             </div>
         </form>
     </div>

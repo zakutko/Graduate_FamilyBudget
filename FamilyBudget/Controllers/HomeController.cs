@@ -137,7 +137,7 @@ namespace FamilyBudget.Controllers
             #endregion
             #region Пагинация
 
-            int pageSize = 5;
+            int pageSize = 10;
 
             var count = await finOperations.CountAsync();
             var items = await finOperations.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();

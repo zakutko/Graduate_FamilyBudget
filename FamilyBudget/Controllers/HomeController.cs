@@ -96,9 +96,9 @@ namespace FamilyBudget.Controllers
                 finOperations = finOperations.Where(p => p.Category.Name.Contains(category));
             }
 
-            if (!String.IsNullOrEmpty(projectMember))
+            if (!String.IsNullOrEmpty(projectMember) && projectMember != "Семья")
             {
-                finOperations = finOperations.Where(p => p.Category.Name.Contains(projectMember));
+                finOperations = finOperations.Where(p => p.ProjectMember.NameInProject.Contains(projectMember));
             }
 
             #endregion
@@ -144,13 +144,18 @@ namespace FamilyBudget.Controllers
 
             #endregion
 
+            var projectMembers = await _context.ProjectMembers.Where(pm => pm.ProjectId == id).Select(x => x.NameInProject).ToListAsync();
+            projectMembers.Insert(0, "Семья");
+            var members = new SelectList(projectMembers);
+
             var detailsModel = new HomeProjectDetailsModel
             {
                 ProjectName = project.Name,
                 PageViewModel = new FinOperationPageModel(count, page, pageSize),
                 SortViewModel = new FinOperationSortModel(sortModel, sortDir),
-                FilterViewModel = new FinOperationFilterModel(id, category, projectMember, finType,beginDate,endDate),
+                FilterViewModel = new FinOperationFilterModel(id, category, projectMember, finType, beginDate, endDate),
                 FinOperations = items,
+                ProjectMembers = members,
                 PieByCategory = finOperations.GroupBy(x => x.Category.Name)
                 .Select(x => new HomeProjectDetailsModel.PieItem { Name = x.Key, Value = x.Sum(y => y.Value) }).ToList(),
                 PieByProjectMember = finOperations.GroupBy(x => x.ProjectMember.NameInProject)

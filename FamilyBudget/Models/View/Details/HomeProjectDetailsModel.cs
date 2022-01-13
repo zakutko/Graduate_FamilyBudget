@@ -1,6 +1,7 @@
 ﻿using FamilyBudget.Models.View.Filter;
 using FamilyBudget.Models.View.Page;
 using FamilyBudget.Models.View.Sort;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace FamilyBudget.Models.View.Details
         }
         public string ProjectName { get; set; }
 
+        public SelectList ProjectMembers { get; set; }
         public IEnumerable<PieItem> PieByCategory { get; set; }
         public IEnumerable<PieItem> PieByProjectMember { get; set; }
         public IEnumerable<PieItem> PieByFinOp { get; set; }

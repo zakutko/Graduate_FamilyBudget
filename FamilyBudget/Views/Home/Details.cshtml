@@ -38,8 +38,9 @@
                         asp-items="@Model.FilterViewModel.FinTypes"
                         onchange="this.form.submit()"></select>
 
-                <input type="text" id="inputProjectMember" data-projectId="@Model.FilterViewModel.SelectedProject" autocomplete="off"
-                       class="form-control col-3 m-auto" name="projectMember" value="@Model.FilterViewModel.SelectedProjectMember" />
+                <select type="submit" asp-for="@Model.FilterViewModel.SelectedProjectMember" class="form-control" name="projectMember"
+                asp-items="@Model.ProjectMembers" onchange="this.form.submit()"></select>
+
                 <input type="text" id="inputCategory" data-projectId="@Model.FilterViewModel.SelectedProject" autocomplete="off"
                        class="form-control col-3 m-auto" name="category" value="@Model.FilterViewModel.SelectedCategory" />
 
@@ -453,28 +454,6 @@
                 this.form.submit();
             }
         });
-
-        $("#inputProjectMember").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "/ProjectMembers/SearchProjectMember/",
-                    data: {
-                        "id": $("#inputProjectMember").attr("data-projectId"),
-                        "term": request.term
-                    },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return item;
-                        }))
-                    }
-                });
-            },
-            select: function (event, ui) {
-                this.value = ui.item.value;
-                this.form.submit();
-            }
-        });
-
 
         $(".finOperationDelete").click(function (e) {
             e.preventDefault();

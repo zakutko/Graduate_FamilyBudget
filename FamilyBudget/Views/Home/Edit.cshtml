@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Edit";
-    var test = 0;
 }
 
 <h1>Edit</h1>
@@ -85,7 +84,7 @@
         }
 
         const generateProjectMember = (id,name,email) => {
-            return ` <a id="projectMember-${id}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            return  `<a id="projectMember-${id}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                                 <span class="flex-grow-1 row ">
                                     <input asp-for="${name}" class="form-control col-lg-5 mr-2" value="${name}"/>
                                     <input asp-for="${email}" class="form-control col-lg-6" value="${email}"/>

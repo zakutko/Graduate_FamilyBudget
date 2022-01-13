@@ -15,6 +15,7 @@ namespace FamilyBudget.Models.View.Details
             public string Name;
             public int Value;
         }
+        public string ProjectName { get; set; }
 
         public IEnumerable<PieItem> PieByCategory { get; set; }
         public IEnumerable<PieItem> PieByProjectMember { get; set; }

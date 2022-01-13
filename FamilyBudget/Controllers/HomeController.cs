@@ -46,7 +46,7 @@ namespace FamilyBudget.Controllers
             return View(viewable_projects);
         }
 
-        public async Task<IActionResult> Details(int? id, string category, FinType? finType, int page = 1,
+        public async Task<IActionResult> Details(int? id, string category, string projectMember, FinType? finType, DateTime? beginDate, DateTime? endDate, int page = 1, 
             FinOperationSortModelEnum sortModel = FinOperationSortModelEnum.Default,
             FinOperationSortDirEnum sortDir = FinOperationSortDirEnum.Ascending)
         {
@@ -63,16 +63,32 @@ namespace FamilyBudget.Controllers
                 return Forbid();
             }
 
+            #region Фильтрация
+
             IQueryable<FinOperation> finOperations = _context.FinOperations
                 .Include(x => x.Project)
                 .Include(x => x.Category)
                 .Include(x => x.ProjectMember);
 
-            finOperations = finOperations.Where(p => p.ProjectId == id);
+            finOperations = finOperations
+                .Where(p => p.ProjectId == id);
+
+            if (beginDate != null)
+            {
+                finOperations = finOperations
+                    .Where(p => p.CreateTime >= beginDate);
+            }
+
+            if (endDate != null)
+            {
+                finOperations = finOperations
+                    .Where(p => p.CreateTime <= endDate);
+            }
 
             if (finType != null)
             {
-                finOperations = finOperations.Where(p => p.FinType == finType);
+                finOperations = finOperations
+                    .Where(p => p.FinType == finType);
             }
 
             if (!String.IsNullOrEmpty(category))
@@ -80,6 +96,13 @@ namespace FamilyBudget.Controllers
                 finOperations = finOperations.Where(p => p.Category.Name.Contains(category));
             }
 
+            if (!String.IsNullOrEmpty(projectMember))
+            {
+                finOperations = finOperations.Where(p => p.Category.Name.Contains(projectMember));
+            }
+
+            #endregion
+            #region Сортировка
             switch (sortModel)
             {
                 case FinOperationSortModelEnum.ProjectMember:
@@ -111,17 +134,22 @@ namespace FamilyBudget.Controllers
                     finOperations = finOperations.OrderByDescending(s => s.CreateTime);
                     break;
             }
+            #endregion
+            #region Пагинация
 
             int pageSize = 5;
 
             var count = await finOperations.CountAsync();
             var items = await finOperations.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 
+            #endregion
+
             var detailsModel = new HomeProjectDetailsModel
             {
+                ProjectName = project.Name,
                 PageViewModel = new FinOperationPageModel(count, page, pageSize),
                 SortViewModel = new FinOperationSortModel(sortModel, sortDir),
-                FilterViewModel = new FinOperationFilterModel(id, category, finType),
+                FilterViewModel = new FinOperationFilterModel(id, category, projectMember, finType,beginDate,endDate),
                 FinOperations = items,
                 PieByCategory = finOperations.GroupBy(x => x.Category.Name)
                 .Select(x => new HomeProjectDetailsModel.PieItem { Name = x.Key, Value = x.Sum(y => y.Value) }).ToList(),

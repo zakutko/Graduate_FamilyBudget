@@ -228,6 +228,11 @@ namespace FamilyBudget.Controllers
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(categoryName))
+                {
+                    return Ok(-1);
+                }
+
                 var category = _context.Categories.Where(x => x.ProjectId == projectId)
                 .FirstOrDefault(e => e.Name == categoryName);
                 if (category != null)
@@ -235,9 +240,11 @@ namespace FamilyBudget.Controllers
                     return Ok(category.Id);
                 }
 
-                category = new Category();
-                category.Name = categoryName;
-                category.ProjectId = projectId;
+                category = new Category
+                {
+                    Name = categoryName,
+                    ProjectId = projectId
+                };
                 await Create(category);
                 return Ok(category.Id);
             }

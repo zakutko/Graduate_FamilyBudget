@@ -32,7 +32,7 @@
     </div>
     <div class="card-body">
         <form>
-            <div class="row g-3 align-items-center d-flex">
+            <div class="row">
                 <div class="ml-2 mr-2">
                     <label class="form-label">FinType:</label>
                     <select type="submit" class="form-control" name="finType"
@@ -41,7 +41,7 @@
                             onchange="this.form.submit()"></select>
                 </div>
 
-                <div class="ml-2 mr-2">
+                <div class="mr-2">
                     <label class="form-label">ProjectMember:</label>
                     <select type="submit" asp-for="@Model.FilterViewModel.SelectedProjectMember" class="form-control" name="projectMember"
                             asp-items="@Model.ProjectMembers" onchange="this.form.submit()"></select>
@@ -53,20 +53,21 @@
                            class="form-control" name="category" value="@Model.FilterViewModel.SelectedCategory" />
                 </div>
 
-                <div class="col-2">
-                    <label class="form-label">from:</label>
-                    <input class="form-control" name="beginDate" asp-for="@Model.FilterViewModel.SelectedBeginDate"
-                           placeholder="Date" type="text" onfocus="(this.type='date')" onblur="(this.type='text')">
+                <div class="ml-2">
+                    <label class="form-label">Start date:</label>
+                    <input class="form-control" name="beginDate" asp-for="@Model.FilterViewModel.SelectedBeginDate" type="date" onchange="this.form.submit()">
                 </div>
 
-                <div class="col-2">
-                    <label class="form-label">before:</label>
-                    <input class="form-control" name="endDate" asp-for="@Model.FilterViewModel.SelectedEndDate"
-                           placeholder="Date" type="text" onfocus="(this.type='date')" onblur="(this.type='text')">
+                <div class="ml-2">
+                    <label class="form-label">End date:</label>
+                    <input class="form-control" name="endDate" asp-for="@Model.FilterViewModel.SelectedEndDate" type="date" onchange="this.form.submit()">
                 </div>
-                <div class="btn-group-vertical ml-2 mr-2">
-                    <button type="submit" class="form-label btn btn-light bi bi-funnel-fill"></button>
-                    <a href="@Model.FilterViewModel.SelectedProject" class="btn btn-light bi bi-funnel"></a>
+                <div class="ml-2 mr-2">
+                    <label class="form-label">&nbsp;</label>
+                    <a href="@Model.FilterViewModel.SelectedProject" class="form-control btn btn-danger">
+                        clear
+                        <i class="bi bi-funnel"></i>
+                    </a>
                 </div>
             </div>
         </form>
@@ -118,7 +119,7 @@
                        asp-route-sortmodel="@(FinOperationSortModelEnum.FinType)"
                        asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.FinType) ?
                                                 null : Model.SortViewModel.changeSortDir(Model.SortViewModel.CurrentSortDir))">
-                            FinType
+                            Type
                             @if (@Model.SortViewModel.finTypeSort)
                             {
                                 <i class="bi @(Model.SortViewModel.isAscending ? "bi-sort-down" : "bi-sort-up")"></i>
@@ -135,7 +136,7 @@
                        asp-route-sortmodel="@(FinOperationSortModelEnum.ProjectMember)"
                        asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.ProjectMember) ?
                                                 null : Model.SortViewModel.changeSortDir(Model.SortViewModel.CurrentSortDir))">
-                            ProjectMember
+                            Project member
                             @if (@Model.SortViewModel.projectMemberSort)
                             {
                                 <i class="bi @(Model.SortViewModel.isAscending ? "bi-sort-alpha-down" : "bi-sort-alpha-up")"></i>
@@ -183,7 +184,7 @@
                        asp-route-sortmodel="@(FinOperationSortModelEnum.CreateTime)"
                        asp-route-sortdir="@(!Model.SortViewModel.sortModelChanged(FinOperationSortModelEnum.CreateTime) ?
                                                 null : Model.SortViewModel.changeSortDir(Model.SortViewModel.CurrentSortDir))">
-                            CreateTime
+                            Create time
                             @if (@Model.SortViewModel.createTimeSort)
                             {
                                 <i class="bi @(Model.SortViewModel.isAscending ? "bi-sort-numeric-down" : "bi-sort-numeric-up")"></i>
@@ -217,6 +218,10 @@
                             @if (fo.Category != null)
                             {
                                 <label>@fo.Category.Name</label>
+                            }
+                            else
+                            {
+                                <label>—</label>
                             }
                         </td>
                         <td class="col-2">@fo.Value</td>

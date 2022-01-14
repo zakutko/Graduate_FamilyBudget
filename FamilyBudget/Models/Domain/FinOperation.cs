@@ -19,9 +19,11 @@ namespace FamilyBudget.Models
         [Required]
         public int Value { get; set; }
 
+        [Display(Name = "Category")]
         public int? CategoryId { get; set; }
         public Category Category { get; set; }
 
+        [Display(Name = "Project member")]
         public int? ProjectMemberId { get; set; }
         public ProjectMember ProjectMember { get; set; }
 

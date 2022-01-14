@@ -47,7 +47,7 @@
                         <label asp-for="CategoryId" class="control-label"></label>
                         <div class="form-group">
                         <input type="text" id="inputCategory" data-projectId="@Model.ProjectId" autocomplete="off"
-                           class="form-control" placeholder="Category" value="@Model.Category.Name"/>
+                           class="form-control" placeholder="Category" value="@Model.Category?.Name"/>
                         <input type="hidden" id="categoryId" asp-for="CategoryId">
                         <div id="SearchCategory"></div>
                         </div>

@@ -15,6 +15,14 @@ namespace FamilyBudget.CRUD_models
             var timeNow = DateTime.Now;
             project.ProjectMembers.Add(new ProjectMember
             {
+                NameInProject = "Семья",
+                ProjectId = project.Id,
+                Project = project,
+                CreateTime = timeNow,
+                UpdateTime = timeNow
+            });
+            project.ProjectMembers.Add(new ProjectMember
+            {
                     NameInProject = "Владелец",
                     User = user,
                     UserId = user.Id,

@@ -28,13 +28,14 @@
           asp-route-projectid="@Model.ProjectId">
             <div class="modal-body container-fluid">
                 <div class="form-group">
-
+                    <label asp-for="CategoryId" class="control-label"></label>
                     <input type="text" id="inputCategory" data-projectId="@Model.ProjectId" autocomplete="off"
-                       class="form-control" placeholder="Category"/>
+                           class="form-control" placeholder="Category" />
                     <input type="hidden" id="categoryId" asp-for="CategoryId">
                     <div id="SearchCategory"></div>
                 </div>
                 <div class="form-group">
+                    <label asp-for="ProjectMemberId" class="control-label"></label>
                     <select asp-for="ProjectMemberId" class="form-control" asp-items="@Model.ProjectMembers"></select>
                 </div>
                 <div class="form-group">

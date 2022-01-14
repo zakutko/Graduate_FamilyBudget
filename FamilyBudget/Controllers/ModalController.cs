@@ -84,7 +84,6 @@ namespace FamilyBudget.Controllers
             addCharge.ProjectId = project.Id;
 
             var projectMembers = project.ProjectMembers.ToList();
-            projectMembers.Insert(0, new ProjectMember { NameInProject = "Семья", Id= -1, ProjectId = project.Id });
             addCharge.ProjectMembers = new SelectList(projectMembers, "Id", "NameInProject");
 
             return PartialView(addCharge);
@@ -116,8 +115,7 @@ namespace FamilyBudget.Controllers
             addIncome.ProjectId = project.Id;
             addIncome.CategoryId = null; //??
 
-            var projectMembers = project.ProjectMembers.ToList();
-            projectMembers.Insert(0, new ProjectMember { NameInProject = "Семья", Id = -1, ProjectId = project.Id });
+            var projectMembers = project.ProjectMembers.OrderBy(x => x.NameInProject == "Семья" ? 0 : 1).ToList();
             addIncome.ProjectMembers = new SelectList(projectMembers, "Id", "NameInProject");
 
             return PartialView(addIncome);
@@ -223,7 +221,6 @@ namespace FamilyBudget.Controllers
             };
 
             var projectMembers = project.ProjectMembers.ToList();
-            projectMembers.Insert(0, new ProjectMember { NameInProject = "Семья", Id = -1, ProjectId = project.Id });
             finOperationModal.ProjectMembers = new SelectList(projectMembers, "Id", "NameInProject");
 
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", finOperationModal.CategoryId);

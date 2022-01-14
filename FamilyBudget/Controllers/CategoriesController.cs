@@ -213,7 +213,7 @@ namespace FamilyBudget.Controllers
             {
                 var categories = await _context.Categories
                     .Where(a => a.ProjectId == id)
-                    .Where(a => a.Name.Contains(term))
+                    .Where(a => a.Name.Contains(term.ToLower()))
                     .Select(a => new { value = a.Name, id = a.Id })
                     .ToListAsync();
                 return Ok(categories);

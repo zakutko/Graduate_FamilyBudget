@@ -8,7 +8,7 @@ namespace FamilyBudget.Models.View.Filter
 {
     public class FinOperationFilterModel
     {
-        public FinOperationFilterModel(int? project, string category, FinType? finType)
+        public FinOperationFilterModel(int? project, string category, string projectMember, FinType? finType,DateTime? beginDate, DateTime? endDate)
         {
             var finTypes = Enum.GetNames(typeof(FinType)).ToList();
             finTypes.Insert(0, "All");
@@ -16,12 +16,20 @@ namespace FamilyBudget.Models.View.Filter
             SelectedProject = project;
             SelectedFinType = finType;
             SelectedCategory = category;
+            SelectedProjectMember = projectMember;
+            SelectedBeginDate = beginDate;
+            SelectedEndDate = endDate;
         }
         public SelectList FinTypes { get; private set; }
         public int? SelectedProject { get; private set; }
 
         public FinType? SelectedFinType { get; private set; }
         public string SelectedCategory { get; private set; }
+
+        public string SelectedProjectMember { get; private set; }
+
+        public DateTime? SelectedBeginDate { get; private set; }
+        public DateTime? SelectedEndDate { get; private set; }
     }
 
 }

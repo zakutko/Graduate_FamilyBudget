@@ -206,5 +206,22 @@ namespace FamilyBudget.Controllers
             return _context.Users
                 .FirstOrDefault(m => m.UserName == username);
         }
+
+        public async Task<IActionResult> SearchProjectMember(int id, string term)
+        {
+            try
+            {
+                var categories = await _context.ProjectMembers
+                    .Where(a => a.ProjectId == id)
+                    .Where(a => a.NameInProject.Contains(term))
+                    .Select(a => new { value = a.NameInProject, id = a.Id })
+                    .ToListAsync();
+                return Ok(categories);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

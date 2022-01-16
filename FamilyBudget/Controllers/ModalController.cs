@@ -125,15 +125,36 @@ namespace FamilyBudget.Controllers
 
         public IActionResult ProjectMemberCreate()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
-            ViewData["ProjectMemberId"] = new SelectList(_context.ProjectMembers, "Id", "NameInProject");
-            return PartialView();
+            var projectMemberModel = new ProjectMemberModel();
+            return PartialView(projectMemberModel);
+        }
+
+        public IActionResult ProjectMemberEdit(int? id)
+        {
+            var projectMemberModel = new ProjectMemberModel();
+            return PartialView(projectMemberModel);
+        }
+
+        public IActionResult ProjectMemberDelete(int? id)
+        {
+            var projectMemberModel = new ProjectMemberModel();
+            return PartialView(projectMemberModel);
         }
 
         public IActionResult CategoryCreate()
         {
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
+            var categoryModel = new CategoryModel();
+            return PartialView(categoryModel);
+        }
+
+        public IActionResult CategoryEdit(int? id)
+        {
+            var categoryModel = new CategoryModel();
+            return PartialView(categoryModel);
+        }
+
+        public IActionResult CategoryDelete(int? id)
+        {
             var categoryModel = new CategoryModel();
             return PartialView(categoryModel);
         }

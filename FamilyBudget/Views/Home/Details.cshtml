@@ -78,28 +78,31 @@
         </form>
     </div>
 </div>
-<div class="row">
-    @if (Model.FilterViewModel.SelectedFinType == null)
-    {
-        <div class="col-4"></div>
-        <div class="col-4">
-            <canvas id="PieByFinOp"></canvas>
-        </div>
-        <div class="col-4"></div>
-    }
-    else
-    {
-        <div class="col-1"></div>
-        <div class="col-4">
-            <canvas id="PieByCategory"></canvas>
-        </div>
-        <div class="col-2"></div>
-        <div class="col-4">
-            <canvas id="PieByProjectMember"></canvas>
-        </div>
-        <div class="col-1"></div>
-    }
-</div>
+@if (!Model.IsEmpty)
+{
+    <div class="row">
+        @if (Model.FilterViewModel.SelectedFinType == null)
+        {
+            <div class="col-4"></div>
+            <div class="col-4">
+                <canvas id="PieByFinOp"></canvas>
+            </div>
+            <div class="col-4"></div>
+        }
+        else
+        {
+            <div class="col-1"></div>
+            <div class="col-4">
+                <canvas id="PieByCategory"></canvas>
+            </div>
+            <div class="col-2"></div>
+            <div class="col-4">
+                <canvas id="PieByProjectMember"></canvas>
+            </div>
+            <div class="col-1"></div>
+        }
+    </div>
+}
 <div class="card">
     @if (!Model.IsEmpty)
     {
@@ -332,7 +335,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Сгруппировано по категории'
+                        text: 'Сгруппировано по категориям'
                     }
                 }
             },
@@ -368,7 +371,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Сгруппировано по члену семьи'
+                        text: 'Сгруппировано по членам семьи'
                     }
                 }
             },

@@ -80,6 +80,22 @@ namespace FamilyBudget.CRUD_models
                 CreateTime = timeNow,
                 UpdateTime = timeNow
             });
+            project.Categories.Add(new Category
+            {
+                ProjectId = project.Id,
+                Name = "зарплата",
+                Project = project,
+                CreateTime = timeNow,
+                UpdateTime = timeNow
+            });
+            project.Categories.Add(new Category
+            {
+                ProjectId = project.Id,
+                Name = "доход по вкладу",
+                Project = project,
+                CreateTime = timeNow,
+                UpdateTime = timeNow
+            });
         }
     }
 }

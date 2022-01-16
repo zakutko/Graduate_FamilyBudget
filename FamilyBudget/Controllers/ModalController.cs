@@ -83,7 +83,7 @@ namespace FamilyBudget.Controllers
             addFinOperation.FinType = type;
             addFinOperation.ProjectId = project.Id;
 
-            var projectMembers = project.ProjectMembers.ToList();
+            var projectMembers = project.ProjectMembers.OrderBy(x => x.NameInProject != "Семья").ToList();
             addFinOperation.ProjectMembers = new SelectList(projectMembers, "Id", "NameInProject");
 
             return PartialView(addFinOperation);

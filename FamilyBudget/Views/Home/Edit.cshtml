@@ -3,6 +3,40 @@
 @{
     ViewData["Title"] = "Edit";
 }
+@*
+<h2>Добавление книг</h2>
+
+<form asp-controller="Projects" asp-action="Edit">
+    <div id="booksBlock">
+        <div class='bookItem'>
+            <h4>Книга № 1</h4>
+            <div>
+                <label>Название</label>
+                <div>
+                    <input asp-for="categories[0].Name" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="addLink">Добавить новый элемент</a>
+    <p><input type="submit" value="Добавить" /></p>
+</form>
+
+@section scripts {
+    <script>
+
+    $(function () {
+    var i = 0;
+    $('.addLink').click(function()
+    {
+    i++;
+    let html2Add= `<input type="text"
+    id="categories_${i}" name="categories[${i}].Name" />  `;
+    $('#booksBlock').append(html2Add);
+    })
+    })
+    </script>
+    }*@
 
 <h1>Edit</h1>
 
@@ -21,17 +55,17 @@
                     <a class="addCategory pull-right bi bi-plus-circle" style="cursor: pointer"></a>
 
                     <div id="categoryList" class="list-group">
-                        @foreach (var item in Model.categories)
+                        @for (var i = 0; i < Model.categories.Count; i++)
                         {
-                            
-                            <div id="@item.Id">
-                            <a id="category-@item.Id" categoryId="@item.Id" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                <span class="flex-grow-1 list-group-item-action">
-                                    <input asp-for="@item.Name" class="form-control" value="@item.Name" />
-                                </span>
 
-                                <i id="@item.Id" class="categoryDelete bi bi-x-lg ml-3" style="cursor: pointer"></i>
-                            </a>
+                            <div id="@Model.categories[i].Id">
+                                <a id="category_@Model.categories[i].Id" categoryId="@Model.categories[i].Id" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <span class="flex-grow-1 list-group-item-action">
+                                        <input asp-for="@Model.categories[i].Name" class="form-control"/>
+                                    </span>
+
+                                    <i id="#deleteCategory_@Model.categories[i].Id" class="categoryDelete bi bi-x-lg ml-3" style="cursor: pointer"></i>
+                                </a>
                             </div>
                         }
                     </div>
@@ -41,17 +75,17 @@
                     <a class="addProjectMember pull-right bi bi-plus-circle" style="cursor: pointer"></a>
                     <div id="projectMemberList" class="list-group">
 
-                        @foreach (var item in Model.projectMembers)
-                        {   
-                            <div id="@item.Id">
-                            <a id="projectMember-@item.Id" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                <span class="flex-grow-1 row ">
-                                    <input asp-for="@item.NameInProject" class="form-control col-lg-5 mr-2" value="@item.NameInProject" />
-                                    <input asp-for="@item.User.Email" class="form-control col-lg-6" value="@item.User.Email" />
-                                </span>
+                        @for (var i = 0; i < Model.projectMembers.Count; i++)
+                        {
+                            <div id="@Model.projectMembers[i].Id">
+                                <a id="projectMember-@Model.projectMembers[i].Id" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <span class="flex-grow-1 row ">
+                                        <input asp-for="@Model.projectMembers[i].NameInProject" class="form-control col-lg-5 mr-2" value="@Model.projectMembers[i].NameInProject" />
+                                        <input asp-for="@Model.projectMembers[i].User.Email" class="form-control col-lg-6" value="@Model.projectMembers[i].User.Email" />
+                                    </span>
 
-                                <i id="@item.Id" class="projectMemberDelete bi bi-x-lg ml-3" style="cursor: pointer"></i>
-                            </a>
+                                    <i id="@Model.projectMembers[i].Id" class="projectMemberDelete bi bi-x-lg ml-3" style="cursor: pointer"></i>
+                                </a>
                             </div>
                         }
                     </div>
@@ -66,80 +100,82 @@
 </div>
 
 @section scripts
-{
+    {
 <script type="text/javascript">
+
+    const randomId = () => {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    };
+    
+    const generateCategory = (id,name) => {
+    return `
+    <a id="category_${id}" categoryId="${id}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+    <span class="flex-grow-1 list-group-item-action">
+    <input type="text" class="form-control" id="categories_${id}" name="categories[${id}].Name" value="${name}" /> 
+    </span>
+
+    <i id="deleteCategory_${id}" class="categoryDelete bi bi-x-lg ml-3" style="cursor: pointer"></i>
+    </a>`;
+    }
+
+    const generateProjectMember = (id,name,email) => {
+    return  `<a id="projectMember-${id}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+    <span class="flex-grow-1 row ">
+    <input asp-for="${name}" class="form-control col-lg-5 mr-2" value="${name}"/>
+    <input asp-for="${email}" class="form-control col-lg-6" value="${email}"/>
+    </span>
+
+    <i id="${id}" class="projectMemberDelete bi bi-x-lg ml-3" style="cursor: pointer"></i>
+    </a>`;
+
+
+    }
+
     $(document).ready(function () {
+    var i = 6;
+    $(".addCategory").click(function (e) {
+    e.preventDefault();
+    let list = document.querySelector('#categoryList');
+    id = i++;
+    var name = id;
 
-        const generateCategory = (id,name) => {
-            return `  
-                    <div id="${id}">
-                    <a id="category-${id}" categoryId="${id}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                <span class="flex-grow-1 list-group-item-action">
-                                    <input asp-for="${name}" class="form-control" value="${name}"/>
-                                </span>
+    var div = document.createElement('div');
+    div.innerHTML = generateCategory(id,name);
+    list.insertBefore(div,list.firstElementChild);
 
-                                <i id="${id}" class="categoryDelete bi bi-x-lg ml-3" style="cursor: pointer"></i>
-                    </a>
-                    </div>`;
-        }
+    $("#deleteCategory_" + id).click(function (e) {
+    e.preventDefault();
+    $("#category_" + id).remove();
+    });
+    });
 
-        const generateProjectMember = (id,name,email) => {
-            return  `<a id="projectMember-${id}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                <span class="flex-grow-1 row ">
-                                    <input asp-for="${name}" class="form-control col-lg-5 mr-2" value="${name}"/>
-                                    <input asp-for="${email}" class="form-control col-lg-6" value="${email}"/>
-                                </span>
+    $(".addProjectMember").click(function (e) {
+    e.preventDefault();
+    let list = document.querySelector('#projectMemberList');
 
-                                <i id="${id}" class="projectMemberDelete bi bi-x-lg ml-3" style="cursor: pointer"></i>
-                     </a>`;
+    var id = "-1";
+    var name = "Not unique! id = " + id;
+    var email = "email";
 
+    var div = document.createElement('div');
+    div.innerHTML = generateProjectMember(id,name,email);
+    list.insertBefore(div,list.firstElementChild);
 
-        }
+    $(".projectMemberDelete").click(function (e) {
+    e.preventDefault();
+    $("#projectMember-" + this.id).remove();
+    });
+    });
 
-        $(".addCategory").click(function (e) {
-            e.preventDefault();
-            let list = document.querySelector('#categoryList');
+    $("#deleteCategory").click(function (e) {
+    e.preventDefault();
+    $("#category_" + this.id).remove();
+    });
 
-            var id = "-1";
-            var name = "Not unique! id = " + id;
-
-            var div = document.createElement('div');
-            div.innerHTML = generateCategory(id,name);
-            list.insertBefore(div,list.firstElementChild);
-
-            $(".categoryDelete").click(function (e) {
-            e.preventDefault();
-            $("#category-" + id).remove();
-        });
-        });
-
-        $(".addProjectMember").click(function (e) {
-            e.preventDefault();
-            let list = document.querySelector('#projectMemberList');
-
-            var id = "-1";
-            var name = "Not unique! id = " + id;
-            var email = "email";
-
-            var div = document.createElement('div');
-            div.innerHTML = generateProjectMember(id,name,email);
-            list.insertBefore(div,list.firstElementChild);
-
-            $(".projectMemberDelete").click(function (e) {
-            e.preventDefault();
-            $("#projectMember-" + this.id).remove();
-        });
-        });
-
-        $(".categoryDelete").click(function (e) {
-            e.preventDefault();
-            $("#category-" + this.id).remove();
-        });
-
-        $(".projectMemberDelete").click(function (e) {
-            e.preventDefault();
-            $("#projectMember-" + this.id).remove();
-        });
+    $(".projectMemberDelete").click(function (e) {
+    e.preventDefault();
+    $("#projectMember-" + this.id).remove();
+    });
     });
 </script>
-}
+    }

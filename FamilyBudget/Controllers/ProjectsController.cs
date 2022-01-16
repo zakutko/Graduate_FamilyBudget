@@ -113,7 +113,7 @@ namespace FamilyBudget.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,OwnerId,UpdateTime")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,OwnerId,UpdateTime")] Project project, List<Category> categories, List<ProjectMember> projectMembers)
         {
             if (!user.CanEdit(project, _context))
             {

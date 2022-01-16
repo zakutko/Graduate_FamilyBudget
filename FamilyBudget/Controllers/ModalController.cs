@@ -3,7 +3,6 @@ using FamilyBudget.Data;
 using FamilyBudget.Extensions;
 using FamilyBudget.ModalViewModels;
 using FamilyBudget.Models;
-using FamilyBudget.Models.View.Modal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

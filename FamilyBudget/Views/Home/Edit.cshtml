@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-4">
                     <h4 class="text-center">Categories</h4>
-                    <a class="addCategory pull-right bi bi-plus-circle" style="cursor: pointer"></a>
+                    <a id="@Model.projectId" class="categoryCreate pull-right bi bi-plus-circle" style="cursor: pointer"></a>
 
                     <div id="categoryList" class="list-group">
                         @foreach (var item in @Model.categories)
@@ -35,15 +35,15 @@
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </span>
 
-                                <i id="@item.Id" class="bi bi-pencil projectEdit mr-2"></i>
-                                <i id="@item.Id" class="bi bi-x-lg projectDelete"></i>
+                                <i id="@item.Id" class="bi bi-pencil categoryEdit mr-2" style="cursor: pointer"></i>
+                                <i id="@item.Id" class="bi bi-x-lg categoryDelete" style="cursor: pointer"></i>
                             </a>
                         }
                     </div>
                 </div>
                 <div class="col-8">
                     <h4 class="text-center">ProjectMembers</h4>
-                    <a class="addProjectMember pull-right bi bi-plus-circle" style="cursor: pointer"></a>
+                    <a class="projectMemberCreate pull-right bi bi-plus-circle" style="cursor: pointer"></a>
 
                     <div id="projectMemberList" class="list-group" count="@Model.projectMembers.Count">
 
@@ -54,8 +54,8 @@
                                     @Html.DisplayFor(modelItem => item.NameInProject)
                                 </span>
 
-                                <i id="@item.Id" class="bi bi-pencil projectEdit mr-2"></i>
-                                <i id="@item.Id" class="bi bi-x-lg projectDelete"></i>
+                                <i id="@item.Id" class="bi bi-pencil projectMemberEdit mr-2" style="cursor: pointer"></i>
+                                <i id="@item.Id" class="bi bi-x-lg projectMemberDelete" style="cursor: pointer"></i>
                             </a>
                         }
                     </div>
@@ -72,11 +72,6 @@
 @section scripts
 {
     <script type="text/javascript">
-        
-        $(".projectEdit").click(function (e) {
-                e.preventDefault();
-                document.location.href = "Home/Edit/" + this.id;               
-            });
        
         $.ajaxSetup({ cache: false });
 
@@ -92,7 +87,7 @@
 
         $(".projectMemberEdit").click(function (e) {
             e.preventDefault();
-            $.get("Modal/ProjectMemberCreate/" + this.id, function (data) {
+            $.get("Modal/ProjectMemberEdit/" + this.id, function (data) {
                 $('#projectDetailsDialogContent').html(data);
                 $('#projectDetailsModal').modal('show');
             });
@@ -110,15 +105,15 @@
 
         $(".categoryCreate").click(function (e) {
             e.preventDefault();
-            $.get("Modal/categoryCreate/" + this.id, function (data) {
+            $.get("Modal/CategoryCreate/" + this.id, function (data) {
                 $('#projectDetailsDialogContent').html(data);
                 $('#projectDetailsModal').modal('show');
             });
         });
 
-        $(".projectMemberCreate").click(function (e) {
+        $(".categoryEdit").click(function (e) {
             e.preventDefault();
-            $.get("Modal/ProjectMemberCreate/" + this.id, function (data) {
+            $.get("Modal/CategoryEdit/" + this.id, function (data) {
                 $('#projectDetailsDialogContent').html(data);
                 $('#projectDetailsModal').modal('show');
             });
@@ -126,7 +121,7 @@
 
         $(".categoryDelete").click(function (e) {
             e.preventDefault();
-            $.get("Modal/categoryDelete/" + this.id, function (data) {
+            $.get("Modal/CategoryDelete/" + this.id, function (data) {
                 $('#projectDetailsDialogContent').html(data);
                 $('#projectDetailsModal').modal('show');
             });

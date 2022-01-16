@@ -10,28 +10,33 @@ namespace FamilyBudget.ModalViewModels
     {
         public int Id { get; set; }
 
-        [Display(Name = "Type")]
+        [Display(Name = "Тип")]
         public FinType FinType { get; set; }
         public bool ForAll { get; set; }
 
+        [Display(Name = "Сумма")]
         public int Value { get; set; }
 
-        [Display(Name = "Category")]
+        [Display(Name = "Категория")]
         public int? CategoryId { get; set; }
+
+        [Display(Name = "Категория")]
         public Category Category { get; set; }
 
-        [Display(Name = "Project member")]
+        [Display(Name = "Член семьи")]
         public int? ProjectMemberId { get; set; }
+
+        [Display(Name = "Член семьи")]
         public ProjectMember ProjectMember { get; set; }
         public SelectList ProjectMembers { get; set; }
 
         public int ProjectId { get; set; }
         public Project Project { get; set; }
 
-        [Display(Name = "Create time")]
+        [Display(Name = "Дата создания")]
         public DateTime CreateTime { get; set; }
 
-        [Display(Name = "Update time")]
+        [Display(Name = "Дата обновления")]
         public DateTime UpdateTime { get; set; }
 
         public bool IsValid { get { return !(IsNotFound || IsForbid); } }

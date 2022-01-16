@@ -8,11 +8,15 @@ namespace FamilyBudget.Models.View.Filter
 {
     public class FinOperationFilterModel
     {
-        public FinOperationFilterModel(int? project, string category, string projectMember, FinType? finType,DateTime? beginDate, DateTime? endDate)
+        public FinOperationFilterModel(int? project, string category, string projectMember, FinType? finType, DateTime? beginDate, DateTime? endDate)
         {
-            var finTypes = Enum.GetNames(typeof(FinType)).ToList();
-            finTypes.Insert(0, "All");
-            FinTypes = new SelectList(finTypes,finType);
+            var finTypes = new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("All", "Любой"),
+                new KeyValuePair<string, string>("Income", "Доход"),
+                new KeyValuePair<string, string>("Charge", "Расход"),
+            };
+            FinTypes = new SelectList(finTypes, "Key", "Value", finType);
             SelectedProject = project;
             SelectedFinType = finType;
             SelectedCategory = category;

@@ -58,9 +58,9 @@ namespace FamilyBudget.Controllers
             return PartialView(projectDelete);
         }
 
-        public IActionResult AddCharge(int? id)
+        public IActionResult AddFinOperation(int? id, FinType type)
         {
-            var addCharge = new AddFinOpModel();
+            var addFinOperation = new AddFinOpModel();
 
             var project = _context.Projects
                 .Include(c => c.ProjectMembers)
@@ -69,56 +69,24 @@ namespace FamilyBudget.Controllers
 
             if (project == null)
             {
-                addCharge.IsNotFound = true;
-                return PartialView(addCharge);
+                addFinOperation.IsNotFound = true;
+                return PartialView(addFinOperation);
             }
 
             if (!user.CanEdit(project, _context))
             {
-                addCharge.IsForbid = true;
-                return PartialView(addCharge);
+                addFinOperation.IsForbid = true;
+                return PartialView(addFinOperation);
             }
 
-            addCharge.ForAll = false;
-            addCharge.FinType = FinType.Charge;
-            addCharge.ProjectId = project.Id;
+            addFinOperation.ForAll = false;
+            addFinOperation.FinType = type;
+            addFinOperation.ProjectId = project.Id;
 
             var projectMembers = project.ProjectMembers.ToList();
-            addCharge.ProjectMembers = new SelectList(projectMembers, "Id", "NameInProject");
+            addFinOperation.ProjectMembers = new SelectList(projectMembers, "Id", "NameInProject");
 
-            return PartialView(addCharge);
-        }
-
-        public IActionResult AddIncome(int? id)
-        {
-            var addIncome = new AddFinOpModel();
-
-            var project = _context.Projects
-                .Include(c => c.ProjectMembers)
-                .Include(c => c.FinOperations)
-                .FirstOrDefault(p => p.Id == id);
-
-            if (project == null)
-            {
-                addIncome.IsNotFound = true;
-                return PartialView(addIncome);
-            }
-
-            if (!user.CanEdit(project, _context))
-            {
-                addIncome.IsForbid = true;
-                return PartialView(addIncome);
-            }
-
-            addIncome.ForAll = false;
-            addIncome.FinType = FinType.Income;
-            addIncome.ProjectId = project.Id;
-            addIncome.CategoryId = null; //??
-
-            var projectMembers = project.ProjectMembers.OrderBy(x => x.NameInProject == "Семья" ? 0 : 1).ToList();
-            addIncome.ProjectMembers = new SelectList(projectMembers, "Id", "NameInProject");
-
-            return PartialView(addIncome);
+            return PartialView(addFinOperation);
         }
 
         public IActionResult ProjectCreate()

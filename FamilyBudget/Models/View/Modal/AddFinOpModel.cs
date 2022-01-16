@@ -15,13 +15,14 @@ namespace FamilyBudget.ModalViewModels
 
         public bool ForAll { get; set; }
 
+        [Display(Name = "Сумма")]
         public int Value { get; set; }
 
-        [Display(Name = "Category")]
+        [Display(Name = "Категория")]
         public int? CategoryId { get; set; }
         public SelectList ProjectMembers { get; set; }
 
-        [Display(Name = "Project member")]
+        [Display(Name = "Член семьи")]
         public int? ProjectMemberId { get; set; }
         public int ProjectId { get; set; }
         public bool IsValid { get { return !(IsNotFound || IsForbid); } }

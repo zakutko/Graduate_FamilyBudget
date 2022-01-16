@@ -35,7 +35,7 @@ namespace FamilyBudget.Models
 
     public enum FinType
     {
-        [Display(Name = "Income")] Income,
-        [Display(Name = "Charge")] Charge,
+        [Display(Name = "Доход")] Income,
+        [Display(Name = "Расход")] Charge,
     }
 }

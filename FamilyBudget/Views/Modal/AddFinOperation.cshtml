@@ -5,7 +5,7 @@
 }
 
 <div class="modal-content">
-    <div class="modal-header">
+    <div class="modal-header pb-2">
         @if (@Model.IsNotFound)
         {
             <h3 class="modal-title text-danger">This project is not found.</h3>
@@ -14,9 +14,13 @@
         {
             <h3 class="modal-title text-danger">This project is forbidden.</h3>
         }
+        else if (@Model.FinType == FinType.Charge)
+        {
+            <h3 class="modal-title">Добавление расхода</h3>
+        }
         else
         {
-            <h3 class="modal-title">Add charge.</h3>
+           <h3 class="modal-title">Добавление дохода</h3>
         }
 
         <button class="bi bi-x-lg btn" data-dismiss="modal" aria-label="Close"></button>
@@ -27,27 +31,31 @@
           asp-route-fintype="@Model.FinType"
           asp-route-projectid="@Model.ProjectId">
             <div class="modal-body container-fluid">
-                <div class="form-group">
-                    <label asp-for="CategoryId" class="control-label"></label>
-                    <input type="text" id="inputCategory" data-projectId="@Model.ProjectId" autocomplete="off"
-                           class="form-control" placeholder="Category" />
-                    <input type="hidden" id="categoryId" asp-for="CategoryId">
-                    <div id="SearchCategory"></div>
+                <div class="form-group row">
+                    <label asp-for="CategoryId" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <input type="text" id="inputCategory" data-projectId="@Model.ProjectId" autocomplete="off"
+                               class="form-control" placeholder="без категории" />
+                        <input type="hidden" id="categoryId" asp-for="CategoryId">
+                        <div id="SearchCategory"></div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="ProjectMemberId" class="control-label"></label>
-                    <select asp-for="ProjectMemberId" class="form-control" asp-items="@Model.ProjectMembers"></select>
+                <div class="form-group row">
+                    <label asp-for="ProjectMemberId" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="ProjectMemberId" class="form-control" asp-items="@Model.ProjectMembers"></select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Value" class="control-label"></label>
-                    <input asp-for="Value" class="form-control" />
-                    <span asp-validation-for="Value" class="text-danger"></span>
+                <div class="form-group row mb-0">
+                    <label asp-for="Value" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-9">
+                        <input asp-for="Value" class="form-control" />
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-                <input id="chargeSubmit" type="submit" value="Create" class="btn btn-success btn-ok" />
+            <div class="modal-footer p-2">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                <input id="chargeSubmit" type="submit" value="Создать" class="btn btn-success btn-ok" />
             </div>
         </form>
     }

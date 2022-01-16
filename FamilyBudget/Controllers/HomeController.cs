@@ -96,7 +96,7 @@ namespace FamilyBudget.Controllers
                 finOperations = finOperations.Where(p => p.Category.Name.Contains(category));
             }
 
-            if (!String.IsNullOrEmpty(projectMember) && projectMember != "All")
+            if (!String.IsNullOrEmpty(projectMember) && projectMember != "Любой")
             {
                 finOperations = finOperations.Where(p => p.ProjectMember.NameInProject.Contains(projectMember));
             }
@@ -145,7 +145,7 @@ namespace FamilyBudget.Controllers
             #endregion
 
             var projectMembers = await _context.ProjectMembers.Where(pm => pm.ProjectId == id).Select(x => x.NameInProject).ToListAsync();
-            projectMembers.Insert(0, "All");
+            projectMembers.Insert(0, "Любой");
             var members = new SelectList(projectMembers);
 
             var detailsModel = new HomeProjectDetailsModel
@@ -161,7 +161,7 @@ namespace FamilyBudget.Controllers
                 PieByProjectMember = finOperations.GroupBy(x => x.ProjectMember.NameInProject)
                 .Select(x => new HomeProjectDetailsModel.PieItem { Name = x.Key ?? "—", Value = x.Sum(y => y.Value) }).ToList(),
                 PieByFinOp = finOperations.GroupBy(x => x.FinType)
-                .Select(x => new HomeProjectDetailsModel.PieItem { Name = x.Key == FinType.Income ? "Income" : "Charge", Value = x.Sum(y => y.Value) }).ToList()
+                .Select(x => new HomeProjectDetailsModel.PieItem { Name = x.Key == FinType.Income ? "Доход" : "Расход", Value = x.Sum(y => y.Value) }).ToList()
             };
             return View(detailsModel);
         }

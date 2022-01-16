@@ -111,19 +111,23 @@ namespace FamilyBudget.Controllers
         // POST: Projects/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,OwnerId,UpdateTime")] Project project, List<Category> categories, List<ProjectMember> projectMembers)
         {
-            if (!user.CanEdit(project, _context))
-            {
-                return Forbid();
-            }
 
             if (id != project.Id)
             {
                 return NotFound();
             }
+
+            if (!user.CanEdit(project, _context))
+            {
+                return Forbid();
+            }
+
+            EditProjectDetails(categories, projectMembers);
 
             if (ModelState.IsValid)
             {
@@ -194,6 +198,13 @@ namespace FamilyBudget.Controllers
             var username = HttpContext.User.Identity.Name;
             return _context.Users
                 .FirstOrDefault(m => m.UserName == username);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public void EditProjectDetails(List<Category> categories, List<ProjectMember> projectMembers)
+        {
+            int i = 0;
         }
     }
 }

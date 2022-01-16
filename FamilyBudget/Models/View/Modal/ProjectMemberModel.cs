@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using FamilyBudget.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 
-namespace FamilyBudget.Models.View.Modal
+namespace FamilyBudget.ModalViewModels
 {
     public class ProjectMemberModel
     {

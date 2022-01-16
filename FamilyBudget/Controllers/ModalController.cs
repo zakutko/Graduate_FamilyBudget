@@ -3,7 +3,6 @@ using FamilyBudget.Data;
 using FamilyBudget.Extensions;
 using FamilyBudget.ModalViewModels;
 using FamilyBudget.Models;
-using FamilyBudget.Models.View.Modal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -135,7 +134,8 @@ namespace FamilyBudget.Controllers
         public IActionResult CategoryCreate()
         {
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
-            return PartialView();
+            var categoryModel = new CategoryModel();
+            return PartialView(categoryModel);
         }
 
         public IActionResult ProjectCreate()

@@ -6,8 +6,8 @@
 
 <h1>Edit</h1>
 
-<div id="projectDetailsModal" class="modal fade">
-    <div id="projectDetailsDialogContent" class="modal-dialog modal-dialog-centered modal-lg"></div>
+<div id="projectEditModal" class="modal fade">
+    <div id="projectEditDialogContent" class="modal-dialog modal-dialog-centered modal-lg"></div>
 </div>
 
 
@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-4">
                     <h4 class="text-center">Categories</h4>
-                    <a id="@Model.projectId" class="categoryCreate pull-right bi bi-plus-circle" style="cursor: pointer"></a>
+                    <a class="categoryCreate pull-right bi bi-plus-circle" style="cursor: pointer"></a>
 
                     <div id="categoryList" class="list-group">
                         @foreach (var item in @Model.categories)
@@ -80,24 +80,24 @@
         $(".projectMemberCreate").click(function (e) {
             e.preventDefault();
             $.get("Modal/ProjectMemberCreate/" + this.id, function (data) {
-                $('#projectDetailsDialogContent').html(data);
-                $('#projectDetailsModal').modal('show');
+                $('#projectEditDialogContent').html(data);
+                $('#projectEditModal').modal('show');
             });
         });
 
         $(".projectMemberEdit").click(function (e) {
             e.preventDefault();
             $.get("Modal/ProjectMemberEdit/" + this.id, function (data) {
-                $('#projectDetailsDialogContent').html(data);
-                $('#projectDetailsModal').modal('show');
+                $('#projectEditDialogContent').html(data);
+                $('#projectEditModal').modal('show');
             });
         });
 
         $(".projectMemberDelete").click(function (e) {
             e.preventDefault();
             $.get("Modal/ProjectMemberDelete/" + this.id, function (data) {
-                $('#projectDetailsDialogContent').html(data);
-                $('#projectDetailsModal').modal('show');
+                $('#projectEditDialogContent').html(data);
+                $('#projectEditModal').modal('show');
             });
         });
 
@@ -105,25 +105,25 @@
 
         $(".categoryCreate").click(function (e) {
             e.preventDefault();
-            $.get("Modal/CategoryCreate/" + this.id, function (data) {
-                $('#projectDetailsDialogContent').html(data);
-                $('#projectDetailsModal').modal('show');
+            $.get("Modal/CategoryCreate/", function (data) {
+                $('#projectEditDialogContent').html(data);
+                $('#projectEditModal').modal('show');
             });
         });
 
         $(".categoryEdit").click(function (e) {
             e.preventDefault();
             $.get("Modal/CategoryEdit/" + this.id, function (data) {
-                $('#projectDetailsDialogContent').html(data);
-                $('#projectDetailsModal').modal('show');
+                $('#projectEditDialogContent').html(data);
+                $('#projectEditModal').modal('show');
             });
         });
 
         $(".categoryDelete").click(function (e) {
             e.preventDefault();
             $.get("Modal/CategoryDelete/" + this.id, function (data) {
-                $('#projectDetailsDialogContent').html(data);
-                $('#projectDetailsModal').modal('show');
+                $('#projectEditDialogContent').html(data);
+                $('#projectEditModal').modal('show');
             });
         });
         

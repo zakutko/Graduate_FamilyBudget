@@ -3,29 +3,29 @@
 @inject UserManager<IdentityUser> UserManager
 
 <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Create new project</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+      <div class="modal-header pb-2">
+        <h3 class="modal-title">Создание нового проекта</h3>
+
+        <button class="bi bi-x-lg btn" data-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <form asp-area="" asp-controller="Projects" asp-action="Create">
           <div asp-validation-summary="ModelOnly" class="text-danger"></div>
           <div class="modal-body">
-            <div class="form-group">
-                <input asp-for="Name" class="form-control" placeholder="Enter the project name"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="hidden" asp-for="OwnerId" value="@UserManager.GetUserId(User)"/>
-            </div>
+              <div class="form-group row mb-0">
+                  <label asp-for="Name" class="col-sm-2 col-form-label"></label>
+                  <div class="col-sm-10">
+                      <input asp-for="Name" class="form-control" placeholder="введите имя проекта" />
+                  </div>
+                  <span asp-validation-for="Name"></span>
+              </div>
+              <div class="form-group mb-0">
+                  <input type="hidden" asp-for="OwnerId" value="@UserManager.GetUserId(User)" />
+              </div>
           </div>
-          <div class="modal-footer">
-            <div class="form-group">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <input type="submit" value="Create" class="btn btn-success"/>
-            </div>
+          <div class="modal-footer p-2">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+              <input type="submit" value="Создать" class="btn btn-success" />
           </div>
       </form>
     </div>

@@ -51,9 +51,9 @@ namespace FamilyBudget.Controllers
             projectDelete.Owner = project.Owner;
             projectDelete.CreateTime = project.CreateTime;
             projectDelete.UpdateTime = project.UpdateTime;
-            projectDelete.membersCount = project.ProjectMembers.Count();
-            projectDelete.incomesCount = project.FinOperations.Where(fo => fo.FinType == FinType.Income).Count();
-            projectDelete.chargesCount = project.FinOperations.Where(fo => fo.FinType == FinType.Charge).Count();
+            projectDelete.MembersCount = project.ProjectMembers.Count();
+            projectDelete.IncomesCount = project.FinOperations.Where(fo => fo.FinType == FinType.Income).Count();
+            projectDelete.ChargesCount = project.FinOperations.Where(fo => fo.FinType == FinType.Charge).Count();
 
             return PartialView(projectDelete);
         }

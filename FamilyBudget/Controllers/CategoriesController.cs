@@ -79,6 +79,10 @@ namespace FamilyBudget.Controllers
 
             if (ModelState.IsValid)
             {
+                var project = _context.Projects.Find(category.ProjectId);
+                project.UpdateTime = DateTime.Now;
+                _context.Update(project);
+
                 category.CreateTime = DateTime.Now;
                 category.UpdateTime = DateTime.Now;
                 category.Name = category.Name.ToLower();
@@ -136,6 +140,10 @@ namespace FamilyBudget.Controllers
             {
                 try
                 {
+                    var project = _context.Projects.Find(category.ProjectId);
+                    project.UpdateTime = DateTime.Now;
+                    _context.Update(project);
+
                     category.UpdateTime = DateTime.Now;
                     category.Name = category.Name.ToLower();
                     _context.Update(category);
@@ -190,6 +198,11 @@ namespace FamilyBudget.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await _context.Categories.FindAsync(id);
+
+            var project = await _context.Projects.FindAsync(category.ProjectId);
+            project.UpdateTime = DateTime.Now;
+            _context.Update(project);
+
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

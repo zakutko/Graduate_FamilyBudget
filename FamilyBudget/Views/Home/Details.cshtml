@@ -25,13 +25,13 @@
 
             <a asp-controller="Modal" asp-action="AddFinOperation" asp-route-id="@Model.FilterViewModel.SelectedProject" asp-route-type="@FinType.Income"
                class="btn btn-warning addIncome m-1 align">
+                <i class="bi bi-pencil-square mr-1"></i>
                 Добавить доход
-                <i class="bi bi-plus-lg"></i>
             </a>
             <a asp-controller="Modal" asp-action="AddFinOperation" asp-route-id="@Model.FilterViewModel.SelectedProject" asp-route-type="@FinType.Charge"
                class="btn btn-info btn addCharge m-1 pull-right">
+                <i class="bi bi-pencil-square mr-1"></i>
                 Добавить расход
-                <i class="bi bi-plus-lg"></i>
             </a>
         </div>
 

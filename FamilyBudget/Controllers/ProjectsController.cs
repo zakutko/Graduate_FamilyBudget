@@ -11,6 +11,7 @@ using FamilyBudget.Extensions;
 using FamilyBudget.CRUD_models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
 
 namespace FamilyBudget.Controllers
 {
@@ -114,7 +115,7 @@ namespace FamilyBudget.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,OwnerId,UpdateTime")] Project project, List<Category> categories, List<ProjectMember> projectMembers)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,OwnerId,UpdateTime")] Project project)
         {
 
             if (id != project.Id)
@@ -126,8 +127,6 @@ namespace FamilyBudget.Controllers
             {
                 return Forbid();
             }
-
-            EditProjectDetails(categories, projectMembers);
 
             if (ModelState.IsValid)
             {
@@ -198,13 +197,6 @@ namespace FamilyBudget.Controllers
             var username = HttpContext.User.Identity.Name;
             return _context.Users
                 .FirstOrDefault(m => m.UserName == username);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public void EditProjectDetails(List<Category> categories, List<ProjectMember> projectMembers)
-        {
-            int i = 0;
         }
     }
 }

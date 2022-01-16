@@ -199,7 +199,16 @@
                 @foreach (FinOperation fo in Model.FinOperations)
                 {
                     <tr>
-                        <td class="col-2">@fo.FinType</td>                      
+                        <td class="col-2">
+                            @if (fo.FinType == FinType.Charge)
+                            {
+                                <label>Расход</label>
+                            }
+                            else
+                            {
+                                <label>Доход</label>
+                            }
+                        </td>                      
                         <td class="col-3">
                             @if (fo.ProjectMember != null)
                             {

@@ -140,7 +140,6 @@ namespace FamilyBudget.Controllers
             };
 
             var projectMembers = project.ProjectMembers.ToList();
-            projectMembers.Insert(0, new ProjectMember { NameInProject = "Семья", Id = -1, ProjectId = project.Id });
             finOperationModal.ProjectMembers = new SelectList(projectMembers, "Id", "NameInProject");
 
             return PartialView(finOperationModal);

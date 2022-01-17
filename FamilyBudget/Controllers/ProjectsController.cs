@@ -147,7 +147,7 @@ namespace FamilyBudget.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Edit", "Home", new { id = project.Id });
             }
             ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", project.OwnerId);
             return View(project);

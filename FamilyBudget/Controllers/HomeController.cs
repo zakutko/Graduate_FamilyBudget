@@ -190,6 +190,7 @@ namespace FamilyBudget.Controllers
             var categories = _context.Categories.Where(x => x.ProjectId == project.Id);
 
             editModel.projectId = project.Id;
+            editModel.Name = project.Name;
             editModel.project = project;
             editModel.projectMembers = await projectMembers.ToListAsync();
             editModel.categories = await categories.ToListAsync();

@@ -12,68 +12,73 @@
     <div id="projectCreateDialogContent" class="modal-dialog modal-dialog-centered"></div>
 </div>
 
+<div class="card">
+    <div class="card-header pt-1 pb-1 pr-1">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3 class="flex-grow-1 mt-2">Проекты</h3>
+            @if (Model.Any())
+            {
+                <div class="m-1 pull-right">
+                    <button type="button" class="btn btn-success projectCreate">
+                        <i class="bi bi-pencil-square mr-1"></i>
+                        Добавить проект
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="card-body">
+        @if (Model.Count() == 0)
+        {
+            <p>
+                <button type="button" class="btn btn-success btn-lg btn-block projectCreate">
+                    <i class="bi bi-pencil-square mr-1"></i>
+                    Добавить проект
+                </button>
+            </p>
+        }
 
-@if (Model.Count() == 0)
-{
-    <p>
-        <button type="button" class="btn btn-success btn-lg btn-block projectCreate">
-            <i class="bi bi-pencil-square mr-1"></i>
-            Добавить проект
-        </button>
-    </p>
-}
-else
-{
-    <p>
-        <button type="button" class="btn btn-success projectCreate">
-            <i class="bi bi-pencil-square mr-1"></i>
-            Добавить проект
-        </button>
-    </p>
-}
+        <div class="list-group">
+            @foreach (var item in Model)
+            {
+                <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+               asp-action="Details" asp-route-id="@item.Id">
+                    <span class="p-2 projectListItem list-group-item-action flex-grow-1">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </span>
 
-<div class="list-group">
-    @foreach (var item in Model)
-    {
-        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-           asp-action="Details" asp-route-id="@item.Id">
-            <span class="p-2 projectListItem list-group-item-action flex-grow-1">
-                @Html.DisplayFor(modelItem => item.Name)
-            </span>
-
-            <i id="@item.Id" class="bi bi-pencil projectEdit mr-2"></i>
-            <i id="@item.Id" class="bi bi-x-lg projectDelete"></i>
-        </a>
-    }
+                    <i id="@item.Id" class="bi bi-pencil projectEdit mr-2"></i>
+                    <i id="@item.Id" class="bi bi-x-lg projectDelete"></i>
+                </a>
+            }
+        </div>
+    </div>
 </div>
 
-
 @section scripts
-{
-    <script type="text/javascript">
-        
-        $(".projectEdit").click(function (e) {
-                e.preventDefault();
-                document.location.href = "Home/Edit/" + this.id;               
-            });
-       
-        $.ajaxSetup({ cache: false });
+    {
+<script type="text/javascript">
 
-            $(".projectCreate").click(function (e) {
-                e.preventDefault();
-                $.get("/Modal/ProjectCreate/" + this.id, function (data) {
-                    $('#projectCreateDialogContent').html(data);
-                    $('#projectCreateModal').modal('show');
-                });
-            });
-
-            $(".projectDelete").click(function (e) {
-                e.preventDefault();
-                $.get("/Modal/ProjectDelete/" + this.id, function (data) {
-                    $('#projectDeleteDialogContent').html(data);
-                    $('#projectDeleteModal').modal('show');
-                });
-            });
+    $.ajaxSetup({ cache: false });
+    $(".projectEdit").click(function (e) {
+            e.preventDefault();
+            document.location.href = "Home/Edit/" + this.id;
         });
-    </script>
-}
+
+    $(".projectCreate").click(function (e) {
+        e.preventDefault();
+        $.get("Modal/ProjectCreate/" + this.id, function (data) {
+            $('#projectCreateDialogContent').html(data);
+            $('#projectCreateModal').modal('show');
+        });
+    });
+    $(".projectDelete").click(function (e) {
+        e.preventDefault();
+        $.get("Modal/ProjectDelete/" + this.id, function (data) {
+            $('#projectDeleteDialogContent').html(data);
+            $('#projectDeleteModal').modal('show');
+        });
+    });
+
+</script>
+    }

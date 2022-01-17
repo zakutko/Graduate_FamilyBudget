@@ -88,7 +88,7 @@ namespace FamilyBudget.Controllers
                 category.Name = category.Name.ToLower();
                 _context.Add(category);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Edit", "Home", new { id = category.ProjectId });
             }
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", category.ProjectId);
 
@@ -160,7 +160,7 @@ namespace FamilyBudget.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Edit", "Home", new { id = category.ProjectId });
             }
 
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", category.ProjectId);
@@ -205,7 +205,7 @@ namespace FamilyBudget.Controllers
 
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Edit", "Home", new { id = category.ProjectId });
         }
 
         private bool CategoryExists(int id)

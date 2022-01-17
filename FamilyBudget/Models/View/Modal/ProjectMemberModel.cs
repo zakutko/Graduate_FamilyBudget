@@ -20,6 +20,11 @@ namespace FamilyBudget.ModalViewModels
 
         public SelectList Users { get; set; }
         public int ProjectId { get; set; }
+        public Project Project { get; set; }
+
+        public DateTime CreateTime { get; set; }
+        public DateTime UpdateTime { get; set; }
+
         public bool IsValid { get { return !(IsNotFound || IsForbid); } }
         public bool IsNotFound { get; set; }
         public bool IsForbid { get; set; }

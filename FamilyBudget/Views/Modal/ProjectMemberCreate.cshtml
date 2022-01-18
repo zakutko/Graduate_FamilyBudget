@@ -1,0 +1,59 @@
+﻿@model FamilyBudget.ModalViewModels.ProjectMemberModel
+
+@{
+    ViewData["Title"] = "ProjectMemberCreate";
+}
+
+<div class="modal-content">
+    <div class="modal-header pb-2">
+        @if (@Model.IsNotFound)
+        {
+            <h3 class="modal-title text-danger">This project is not found.</h3>
+        }
+        else if (@Model.IsForbid)
+        {
+            <h3 class="modal-title text-danger">This project is forbidden.</h3>
+        }
+        else
+        {
+            <h3 class="modal-title">Добавть в проект члена семьи</h3>
+        }
+
+        <button class="bi bi-x-lg btn" data-dismiss="modal" aria-label="Close"></button>
+    </div>
+    @if (Model.IsValid)
+    {
+        <form asp-controller="ProjectMembers" asp-action="Create">
+            <div class="modal-body container-fluid">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ProjectId" />
+
+                <div class="form-group">
+                    <label asp-for="NameInProject" class="control-label"></label>
+                    <input asp-for="NameInProject" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="UserId" class="control-label"></label>
+                    <select asp-for="UserId" class="form-control" asp-items="@Model.Users"></select>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <input type="submit" value="Создать" class="btn btn-success btn-ok" />
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+            </div>
+        </form>
+    }
+    else
+    {
+        <div class="modal-footer p-2">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+        </div>
+    }
+</div>
+
+@section Scripts {
+        @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

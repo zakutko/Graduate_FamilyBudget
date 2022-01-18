@@ -90,7 +90,7 @@ namespace FamilyBudget.Controllers
                 projectMember.UpdateTime = DateTime.Now;
                 _context.Add(projectMember);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Edit", "Home", new { id = projectMember.ProjectId });
             }
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", projectMember.ProjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", projectMember.UserId);
@@ -161,7 +161,7 @@ namespace FamilyBudget.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Edit", "Home", new { id = projectMember.ProjectId });
             }
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", projectMember.ProjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", projectMember.UserId);
@@ -206,7 +206,7 @@ namespace FamilyBudget.Controllers
 
             _context.ProjectMembers.Remove(projectMember);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Edit", "Home", new { id = projectMember.ProjectId });
         }
 
         private bool ProjectMemberExists(int id)

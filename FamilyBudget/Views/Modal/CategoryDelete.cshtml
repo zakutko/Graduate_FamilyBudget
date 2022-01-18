@@ -1,0 +1,41 @@
+﻿@model FamilyBudget.ModalViewModels.CategoryModel
+
+@{
+    ViewData["Title"] = "CategoryDelete";
+}
+
+<div class="modal-content">
+    <div class="modal-header pb-2">
+        @if (@Model.IsNotFound)
+        {
+            <h3 class="modal-title text-danger">This project is not found.</h3>
+        }
+        else if (@Model.IsForbid)
+        {
+            <h3 class="modal-title text-danger">This project is forbidden.</h3>
+        }
+        else
+        {
+            <h3 class="modal-title">Удалить @Model.Name?</h3>
+        }
+
+        <button class="bi bi-x-lg btn" data-dismiss="modal" aria-label="Close"></button>
+    </div>
+    
+    <div class="modal-footer p-2">
+            @if (Model.IsValid)
+            {
+                 <form asp-controller="Categories" asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="submit" value="Удалить" class="btn btn-danger btn-ok" />
+                </form>
+            }
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+    </div>
+</div>
+
+@section Scripts {
+        @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

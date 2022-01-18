@@ -11,6 +11,7 @@ using FamilyBudget.Extensions;
 using FamilyBudget.CRUD_models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
 
 namespace FamilyBudget.Controllers
 {
@@ -111,18 +112,20 @@ namespace FamilyBudget.Controllers
         // POST: Projects/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,OwnerId,UpdateTime")] Project project)
         {
-            if (!user.CanEdit(project, _context))
-            {
-                return Forbid();
-            }
 
             if (id != project.Id)
             {
                 return NotFound();
+            }
+
+            if (!user.CanEdit(project, _context))
+            {
+                return Forbid();
             }
 
             if (ModelState.IsValid)
@@ -144,7 +147,7 @@ namespace FamilyBudget.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Edit", "Home", new { id = project.Id });
             }
             ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", project.OwnerId);
             return View(project);

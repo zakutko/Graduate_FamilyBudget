@@ -195,6 +195,165 @@ namespace FamilyBudget.Controllers
             ViewData["ProjectMemberId"] = new SelectList(_context.ProjectMembers, "Id", "NameInProject", finOperationModal.ProjectMemberId);
             return PartialView(finOperationModal);
         }
+
+        public IActionResult ProjectMemberCreate(int? id)
+        {
+            var project = _context.Projects
+                .FirstOrDefault(p => p.Id == id);
+
+            var projectMemberModel = new ProjectMemberModel();
+
+            if (project == null)
+            {
+
+                projectMemberModel.IsNotFound = true;
+                return PartialView(projectMemberModel);
+            }
+
+            if (!user.CanEdit(project, _context))
+            {
+                projectMemberModel.IsForbid = true;
+                return PartialView(projectMemberModel);
+            }
+
+            projectMemberModel.ProjectId = project.Id;
+            projectMemberModel.Users = new SelectList(_context.Users, "Id", "UserName");
+
+            return PartialView(projectMemberModel);
+        }
+
+        public IActionResult ProjectMemberEdit(int? id)
+        {
+            var projectMember = _context.ProjectMembers
+                .Include(p => p.User)
+                .FirstOrDefault(p => p.Id == id);
+
+            var projectMemberModel = new ProjectMemberModel();
+
+            if (projectMember == null)
+            {
+                projectMemberModel.IsNotFound = true;
+                return PartialView(projectMemberModel);
+            }
+
+            if (!user.CanEdit(projectMember, _context))
+            {
+                projectMemberModel.IsForbid = true;
+                return PartialView(projectMemberModel);
+            }
+
+            projectMemberModel.Id = projectMember.Id;
+            projectMemberModel.ProjectId = projectMember.ProjectId;
+            projectMemberModel.NameInProject = projectMember.NameInProject;
+            projectMemberModel.User = projectMember.User;
+            projectMemberModel.Users = new SelectList(_context.Users, "Id", "UserName");
+
+            return PartialView(projectMemberModel);
+        }
+
+        public IActionResult ProjectMemberDelete(int? id)
+        {
+            var projectMember = _context.ProjectMembers
+                .FirstOrDefault(p => p.Id == id);
+
+            var projectMemberModel = new ProjectMemberModel();
+
+            if (projectMember == null)
+            {
+                projectMemberModel.IsNotFound = true;
+                return PartialView(projectMemberModel);
+            }
+
+            if (!user.CanDelete(projectMember, _context))
+            {
+                projectMemberModel.IsForbid = true;
+                return PartialView(projectMemberModel);
+            }
+
+            projectMemberModel.Id = projectMember.Id;
+            projectMemberModel.ProjectId = projectMember.ProjectId;
+            projectMemberModel.NameInProject = projectMember.NameInProject;
+
+            return PartialView(projectMemberModel);
+        }
+
+        public IActionResult CategoryCreate(int? id)
+        {
+            var project = _context.Projects
+                .FirstOrDefault(p => p.Id == id);
+
+            var categoryModel = new CategoryModel();
+
+            if (project == null)
+            {
+
+                categoryModel.IsNotFound = true;
+                return PartialView(categoryModel);
+            }
+
+            if (!user.CanEdit(project, _context))
+            {
+                categoryModel.IsForbid = true;
+                return PartialView(categoryModel);
+            }
+
+            categoryModel.ProjectId = project.Id;
+
+            return PartialView(categoryModel);
+        }
+
+        public IActionResult CategoryEdit(int? id)
+        {
+            var category = _context.Categories
+                .FirstOrDefault(p => p.Id == id);
+
+            var categoryModel = new CategoryModel();
+
+            if (category == null)
+            {
+                categoryModel.IsNotFound = true;
+                return PartialView(categoryModel);
+            }
+
+            if (!user.CanEdit(category, _context))
+            {
+                categoryModel.IsForbid = true;
+                return PartialView(categoryModel);
+            }
+
+            categoryModel.Id = category.Id;
+            categoryModel.ProjectId = category.ProjectId;
+            categoryModel.Name = category.Name;
+
+            return PartialView(categoryModel);
+        }
+
+        public IActionResult CategoryDelete(int? id)
+        {
+            var category = _context.Categories
+                .FirstOrDefault(p => p.Id == id);
+
+            var categoryModel = new CategoryModel();
+
+            if (category == null)
+            {
+                categoryModel.IsNotFound = true;
+                return PartialView(categoryModel);
+            }
+
+            if (!user.CanDelete(category, _context))
+            {
+                categoryModel.IsForbid = true;
+                return PartialView(categoryModel);
+            }
+
+            categoryModel.Id = category.Id;
+            categoryModel.ProjectId = category.ProjectId;
+            categoryModel.Name = category.Name;
+
+            return PartialView(categoryModel);
+        }
+
         private IdentityUser CurrentUser()
         {
             var username = HttpContext.User.Identity.Name;

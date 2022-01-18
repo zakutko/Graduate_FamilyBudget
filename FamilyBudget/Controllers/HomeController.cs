@@ -18,6 +18,7 @@ using FamilyBudget.Models.View.Sort;
 using FamilyBudget.Models.View.Page;
 using FamilyBudget.Models.View.Filter;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using FamilyBudget.Models.View.Edit;
 
 namespace FamilyBudget.Controllers
 {
@@ -112,7 +113,7 @@ namespace FamilyBudget.Controllers
                     break;
                 case FinOperationSortModelEnum.FinType:
                     if (sortDir == FinOperationSortDirEnum.Ascending) { finOperations = finOperations.OrderBy(s => s.FinType); break; }
-                    
+
                     finOperations = finOperations.OrderByDescending(s => s.FinType);
                     break;
                 case FinOperationSortModelEnum.Category:
@@ -164,6 +165,36 @@ namespace FamilyBudget.Controllers
                 .Select(x => new HomeProjectDetailsModel.PieItem { Name = x.Key == FinType.Income ? "Доход" : "Расход", Value = x.Sum(y => y.Value) }).ToList()
             };
             return View(detailsModel);
+        }
+
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            var project = _context.Projects
+                .FirstOrDefault(p => p.Id == id);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            if (!user.CanView(project, _context))
+            {
+                return Forbid();
+            }
+
+
+            var editModel = new HomeProjectEditModel();
+
+            var projectMembers = _context.ProjectMembers.Where(x => x.ProjectId == project.Id);
+            var categories = _context.Categories.Where(x => x.ProjectId == project.Id);
+
+            editModel.projectId = project.Id;
+            editModel.Name = project.Name;
+            editModel.project = project;
+            editModel.projectMembers = await projectMembers.ToListAsync();
+            editModel.categories = await categories.ToListAsync();
+            return View(editModel);
         }
 
         public IActionResult Privacy()

@@ -77,17 +77,12 @@
                                 <span class="p-2 projectListItem list-group-item-action flex-grow-1">
                                     @Html.DisplayFor(modelItem => item.NameInProject)
                                 </span>
-                                <span class="p-2 projectListItem list-group-item-action flex-grow-1">
-                                    <label>@Html.DisplayFor(modelItem => item.User.Email)</label>
-                                </span>
+
 
                                 <a asp-controller="Modal" asp-action="ProjectMemberEdit" asp-route-id="@item.Id"
                                class="bi bi-pencil projectMemberEdit mr-2 text-decoration-none text-reset"></a>
-                                @if (@Model.project.OwnerId != item.UserId)
-                                {
-                                    <a asp-controller="Modal" asp-action="ProjectMemberDelete" asp-route-id="@item.Id"
+                                <a asp-controller="Modal" asp-action="ProjectMemberDelete" asp-route-id="@item.Id"
                                class="bi bi-x-lg projectMemberDelete mr-2 text-decoration-none text-reset"></a>
-                                }
                             </div>
                         }
                     </div>
